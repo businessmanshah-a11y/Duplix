@@ -16,3 +16,18 @@ DerivedData/
 /clones/
 *.app
 dist/
+
+# Security & Secrets Prevention
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.cer
+*.crt
+*.pfx
+*.secret
+*.token
+id_rsa
+id_ed25519
+*.log

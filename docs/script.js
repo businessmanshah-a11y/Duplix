@@ -1,5 +1,53 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Homebrew & CLI Copy Notification
+  // 1. Ultra-Premium Page Preloader
+  const preloader = document.getElementById('preloader');
+  const preloaderBar = document.getElementById('preloader-bar');
+  const preloaderStatus = document.getElementById('preloader-status');
+
+  if (preloader && preloaderBar) {
+    let progress = 0;
+    const interval = setInterval(() => {
+      progress += Math.floor(Math.random() * 22) + 16;
+      if (progress >= 100) {
+        progress = 100;
+        clearInterval(interval);
+        preloaderBar.style.width = '100%';
+        if (preloaderStatus) preloaderStatus.textContent = 'Engine Ready';
+        setTimeout(() => {
+          preloader.classList.add('fade-out');
+          setTimeout(() => preloader.remove(), 600);
+        }, 200);
+      } else {
+        preloaderBar.style.width = progress + '%';
+        if (progress > 50 && preloaderStatus) {
+          preloaderStatus.textContent = 'Loading Isolated Workspaces...';
+        }
+      }
+    }, 55);
+  }
+
+  // 2. Scroll Reveal Engine (Smooth Micro-Animations)
+  const revealElements = document.querySelectorAll('.reveal-on-scroll');
+  if ('IntersectionObserver' in window) {
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      root: null,
+      threshold: 0.12,
+      rootMargin: '0px 0px -40px 0px'
+    });
+
+    revealElements.forEach(el => revealObserver.observe(el));
+  } else {
+    revealElements.forEach(el => el.classList.add('revealed'));
+  }
+
+  // 3. Homebrew & CLI Copy Notification
   const cliBox = document.getElementById('cli-copy-box');
   const toast = document.getElementById('toast-notice');
   const toastText = document.getElementById('toast-message');
@@ -22,50 +70,64 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 2800);
   }
 
-  // 2. Interactive Dock Simulator Logic
+  // 4. Interactive Dock Simulator Logic
   const appButtons = document.querySelectorAll('.app-pill-btn');
   const colorSwatches = document.querySelectorAll('.swatch-item');
   const badgeTextInput = document.getElementById('sim-badge-input');
   const simTargetApp = document.getElementById('sim-target-app');
   const simTargetBadge = document.getElementById('sim-target-badge');
   const simTargetIcon = document.getElementById('sim-target-icon');
+  const simOriginalIcon = document.getElementById('sim-original-icon');
 
   const appData = {
     antigravity: {
       name: 'Antigravity IDE',
       icon: 'assets/icon.png',
       defaultColor: '#4f46e5',
-      defaultText: '1'
+      defaultText: '1',
+      isFullIcon: true
     },
-    chrome: {
-      name: 'Google Chrome',
-      icon: 'https://cdn.simpleicons.org/googlechrome/06b6d4',
+    cursor: {
+      name: 'Cursor',
+      icon: 'assets/logos/cursor.svg',
       defaultColor: '#06b6d4',
-      defaultText: 'DEV'
+      defaultText: 'AI',
+      isFullIcon: false
+    },
+    claude: {
+      name: 'Claude Desktop',
+      icon: 'assets/logos/claude.svg',
+      defaultColor: '#d97757',
+      defaultText: 'PRO',
+      isFullIcon: false
     },
     vscode: {
       name: 'VS Code',
-      icon: 'https://cdn.simpleicons.org/visualstudiocode/818cf8',
-      defaultColor: '#7c3aed',
-      defaultText: '2'
+      icon: 'assets/logos/vscode.svg',
+      defaultColor: '#007acc',
+      defaultText: '2',
+      isFullIcon: false
     },
     telegram: {
       name: 'Telegram',
-      icon: 'https://cdn.simpleicons.org/telegram/38bdf8',
+      icon: 'assets/logos/telegram.svg',
       defaultColor: '#0284c7',
-      defaultText: 'W'
+      defaultText: 'W',
+      isFullIcon: true
     },
     slack: {
       name: 'Slack',
-      icon: 'https://cdn.simpleicons.org/slack/f43f5e',
+      icon: 'assets/logos/slack.svg',
       defaultColor: '#e11d48',
-      defaultText: '3'
+      defaultText: 'TEAM',
+      isFullIcon: false
     },
     figma: {
       name: 'Figma',
-      icon: 'https://cdn.simpleicons.org/figma/a855f7',
-      defaultColor: '#9333ea',
-      defaultText: 'ALT'
+      icon: 'assets/logos/figma.svg',
+      defaultColor: '#a855f7',
+      defaultText: 'ALT',
+      isFullIcon: false
     }
   };
 
@@ -75,9 +137,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function updateDockSim() {
     if (!simTargetBadge || !simTargetIcon) return;
+    const targetData = appData[currentApp] || appData.antigravity;
+
     simTargetBadge.style.backgroundColor = currentColor;
     simTargetBadge.textContent = currentText || '1';
-    simTargetIcon.src = appData[currentApp]?.icon || 'assets/icon.png';
+    simTargetIcon.src = targetData.icon;
+
+    if (simOriginalIcon) {
+      simOriginalIcon.src = targetData.icon;
+    }
+
+    // Toggle padding/background for icon fit
+    if (targetData.isFullIcon) {
+      simTargetIcon.classList.add('dock-icon-full');
+      if (simOriginalIcon) simOriginalIcon.classList.add('dock-icon-full');
+    } else {
+      simTargetIcon.classList.remove('dock-icon-full');
+      if (simOriginalIcon) simOriginalIcon.classList.remove('dock-icon-full');
+    }
 
     // Physics-like Dock Bounce Animation
     if (simTargetApp) {
@@ -141,7 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 3. FAQ Accordion Logic
+  // 5. FAQ Accordion Logic
   const faqCards = document.querySelectorAll('.faq-card');
   faqCards.forEach(card => {
     const trigger = card.querySelector('.faq-trigger');
@@ -156,7 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // 4. Product Hunt Banner
+  // 6. Product Hunt Banner
   const phBanner = document.getElementById('ph-pill-link');
   if (phBanner) {
     phBanner.addEventListener('click', (e) => {

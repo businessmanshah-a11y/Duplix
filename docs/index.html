@@ -10,6 +10,25 @@
 </head>
 <body>
 
+  <!-- Ultra-Premium App Preloader -->
+  <div id="preloader" class="preloader">
+    <div class="preloader-backdrop"></div>
+    <div class="preloader-content">
+      <div class="preloader-logo-ring">
+        <img src="assets/icon.png" alt="Duplix" class="preloader-logo">
+        <div class="ring-spinner"></div>
+      </div>
+      <div class="preloader-brand">
+        <span class="preloader-brand-name">Duplix</span>
+        <span class="preloader-version">v1.0.0</span>
+      </div>
+      <div class="preloader-bar-wrap">
+        <div class="preloader-bar" id="preloader-bar"></div>
+      </div>
+      <span class="preloader-status" id="preloader-status">Initializing Native macOS Engine...</span>
+    </div>
+  </div>
+
   <!-- Ambient Light Orbs -->
   <div class="ambient-glow glow-top-left"></div>
   <div class="ambient-glow glow-mid-right"></div>
@@ -92,7 +111,7 @@
       </div>
 
       <!-- Trust Metrics Strip -->
-      <div class="trust-strip">
+      <div class="trust-strip reveal-on-scroll">
         <div class="trust-badge-card">
           <svg class="trust-badge-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
@@ -120,7 +139,7 @@
       </div>
 
       <!-- Application Window Showcase -->
-      <div class="preview-container">
+      <div class="preview-container reveal-on-scroll">
         <div class="mac-window">
           <div class="mac-titlebar">
             <div class="window-buttons">
@@ -139,7 +158,7 @@
   <!-- Interactive Dock Simulator -->
   <section class="sim-section" id="simulator">
     <div class="container">
-      <div class="section-head">
+      <div class="section-head reveal-on-scroll">
         <span class="section-eyebrow">
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <circle cx="12" cy="12" r="10"></circle>
@@ -153,7 +172,7 @@
         </p>
       </div>
 
-      <div class="simulator-panel">
+      <div class="simulator-panel reveal-on-scroll">
         <!-- Settings -->
         <div class="sim-settings">
           <div>
@@ -170,24 +189,28 @@
                 <img src="assets/icon.png" class="app-mini-icon" alt="Antigravity">
                 <span>Antigravity</span>
               </button>
-              <button class="app-pill-btn" data-app="chrome">
-                <img src="https://cdn.simpleicons.org/googlechrome/06b6d4" class="app-mini-icon" alt="Chrome">
-                <span>Chrome</span>
+              <button class="app-pill-btn" data-app="cursor">
+                <img src="assets/logos/cursor.svg" class="app-mini-icon app-mini-icon-dark" alt="Cursor">
+                <span>Cursor</span>
+              </button>
+              <button class="app-pill-btn" data-app="claude">
+                <img src="assets/logos/claude.svg" class="app-mini-icon app-mini-icon-dark" alt="Claude">
+                <span>Claude</span>
               </button>
               <button class="app-pill-btn" data-app="vscode">
-                <img src="https://cdn.simpleicons.org/visualstudiocode/818cf8" class="app-mini-icon" alt="VS Code">
+                <img src="assets/logos/vscode.svg" class="app-mini-icon" alt="VS Code">
                 <span>VS Code</span>
               </button>
               <button class="app-pill-btn" data-app="telegram">
-                <img src="https://cdn.simpleicons.org/telegram/38bdf8" class="app-mini-icon" alt="Telegram">
+                <img src="assets/logos/telegram.svg" class="app-mini-icon" alt="Telegram">
                 <span>Telegram</span>
               </button>
               <button class="app-pill-btn" data-app="slack">
-                <img src="https://cdn.simpleicons.org/slack/f43f5e" class="app-mini-icon" alt="Slack">
+                <img src="assets/logos/slack.svg" class="app-mini-icon app-mini-icon-dark" alt="Slack">
                 <span>Slack</span>
               </button>
               <button class="app-pill-btn" data-app="figma">
-                <img src="https://cdn.simpleicons.org/figma/a855f7" class="app-mini-icon" alt="Figma">
+                <img src="assets/logos/figma.svg" class="app-mini-icon app-mini-icon-dark" alt="Figma">
                 <span>Figma</span>
               </button>
             </div>
@@ -237,25 +260,38 @@
           <div class="mac-dock-bar">
             <!-- Finder -->
             <div class="dock-slot">
-              <img src="https://cdn.simpleicons.org/apple/ffffff" class="dock-slot-icon" style="background:linear-gradient(135deg,#0284c7,#4338ca);padding:14px;" alt="Finder">
+              <svg class="dock-slot-icon" viewBox="0 0 100 100" style="background:linear-gradient(135deg,#0284c7,#4338ca);border-radius:15px;padding:11px;">
+                <circle cx="50" cy="50" r="38" fill="none" stroke="#ffffff" stroke-width="6"/>
+                <path d="M36 42 L36 48 M64 42 L64 48 M34 62 Q50 74 66 62" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round"/>
+              </svg>
             </div>
 
             <!-- Original App -->
             <div class="dock-slot">
-              <img src="assets/icon.png" class="dock-slot-icon" alt="Original App">
+              <img src="assets/icon.png" class="dock-slot-icon dock-icon-full" id="sim-original-icon" alt="Original App">
               <div class="dock-running-dot"></div>
             </div>
 
-            <!-- Target Clone -->
+            <!-- Target Clone with Badge -->
             <div class="dock-slot" id="sim-target-app">
-              <img src="assets/icon.png" class="dock-slot-icon" id="sim-target-icon" alt="Clone App">
+              <img src="assets/icon.png" class="dock-slot-icon dock-icon-full" id="sim-target-icon" alt="Clone App">
               <div class="dock-badge-rendered" id="sim-target-badge">1</div>
               <div class="dock-running-dot"></div>
             </div>
 
-            <!-- Chrome -->
+            <!-- Claude -->
             <div class="dock-slot">
-              <img src="https://cdn.simpleicons.org/googlechrome/ffffff" class="dock-slot-icon" style="background:#1e202e;padding:13px;" alt="Chrome">
+              <img src="assets/logos/claude.svg" class="dock-slot-icon" alt="Claude">
+            </div>
+
+            <!-- Cursor -->
+            <div class="dock-slot">
+              <img src="assets/logos/cursor.svg" class="dock-slot-icon" alt="Cursor">
+            </div>
+
+            <!-- Telegram -->
+            <div class="dock-slot">
+              <img src="assets/logos/telegram.svg" class="dock-slot-icon dock-icon-full" alt="Telegram">
             </div>
           </div>
         </div>
@@ -266,7 +302,7 @@
   <!-- Bento Features Grid -->
   <section class="features-section" id="features">
     <div class="container">
-      <div class="section-head">
+      <div class="section-head reveal-on-scroll">
         <span class="section-eyebrow">
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
@@ -283,7 +319,7 @@
 
       <div class="bento-grid">
         <!-- Card 1 -->
-        <div class="bento-card">
+        <div class="bento-card reveal-on-scroll reveal-delay-1">
           <div class="bento-icon-box">
             <svg class="bento-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
@@ -296,7 +332,7 @@
         </div>
 
         <!-- Card 2 -->
-        <div class="bento-card">
+        <div class="bento-card reveal-on-scroll reveal-delay-2">
           <div class="bento-icon-box">
             <svg class="bento-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
@@ -310,7 +346,7 @@
         </div>
 
         <!-- Card 3 -->
-        <div class="bento-card">
+        <div class="bento-card reveal-on-scroll reveal-delay-3">
           <div class="bento-icon-box">
             <svg class="bento-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <circle cx="12" cy="12" r="10"></circle>
@@ -324,7 +360,7 @@
         </div>
 
         <!-- Card 4 -->
-        <div class="bento-card">
+        <div class="bento-card reveal-on-scroll reveal-delay-4">
           <div class="bento-icon-box">
             <svg class="bento-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
@@ -339,7 +375,7 @@
         </div>
 
         <!-- Card 5 -->
-        <div class="bento-card">
+        <div class="bento-card reveal-on-scroll reveal-delay-5">
           <div class="bento-icon-box">
             <svg class="bento-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <polyline points="16 18 22 12 16 6"></polyline>
@@ -348,12 +384,12 @@
           </div>
           <h3 class="bento-title">Multi-Engine Intelligence</h3>
           <p class="bento-copy">
-            Automatic framework inspection identifies Electron, Chromium (Chrome, Brave, Arc, Edge), Gecko, and Native Cocoa to apply tailored sandbox flags.
+            Automatic framework inspection identifies Electron, Chromium, Gecko, and Native Cocoa to apply tailored sandbox flags and isolated socket descriptors.
           </p>
         </div>
 
         <!-- Card 6 -->
-        <div class="bento-card">
+        <div class="bento-card reveal-on-scroll reveal-delay-6">
           <div class="bento-icon-box">
             <svg class="bento-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
@@ -371,7 +407,7 @@
   <!-- Comparison Matrix -->
   <section class="compare-section" id="compare">
     <div class="container">
-      <div class="section-head">
+      <div class="section-head reveal-on-scroll">
         <span class="section-eyebrow">
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <line x1="18" y1="20" x2="18" y2="10"></line>
@@ -386,7 +422,7 @@
         </p>
       </div>
 
-      <div class="compare-matrix-wrap">
+      <div class="compare-matrix-wrap reveal-on-scroll">
         <table class="compare-matrix">
           <thead>
             <tr>
@@ -442,7 +478,7 @@
   <!-- FAQ Section -->
   <section class="faq-section" id="faq">
     <div class="container">
-      <div class="section-head">
+      <div class="section-head reveal-on-scroll">
         <span class="section-eyebrow">
           <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <circle cx="12" cy="12" r="10"></circle>
@@ -454,7 +490,7 @@
         <h2 class="section-headline">Frequently Asked Questions</h2>
       </div>
 
-      <div class="faq-accordion-box">
+      <div class="faq-accordion-box reveal-on-scroll">
         <div class="faq-card open">
           <button class="faq-trigger">
             <span>Does cloning an app consume extra disk space?</span>
@@ -476,6 +512,18 @@
           </button>
           <div class="faq-body">
             Yes. Duplix assigns unique bundle identifiers and directs session data to independent sandbox directories, allowing concurrent execution without conflict.
+          </div>
+        </div>
+
+        <div class="faq-card">
+          <button class="faq-trigger">
+            <span>Is Duplix safe and private? Does it collect any data?</span>
+            <svg class="faq-chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="faq-body">
+            Duplix is 100% offline with zero telemetry. It requires no root or sudo permissions, communicates with no remote servers, and runs entirely in user-space.
           </div>
         </div>
 
@@ -508,7 +556,7 @@
 
   <!-- Download Action Banner -->
   <section class="container" id="download">
-    <div class="download-card">
+    <div class="download-card reveal-on-scroll">
       <h2 class="download-title">Get Started with Duplix</h2>
       <p class="download-subtext">
         Free, native, and open source. Run your independent Mac workspaces side-by-side today.
@@ -539,6 +587,7 @@
       <div class="footer-nav">
         <a href="https://github.com/businessmanshah-a11y/Duplix" target="_blank" class="footer-link-item">GitHub Repository</a>
         <a href="https://github.com/businessmanshah-a11y/Duplix/releases" target="_blank" class="footer-link-item">Releases</a>
+        <a href="https://github.com/businessmanshah-a11y/Duplix/blob/main/SECURITY.md" target="_blank" class="footer-link-item">Security & Privacy</a>
         <a href="https://github.com/businessmanshah-a11y/Duplix/blob/main/LICENSE" target="_blank" class="footer-link-item">MIT License</a>
       </div>
     </div>
