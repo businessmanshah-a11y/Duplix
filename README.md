@@ -39,11 +39,40 @@ Detailed documentation and technical architecture reports are available in the [
 ## 🏗 Development Status
 
 Duplix is actively under development.
-- **Phase 1 (Core Engine):** In progress
+- **Phase 1 (Core Engine & CLI):** ✅ Completed & Verified (100% automated test coverage)
 - **Phase 2 (Icon Badging):** Queued
 - **Phase 3 (SwiftUI Native UI):** Queued
 - **Phase 4 (Multi-App QA):** Queued
 - **Phase 5 (Public DMG Release):** Queued
+
+---
+
+## 💻 CLI Quickstart (Phase 1)
+
+Build and run Duplix CLI directly using Swift:
+
+```bash
+# Clone any app instantly with APFS CoW (0 extra bytes)
+swift run duplix clone "/Applications/Antigravity IDE.app" --name "Antigravity Work"
+
+# List all created clones and their isolated data directories
+swift run duplix list
+
+# Launch an isolated instance simultaneously with existing apps
+swift run duplix launch "Antigravity Work"
+
+# Open the clone's isolated Application Support data folder
+swift run duplix data "Antigravity Work"
+
+# Wipe session/cache for a fresh start without deleting the app
+swift run duplix reset "Antigravity Work"
+
+# Delete a clone cleanly
+swift run duplix delete "Antigravity Work"
+
+# Run automated tests
+swift run DuplixTests
+```
 
 ---
 
