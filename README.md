@@ -41,9 +41,26 @@ Detailed documentation and technical architecture reports are available in the [
 Duplix is actively under development.
 - **Phase 1 (Core Engine & CLI):** ✅ Completed & Verified (100% automated test coverage)
 - **Phase 2 (Icon Badging & Dock Distinction):** ✅ Completed & Verified (CoreGraphics + iconutil)
-- **Phase 3 (SwiftUI Native UI):** Queued
-- **Phase 4 (Multi-App QA):** Queued
+- **Phase 3 (SwiftUI Native App & Dashboard):** ✅ Completed & Verified (`swift run DuplixApp`)
+- **Phase 4 (Multi-App QA):** In Progress
 - **Phase 5 (Public DMG Release):** Queued
+
+---
+
+## 🖥 Native macOS App (GUI)
+
+Launch the modern SwiftUI interface directly:
+
+```bash
+# Launch the native macOS Duplix GUI
+swift run DuplixApp
+```
+
+Features included in the Native GUI:
+- **Applications Scanner:** Automatically detects all installed apps in `/Applications`, filters by engine (Electron, Gecko, Native Cocoa), and instant search.
+- **Visual Clone Creator Sheet:** One-click cloning with batch quantity selector (1 to 5 clones), real-time interactive icon badge preview, preset and custom hex color pickers, and badge labels.
+- **Clones Dashboard:** Live grid of all cloned apps with direct Launch, Finder Data reveal, Live Badge Editor, Session Cache Wipe, and Uninstall actions.
+- **Live Badge Customizer:** Update badge colors and text on existing clones in real-time.
 
 ---
 

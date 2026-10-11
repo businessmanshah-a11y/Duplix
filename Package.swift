@@ -16,6 +16,10 @@ let package = Package(
             targets: ["duplix"]
         ),
         .executable(
+            name: "DuplixApp",
+            targets: ["DuplixApp"]
+        ),
+        .executable(
             name: "DuplixTests",
             targets: ["DuplixTests"]
         )
@@ -30,6 +34,11 @@ let package = Package(
             name: "duplix",
             dependencies: ["DuplixCore"],
             path: "Sources/duplix"
+        ),
+        .executableTarget(
+            name: "DuplixApp",
+            dependencies: ["DuplixCore"],
+            path: "Sources/DuplixApp"
         ),
         .executableTarget(
             name: "DuplixTests",

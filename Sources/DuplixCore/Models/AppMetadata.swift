@@ -1,6 +1,7 @@
 import Foundation
 
-public struct AppMetadata: Codable, Sendable {
+public struct AppMetadata: Codable, Sendable, Identifiable {
+    public var id: String { bundleIdentifier }
     public let bundleURL: URL
     public let bundleIdentifier: String
     public let displayName: String
