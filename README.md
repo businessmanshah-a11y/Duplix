@@ -1,8 +1,20 @@
 # Duplix
 
 <p align="center">
+  <img src="website/assets/icon.png" width="120" height="120" alt="Duplix Icon" style="border-radius: 28px;" />
+  <br>
   <b>The Free, Native, Open-Source macOS App Cloner</b><br>
   Run multiple fully isolated instances of any macOS app simultaneously with independent accounts, data, and Dock icons.
+  <br><br>
+  <a href="https://businessmanshah-a11y.github.io/Duplix/"><img src="https://img.shields.io/badge/Website-Live%20Demo-6366f1?style=for-the-badge&logo=safari&logoColor=white" alt="Live Website"></a>
+  <a href="https://github.com/businessmanshah-a11y/Duplix/releases"><img src="https://img.shields.io/badge/Download-.DMG%20(1.5MB)-10b981?style=for-the-badge&logo=apple&logoColor=white" alt="Download DMG"></a>
+  <a href="https://github.com/businessmanshah-a11y/Duplix/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="MIT License"></a>
+</p>
+
+---
+
+<p align="center">
+  <img src="website/assets/app-preview.png" width="850" alt="Duplix App Preview on macOS" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);" />
 </p>
 
 ---

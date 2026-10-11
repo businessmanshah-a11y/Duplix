@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Duplix — Free, Native macOS App Cloner (APFS CoW & Dock Badging)</title>
+  <meta name="description" content="Run multiple isolated instances of any macOS app simultaneously with zero disk overhead, independent session data, and color-coded Dock badges. Free & Open-Source.">
+  <meta name="keywords" content="macOS app cloner, duplicate Mac apps, APFS copy on write, multi-account Mac, run multiple Slack instances, multiple VS Code, Apple Silicon native, Product Hunt">
+  <meta property="og:title" content="Duplix — The Free, Native macOS App Cloner">
+  <meta property="og:description" content="Duplicate any Mac app in 1 second with 0 Byte extra storage. Run separate accounts simultaneously with distinct Dock icons.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/icon.png">
+  <link rel="icon" type="image/png" href="assets/icon.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Ambient Glow Orbs -->
+  <div class="bg-glow-orb bg-orb-1"></div>
+  <div class="bg-glow-orb bg-orb-2"></div>
+  <div class="bg-glow-orb bg-orb-3"></div>
+
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="#" class="nav-brand">
+        <img src="assets/icon.png" alt="Duplix Logo" class="nav-logo">
+        <span class="nav-title">Duplix</span>
+        <span class="version-badge">v1.0.0</span>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#features" class="nav-link">Features</a></li>
+          <li><a href="#simulator" class="nav-link">Live Simulator</a></li>
+          <li><a href="#comparison" class="nav-link">Comparison</a></li>
+          <li><a href="#faq" class="nav-link">FAQ</a></li>
+          <li><a href="https://github.com/businessmanshah-a11y/Duplix" target="_blank" class="nav-link">Docs</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="https://github.com/businessmanshah-a11y/Duplix" target="_blank" class="btn btn-secondary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          Star on GitHub
+        </a>
+        <a href="#download" class="btn btn-primary">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+          </svg>
+          Download Free
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <a href="#" id="ph-banner" class="product-hunt-banner">
+        <span>🚀 Featured on Product Hunt</span>
+        <span>•</span>
+        <span>Join the Launch Upvote &rarr;</span>
+      </a>
+
+      <h1 class="hero-title">
+        Run Multiple Instances of <br>
+        <span class="gradient-text">Any Mac App Simultaneously</span>
+      </h1>
+
+      <p class="hero-subtitle">
+        Zero extra disk space. 100% isolated logins, caches, and accounts. 
+        Distinct color-coded Dock badges. Built natively for Apple Silicon & Intel macOS.
+      </p>
+
+      <div class="hero-cta-group">
+        <a href="#download" class="btn btn-primary btn-lg">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+          </svg>
+          Download Duplix DMG (1.5 MB)
+        </a>
+
+        <div class="terminal-copy-box" id="brew-cmd-box" title="Click to copy Homebrew command">
+          <span class="terminal-prompt">$</span>
+          <span>brew install --cask duplix</span>
+          <button class="copy-icon-btn" aria-label="Copy Command">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Trust Badges -->
+      <div class="trust-badges">
+        <div class="trust-item">
+          <svg class="trust-icon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+          </svg>
+          <span>APFS Copy-on-Write (0 Byte Disk Cost)</span>
+        </div>
+        <div class="trust-item">
+          <svg class="trust-icon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+          </svg>
+          <span>100% Local & Private (Zero Telemetry)</span>
+        </div>
+        <div class="trust-item">
+          <svg class="trust-icon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <span>Apple Silicon & Intel Native</span>
+        </div>
+        <div class="trust-item">
+          <svg class="trust-icon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+          <span>100% Free Forever (MIT Open Source)</span>
+        </div>
+      </div>
+
+      <!-- App Preview Window -->
+      <div class="showcase-wrapper">
+        <div class="showcase-window">
+          <div class="window-header">
+            <div class="window-dots">
+              <div class="dot dot-red"></div>
+              <div class="dot dot-yellow"></div>
+              <div class="dot dot-green"></div>
+            </div>
+            <div class="window-title">Duplix — Active Clones Dashboard</div>
+          </div>
+          <img src="assets/app-preview.png" alt="Duplix macOS Dashboard Preview" class="showcase-img">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Live Simulator Section -->
+  <section class="simulator-section" id="simulator">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Interactive Preview</span>
+        <h2 class="section-title">Test Duplix Dock Badging Live</h2>
+        <p class="section-subtitle">
+          See how your cloned apps look in the macOS Dock with crystal-clear color tags and custom labels.
+        </p>
+      </div>
+
+      <div class="simulator-box">
+        <!-- Controls -->
+        <div class="sim-controls">
+          <div>
+            <label class="control-label">1. Select Target Application:</label>
+            <div class="app-selector-grid">
+              <button class="app-select-btn active" data-app="antigravity">
+                <img src="assets/icon.png" class="app-icon-mini" alt="Antigravity">
+                <span>Antigravity</span>
+              </button>
+              <button class="app-select-btn" data-app="chrome">
+                <img src="https://cdn.simpleicons.org/googlechrome/38bdf8" class="app-icon-mini" alt="Chrome">
+                <span>Chrome</span>
+              </button>
+              <button class="app-select-btn" data-app="vscode">
+                <img src="https://cdn.simpleicons.org/visualstudiocode/60a5fa" class="app-icon-mini" alt="VS Code">
+                <span>VS Code</span>
+              </button>
+              <button class="app-select-btn" data-app="telegram">
+                <img src="https://cdn.simpleicons.org/telegram/38bdf8" class="app-icon-mini" alt="Telegram">
+                <span>Telegram</span>
+              </button>
+              <button class="app-select-btn" data-app="slack">
+                <img src="https://cdn.simpleicons.org/slack/e879f9" class="app-icon-mini" alt="Slack">
+                <span>Slack</span>
+              </button>
+              <button class="app-select-btn" data-app="figma">
+                <img src="https://cdn.simpleicons.org/figma/f43f5e" class="app-icon-mini" alt="Figma">
+                <span>Figma</span>
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <label class="control-label">2. Pick Dock Badge Color:</label>
+            <div class="color-palette">
+              <button class="color-swatch active" style="background:#3b82f6;" data-color="#3b82f6" title="Blue"></button>
+              <button class="color-swatch" style="background:#10b981;" data-color="#10b981" title="Green"></button>
+              <button class="color-swatch" style="background:#8b5cf6;" data-color="#8b5cf6" title="Purple"></button>
+              <button class="color-swatch" style="background:#f59e0b;" data-color="#f59e0b" title="Orange"></button>
+              <button class="color-swatch" style="background:#ef4444;" data-color="#ef4444" title="Red"></button>
+              <button class="color-swatch" style="background:#06b6d4;" data-color="#06b6d4" title="Teal"></button>
+              <button class="color-swatch" style="background:#ec4899;" data-color="#ec4899" title="Pink"></button>
+            </div>
+          </div>
+
+          <div>
+            <label class="control-label">3. Badge Label (1–4 characters):</label>
+            <input type="text" id="sim-badge-text" class="text-input-field" value="1" maxlength="4" placeholder="e.g. 1, DEV, WORK">
+          </div>
+        </div>
+
+        <!-- Simulated Dock View -->
+        <div class="sim-preview-pane">
+          <div class="preview-label">Live macOS Dock Simulation (Click icons to bounce)</div>
+          
+          <div class="dock-mockup">
+            <!-- Finder -->
+            <div class="dock-item">
+              <img src="https://cdn.simpleicons.org/apple/ffffff" class="dock-icon" style="background:linear-gradient(135deg,#38bdf8,#1d4ed8);padding:14px;" alt="Finder">
+            </div>
+
+            <!-- Original App -->
+            <div class="dock-item">
+              <img src="assets/icon.png" class="dock-icon" alt="Original App">
+              <div class="dock-dot-active"></div>
+            </div>
+
+            <!-- Cloned & Badged App -->
+            <div class="dock-item" id="sim-target-app">
+              <img src="assets/icon.png" class="dock-icon" id="sim-target-icon" alt="Target Clone">
+              <div class="dock-badge-sim" id="sim-target-badge">1</div>
+              <div class="dock-dot-active"></div>
+            </div>
+
+            <!-- Chrome -->
+            <div class="dock-item">
+              <img src="https://cdn.simpleicons.org/googlechrome/ffffff" class="dock-icon" style="background:#222;padding:12px;" alt="Chrome">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Grid Section -->
+  <section class="features-section" id="features">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Core Capabilities</span>
+        <h2 class="section-title">Engineered Specifically for macOS</h2>
+        <p class="section-subtitle">
+          No slow virtual machines, no complex terminal hacks, and zero recurring subscription fees.
+        </p>
+      </div>
+
+      <div class="features-grid">
+        <!-- Feature 1 -->
+        <div class="feature-card">
+          <div class="feature-icon-wrapper">⚡️</div>
+          <h3 class="feature-title">Instant APFS Copy-on-Write</h3>
+          <p class="feature-desc">
+            Duplicates gigabyte-sized app bundles in milliseconds using macOS kernel-level pointer referencing. Consumes 0 additional bytes on your SSD until files mutate.
+          </p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="feature-card">
+          <div class="feature-icon-wrapper">🔒</div>
+          <h3 class="feature-title">Full Session & Data Isolation</h3>
+          <p class="feature-desc">
+            Each clone runs with its own sandboxed <code>Application Support</code>, preferences, cookies, cache, and token stores. Sign into work, personal, and client accounts side-by-side.
+          </p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="feature-card">
+          <div class="feature-icon-wrapper">🎨</div>
+          <h3 class="feature-title">CoreGraphics Retina Badging</h3>
+          <p class="feature-desc">
+            Renders crisp, vector badges in all 10 standard macOS icon resolutions (16px to 1024px) with drop shadows and contrast borders for instant identification in Dock and Spotlight.
+          </p>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="feature-card">
+          <div class="feature-icon-wrapper">🖥</div>
+          <h3 class="feature-title">Native SwiftUI Dashboard</h3>
+          <p class="feature-desc">
+            Features an intuitive application scanner, batch clone generator (up to 5 copies in 1 click), live badge editor, and one-click session cache resets.
+          </p>
+        </div>
+
+        <!-- Feature 5 -->
+        <div class="feature-card">
+          <div class="feature-icon-wrapper">🧠</div>
+          <h3 class="feature-title">Multi-Engine Intelligence</h3>
+          <p class="feature-desc">
+            Automatically detects Electron, Chromium (Chrome, Brave, Arc, Edge), Gecko (Firefox), and Native Cocoa/AppKit binaries to pass the exact sandboxing flags required.
+          </p>
+        </div>
+
+        <!-- Feature 6 -->
+        <div class="feature-card">
+          <div class="feature-icon-wrapper">🛡</div>
+          <h3 class="feature-title">Apple Silicon Ad-hoc Signing</h3>
+          <p class="feature-desc">
+            Automates recursive quarantine stripping (<code>xattr -cr</code>) and ad-hoc code signing (<code>codesign -s -</code>) so clones launch instantly without Gatekeeper warnings.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Comparison Table Section -->
+  <section class="comparison-section" id="comparison">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Direct Comparison</span>
+        <h2 class="section-title">Why Duplix is the Best Choice</h2>
+        <p class="section-subtitle">
+          See how Duplix beats traditional workarounds like multi-user accounts, virtual machines, and paid subscription tools.
+        </p>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th class="highlight-col">✨ Duplix</th>
+              <th>Fast User Switching</th>
+              <th>Parallels / UTM VMs</th>
+              <th>Paid Cloners</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Extra Disk Space</strong></td>
+              <td class="highlight-col"><span class="table-check">0 Bytes (APFS CoW)</span></td>
+              <td>5 GB – 20 GB</td>
+              <td>25 GB – 60 GB</td>
+              <td>Full clone copy (GBs)</td>
+            </tr>
+            <tr>
+              <td><strong>Simultaneous Dock Windows</strong></td>
+              <td class="highlight-col"><span class="table-check">Yes (Side-by-side)</span></td>
+              <td><span class="table-cross">No (Requires Switching)</span></td>
+              <td>Separate VM Window</td>
+              <td><span class="table-check">Yes</span></td>
+            </tr>
+            <tr>
+              <td><strong>Distinct Dock Badging</strong></td>
+              <td class="highlight-col"><span class="table-check">Custom Colors & Labels</span></td>
+              <td><span class="table-cross">Identical Icons</span></td>
+              <td>VM App Icon</td>
+              <td>Limited</td>
+            </tr>
+            <tr>
+              <td><strong>RAM & Battery Impact</strong></td>
+              <td class="highlight-col"><span class="table-check">Near Zero Overhead</span></td>
+              <td>Moderate</td>
+              <td><span class="table-cross">Heavy (4GB+ RAM)</span></td>
+              <td>Low</td>
+            </tr>
+            <tr>
+              <td><strong>Price & Licensing</strong></td>
+              <td class="highlight-col"><span class="table-check">100% Free & Open Source</span></td>
+              <td>Free (macOS built-in)</td>
+              <td>$99 / year</td>
+              <td>$20 – $39 / year</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="faq-section" id="faq">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Frequently Asked Questions</span>
+        <h2 class="section-title">Got Questions? We’ve Got Answers.</h2>
+      </div>
+
+      <div class="faq-list">
+        <div class="faq-item open">
+          <button class="faq-question">
+            <span>Does cloning an app take up extra disk space?</span>
+            <span class="faq-icon">▼</span>
+          </button>
+          <div class="faq-answer">
+            No! Duplix leverages Apple File System (APFS) Copy-on-Write (CoW). A 2GB app bundle takes 0 bytes of extra storage upon cloning. Only modified files or new cache data written during app usage consume disk space.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>Can I run original apps and clones at the same time?</span>
+            <span class="faq-icon">▼</span>
+          </button>
+          <div class="faq-answer">
+            Yes, absolutely. Duplix assigns unique Bundle Identifiers (<code>CFBundleIdentifier</code>) and dedicated session directories so both the original application and your clone run concurrently without conflict.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>Which macOS versions and Macs are supported?</span>
+            <span class="faq-icon">▼</span>
+          </button>
+          <div class="faq-answer">
+            Duplix runs natively on macOS 13 (Ventura), macOS 14 (Sonoma), and macOS 15+ (Sequoia) across all Apple Silicon (M1, M2, M3, M4) and Intel Macs.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>How do I uninstall a clone and clean up its data?</span>
+            <span class="faq-icon">▼</span>
+          </button>
+          <div class="faq-answer">
+            Simply open Duplix, click the menu on any clone card, and choose Delete. Or in the terminal, run <code>duplix delete &lt;name&gt;</code>. Duplix unregisters the bundle and removes the isolated Application Support folder cleanly.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>Is Duplix safe and really 100% free?</span>
+            <span class="faq-icon">▼</span>
+          </button>
+          <div class="faq-answer">
+            Yes. Duplix is 100% free and open-source under the MIT license. There are no tracking scripts, analytics, telemetries, background daemons, or paywalls. All operations run strictly on your local Mac.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Download Banner -->
+  <section class="container" id="download">
+    <div class="cta-banner">
+      <h2 class="cta-banner-title">Start Cloning Your Mac Apps Today</h2>
+      <p class="cta-banner-sub">
+        Download Duplix for free and start running separate workspaces, accounts, and environments side-by-side.
+      </p>
+
+      <div class="hero-cta-group">
+        <a href="https://github.com/businessmanshah-a11y/Duplix/releases" target="_blank" class="btn btn-primary btn-lg">
+          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+          </svg>
+          Download Duplix-1.0.0.dmg
+        </a>
+        <a href="https://github.com/businessmanshah-a11y/Duplix" target="_blank" class="btn btn-secondary btn-lg">
+          Explore Source on GitHub
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <div>
+        <p><strong>Duplix</strong> — Free, Native macOS App Cloner. MIT License.</p>
+        <p style="margin-top:4px;">Built with Swift & SwiftUI for Apple Silicon and Intel.</p>
+      </div>
+
+      <div class="footer-links">
+        <a href="https://github.com/businessmanshah-a11y/Duplix" target="_blank" class="footer-link">GitHub Repository</a>
+        <a href="https://github.com/businessmanshah-a11y/Duplix/releases" target="_blank" class="footer-link">Releases</a>
+        <a href="https://github.com/businessmanshah-a11y/Duplix/blob/main/LICENSE" target="_blank" class="footer-link">License</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">Copied to clipboard!</div>
+
+  <script src="script.js"></script>
+</body>
+</html>
