@@ -185,6 +185,7 @@ final class TestSuite {
 
             try assert(dict["CFBundleIdentifier"] as? String == "com.duplix.clone.mockapp.test1", "BundleID was not updated")
             try assert(dict["CFBundleDisplayName"] as? String == "Mock App (Clone 1)", "DisplayName was not updated")
+            try assert(dict["CFBundleName"] as? String == "MockApp", "CFBundleName should be preserved for Helper apps")
             try assert(dict["CFBundleExecutable"] as? String == "duplix_launcher", "CFBundleExecutable not updated")
             try assert(dict["DuplixOriginalExecutable"] as? String == "MockExecutable", "DuplixOriginalExecutable missing")
         }
@@ -210,6 +211,7 @@ final class TestSuite {
             try assert(content.contains("DATA_DIR=\"\(dataDir)\""), "Missing DATA_DIR definition")
             try assert(content.contains("--user-data-dir=\"$DATA_DIR\""), "Missing user-data-dir flag")
             try assert(content.contains("--password-store=basic"), "Missing password-store flag")
+            try assert(content.contains("--extensions-dir=\"$DATA_DIR/Extensions\""), "Missing extensions-dir flag")
             try assert(content.contains("--use-mock-keychain"), "Missing mock-keychain flag")
 
             let attrs = try FileManager.default.attributesOfItem(atPath: launcherURL.path)

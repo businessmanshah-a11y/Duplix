@@ -56,7 +56,10 @@ public struct PlistModifier: Sendable {
         // Update bundle identity
         dict["CFBundleIdentifier"] = newBundleIdentifier
         dict["CFBundleDisplayName"] = displayName
-        dict["CFBundleName"] = displayName
+        // Preserve original CFBundleName so frameworks (Electron, Chromium) can find their Helper apps
+        if dict["CFBundleName"] == nil {
+            dict["CFBundleName"] = displayName
+        }
 
         // Store original executable and attach new launcher
         dict["DuplixOriginalExecutable"] = originalExecutable

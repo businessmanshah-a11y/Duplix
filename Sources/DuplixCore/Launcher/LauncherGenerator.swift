@@ -41,12 +41,13 @@ public struct LauncherGenerator: Sendable {
             DIR="$(cd "$(dirname "$0")" && pwd)"
             DATA_DIR="\(dataDirectoryPath)"
             mkdir -p "$DATA_DIR"
+            mkdir -p "$DATA_DIR/Extensions"
 
             exec "$DIR/\(originalExecutableName)" \\
               --user-data-dir="$DATA_DIR" \\
               --password-store=basic \\
+              --extensions-dir="$DATA_DIR/Extensions" \\
               --use-mock-keychain \\
-              --no-first-run \\
               "$@"
             """
 

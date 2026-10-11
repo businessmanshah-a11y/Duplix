@@ -109,6 +109,7 @@ public actor DuplixManager {
 
         // 2. Generate identifiers & names
         let cloneId = UUID()
+        let shortId = String(cloneId.uuidString.lowercased().prefix(8))
         let existing = try loadRegistry()
         let matchingCount = existing.filter { $0.sourceAppName == meta.displayName }.count
         let cloneName = customName ?? "\(meta.displayName) (Clone \(matchingCount + 1))"
@@ -117,10 +118,10 @@ public actor DuplixManager {
             .components(separatedBy: CharacterSet.alphanumerics.inverted)
             .filter { !$0.isEmpty }
             .joined(separator: ".")
-        let cloneBundleID = "com.duplix.clone.\(sanitizedName).\(cloneId.uuidString.lowercased().prefix(8))"
+        let cloneBundleID = "com.duplix.clone.\(sanitizedName).\(shortId)"
 
         let destinationURL = clonesDirectoryURL.appendingPathComponent("\(cloneName).app", isDirectory: true)
-        let cloneDataURL = dataDirectoryURL.appendingPathComponent(cloneId.uuidString, isDirectory: true)
+        let cloneDataURL = dataDirectoryURL.appendingPathComponent(shortId, isDirectory: true)
 
         // Determine badge configuration
         let finalBadge = badgeConfig ?? BadgeConfig.automatic(forCloneIndex: matchingCount + 1)
