@@ -131,6 +131,39 @@ final class TestSuite {
             try assert(meta.engineType == .nativeCocoa, "Expected engine to be Native Cocoa")
         }
 
+        runTest("EngineDetector detects Google Chrome Framework as Chromium/Electron engine") {
+            let appURL = try createMockAppBundle(engine: .nativeCocoa)
+            defer { try? FileManager.default.removeItem(at: appURL.deletingLastPathComponent()) }
+
+            let frameworksURL = appURL.appendingPathComponent("Contents/Frameworks/Google Chrome Framework.framework", isDirectory: true)
+            try FileManager.default.createDirectory(at: frameworksURL, withIntermediateDirectories: true)
+
+            let detector = EngineDetector()
+            let meta = try detector.inspect(appURL: appURL)
+            try assert(meta.engineType == .electron, "Expected Chromium/Chrome framework to be detected as .electron")
+        }
+
+        runTest("LauncherGenerator creates Native Cocoa directories and isolates HOME") {
+            let appURL = try createMockAppBundle(engine: .nativeCocoa)
+            defer { try? FileManager.default.removeItem(at: appURL.deletingLastPathComponent()) }
+
+            let generator = LauncherGenerator()
+            let dataDir = "/tmp/duplix_native_data"
+            try generator.generateLauncher(
+                appBundleURL: appURL,
+                originalExecutableName: "MockExecutable",
+                launcherExecutableName: "duplix_launcher",
+                dataDirectoryPath: dataDir,
+                engineType: .nativeCocoa
+            )
+
+            let launcherURL = appURL.appendingPathComponent("Contents/MacOS/duplix_launcher")
+            let content = try String(contentsOf: launcherURL, encoding: .utf8)
+            try assert(content.contains("mkdir -p \"$DATA_DIR/Library/Application Support\""), "Missing App Support dir creation")
+            try assert(content.contains("export HOME=\"$DATA_DIR\""), "Missing HOME isolation")
+            try assert(content.contains("export CFFIXED_USER_HOME=\"$DATA_DIR\""), "Missing CFFIXED_USER_HOME")
+        }
+
         runTest("PlistModifier modifies BundleID and redirects CFBundleExecutable") {
             let appURL = try createMockAppBundle(engine: .electron)
             defer { try? FileManager.default.removeItem(at: appURL.deletingLastPathComponent()) }

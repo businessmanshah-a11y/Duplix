@@ -84,15 +84,30 @@ public struct EngineDetector: Sendable {
     public func detectEngine(at contentsURL: URL) -> EngineType {
         let fileManager = FileManager.default
 
-        // 1. Check for Electron Framework or Chromium
+        // 1. Check for Electron Framework or Chromium-based browsers
         let frameworksURL = contentsURL.appendingPathComponent("Frameworks", isDirectory: true)
-        let electronFramework = frameworksURL.appendingPathComponent("Electron Framework.framework", isDirectory: true)
+        let chromiumFrameworks = [
+            "Electron Framework.framework",
+            "Google Chrome Framework.framework",
+            "Chromium Framework.framework",
+            "Brave Browser Framework.framework",
+            "Microsoft Edge Framework.framework",
+            "Arc Framework.framework",
+            "Opera Framework.framework"
+        ]
+
+        for frameworkName in chromiumFrameworks {
+            let frameworkURL = frameworksURL.appendingPathComponent(frameworkName, isDirectory: true)
+            if fileManager.fileExists(atPath: frameworkURL.path) {
+                return .electron
+            }
+        }
+
         let resourcesURL = contentsURL.appendingPathComponent("Resources", isDirectory: true)
         let appAsar = resourcesURL.appendingPathComponent("app.asar", isDirectory: false)
         let defaultAppAsar = resourcesURL.appendingPathComponent("default_app.asar", isDirectory: false)
 
-        if fileManager.fileExists(atPath: electronFramework.path)
-            || fileManager.fileExists(atPath: appAsar.path)
+        if fileManager.fileExists(atPath: appAsar.path)
             || fileManager.fileExists(atPath: defaultAppAsar.path) {
             return .electron
         }

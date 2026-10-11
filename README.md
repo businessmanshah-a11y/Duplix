@@ -42,7 +42,7 @@ Duplix is actively under development.
 - **Phase 1 (Core Engine & CLI):** ✅ Completed & Verified (100% automated test coverage)
 - **Phase 2 (Icon Badging & Dock Distinction):** ✅ Completed & Verified (CoreGraphics + iconutil)
 - **Phase 3 (SwiftUI Native App & Dashboard):** ✅ Completed & Verified (`swift run DuplixApp`)
-- **Phase 4 (Multi-App QA):** In Progress
+- **Phase 4 (Multi-App QA & Hardening):** ✅ Completed & Verified (Chromium, Electron, Gecko, Native)
 - **Phase 5 (Public DMG Release):** Queued
 
 ---

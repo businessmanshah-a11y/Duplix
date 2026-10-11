@@ -46,6 +46,7 @@ public struct LauncherGenerator: Sendable {
               --user-data-dir="$DATA_DIR" \\
               --password-store=basic \\
               --use-mock-keychain \\
+              --no-first-run \\
               "$@"
             """
 
@@ -71,7 +72,9 @@ public struct LauncherGenerator: Sendable {
 
             DIR="$(cd "$(dirname "$0")" && pwd)"
             DATA_DIR="\(dataDirectoryPath)"
-            mkdir -p "$DATA_DIR"
+            mkdir -p "$DATA_DIR/Library/Application Support"
+            mkdir -p "$DATA_DIR/Library/Caches"
+            mkdir -p "$DATA_DIR/Library/Preferences"
 
             export HOME="$DATA_DIR"
             export CFFIXED_USER_HOME="$DATA_DIR"
