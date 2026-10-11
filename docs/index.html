@@ -6,28 +6,12 @@
   <title>Duplix — The Free, Native macOS App Cloner</title>
   <meta name="description" content="Duplicate any macOS application with zero extra disk space, complete session isolation, and retina Dock badging. Free and open source for Apple Silicon and Intel.">
   <link rel="icon" type="image/png" href="assets/icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-  <!-- Ultra-Premium App Preloader -->
-  <div id="preloader" class="preloader">
-    <div class="preloader-backdrop"></div>
-    <div class="preloader-content">
-      <div class="preloader-logo-ring">
-        <img src="assets/icon.png" alt="Duplix" class="preloader-logo">
-        <div class="ring-spinner"></div>
-      </div>
-      <div class="preloader-brand">
-        <span class="preloader-brand-name">Duplix</span>
-        <span class="preloader-version">v1.0.0</span>
-      </div>
-      <div class="preloader-bar-wrap">
-        <div class="preloader-bar" id="preloader-bar"></div>
-      </div>
-      <span class="preloader-status" id="preloader-status">Initializing Native macOS Engine...</span>
-    </div>
-  </div>
 
   <!-- Ambient Light Orbs -->
   <div class="ambient-glow glow-top-left"></div>
@@ -54,17 +38,41 @@
       </nav>
 
       <div class="nav-right-actions">
-        <a href="https://github.com/businessmanshah-a11y/Duplix" target="_blank" class="btn btn-ghost">
+        <a href="https://github.com/businessmanshah-a11y/Duplix" target="_blank" class="btn btn-ghost nav-desktop-only">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
           </svg>
           GitHub
         </a>
-        <a href="downloads/Duplix.dmg" download="Duplix.dmg" class="btn btn-primary">
+        <a href="downloads/Duplix.dmg" download="Duplix.dmg" class="btn btn-primary nav-desktop-only">
           <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
           </svg>
           Download DMG
+        </a>
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Open navigation menu" aria-expanded="false">
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+          <span class="hamburger-line"></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer Navigation -->
+    <div class="mobile-nav-drawer" id="mobile-nav-drawer" aria-hidden="true">
+      <ul class="mobile-nav-menu">
+        <li><a href="#features" class="mobile-nav-link">Features</a></li>
+        <li><a href="#simulator" class="mobile-nav-link">Dock Simulator</a></li>
+        <li><a href="#compare" class="mobile-nav-link">Comparison</a></li>
+        <li><a href="#faq" class="mobile-nav-link">FAQ</a></li>
+        <li><a href="https://github.com/businessmanshah-a11y/Duplix" target="_blank" class="mobile-nav-link">GitHub Source</a></li>
+      </ul>
+      <div class="mobile-drawer-cta">
+        <a href="downloads/Duplix.dmg" download="Duplix.dmg" class="btn btn-primary btn-block">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+          </svg>
+          Download Duplix.dmg (1.5 MB)
         </a>
       </div>
     </div>
@@ -149,13 +157,13 @@
             </div>
             <div class="window-caption" id="window-caption">Duplix Control Center — Active Clones</div>
             <div class="window-tabs">
-              <button class="win-tab-btn active" data-slide="0">
+              <button class="win-tab-btn active" data-slide="0" aria-label="Active Clones View">
                 <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
                 </svg>
                 <span>Active Clones</span>
               </button>
-              <button class="win-tab-btn" data-slide="1">
+              <button class="win-tab-btn" data-slide="1" aria-label="Installed Apps Scanner View">
                 <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <rect x="3" y="3" width="7" height="7"></rect>
                   <rect x="14" y="3" width="7" height="7"></rect>
@@ -164,7 +172,7 @@
                 </svg>
                 <span>Installed Apps</span>
               </button>
-              <button class="win-tab-btn" data-slide="2">
+              <button class="win-tab-btn" data-slide="2" aria-label="About Duplix View">
                 <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <circle cx="12" cy="12" r="10"></circle>
                   <line x1="12" y1="16" x2="12" y2="12"></line>
@@ -218,13 +226,13 @@
                       <p class="app-view-subtitle">1 isolated app instance registered</p>
                     </div>
                     <div class="app-header-actions">
-                      <button class="mac-btn-icon" title="Refresh">
+                      <button class="mac-btn-icon" title="Refresh" aria-label="Refresh Clones">
                         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                           <path d="M23 4v6h-6M1 20v-6h6"></path>
                           <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
                         </svg>
                       </button>
-                      <button class="mac-btn-primary">
+                      <button class="mac-btn-primary" aria-label="Create New Clone">
                         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                           <line x1="12" y1="5" x2="12" y2="19"></line>
                           <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -270,24 +278,24 @@
                     </div>
 
                     <div class="mock-actions-row">
-                      <button class="mock-btn-launch">
+                      <button class="mock-btn-launch" aria-label="Launch Clone">
                         <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24">
                           <polygon points="5 3 19 12 5 21 5 3"></polygon>
                         </svg>
                         Launch
                       </button>
-                      <button class="mock-btn-subtle" title="Open Data Directory">
+                      <button class="mock-btn-subtle" title="Open Data Directory" aria-label="Open Data Directory">
                         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                           <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
                         </svg>
                       </button>
-                      <button class="mock-btn-subtle" title="Edit Badge">
+                      <button class="mock-btn-subtle" title="Edit Badge" aria-label="Edit Badge">
                         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                           <path d="M12 20h9"></path>
                           <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
                         </svg>
                       </button>
-                      <button class="mock-btn-subtle" title="More">
+                      <button class="mock-btn-subtle" title="More Options" aria-label="More Options">
                         <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
                           <circle cx="5" cy="12" r="2"></circle>
                           <circle cx="12" cy="12" r="2"></circle>
@@ -352,7 +360,7 @@
                       <span class="seg-item">Native</span>
                     </div>
 
-                    <button class="mac-btn-icon" title="Refresh">
+                    <button class="mac-btn-icon" title="Refresh" aria-label="Rescan Applications">
                       <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path d="M23 4v6h-6M1 20v-6h6"></path>
                         <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
@@ -369,7 +377,7 @@
                         <div class="scanner-card-name">Antigravity IDE</div>
                         <div class="scanner-card-meta"><span class="engine-badge electron">Electron</span> v2.5.5</div>
                       </div>
-                      <button class="scanner-clone-btn">Clone</button>
+                      <button class="scanner-clone-btn" aria-label="Clone Antigravity IDE">Clone</button>
                     </div>
 
                     <!-- App 2: Cursor -->
@@ -379,7 +387,7 @@
                         <div class="scanner-card-name">Cursor</div>
                         <div class="scanner-card-meta"><span class="engine-badge electron">Electron</span> v3.17.8</div>
                       </div>
-                      <button class="scanner-clone-btn">Clone</button>
+                      <button class="scanner-clone-btn" aria-label="Clone Cursor">Clone</button>
                     </div>
 
                     <!-- App 3: Claude Desktop -->
@@ -389,7 +397,7 @@
                         <div class="scanner-card-name">Claude</div>
                         <div class="scanner-card-meta"><span class="engine-badge electron">Electron</span> v1.0.4</div>
                       </div>
-                      <button class="scanner-clone-btn">Clone</button>
+                      <button class="scanner-clone-btn" aria-label="Clone Claude">Clone</button>
                     </div>
 
                     <!-- App 4: VS Code -->
@@ -399,7 +407,7 @@
                         <div class="scanner-card-name">Code</div>
                         <div class="scanner-card-meta"><span class="engine-badge electron">Electron</span> v1.135.0</div>
                       </div>
-                      <button class="scanner-clone-btn">Clone</button>
+                      <button class="scanner-clone-btn" aria-label="Clone VS Code">Clone</button>
                     </div>
 
                     <!-- App 5: Telegram -->
@@ -409,7 +417,7 @@
                         <div class="scanner-card-name">Telegram</div>
                         <div class="scanner-card-meta"><span class="engine-badge native">Native</span> v10.4.0</div>
                       </div>
-                      <button class="scanner-clone-btn">Clone</button>
+                      <button class="scanner-clone-btn" aria-label="Clone Telegram">Clone</button>
                     </div>
 
                     <!-- App 6: Slack -->
@@ -419,7 +427,7 @@
                         <div class="scanner-card-name">Slack</div>
                         <div class="scanner-card-meta"><span class="engine-badge electron">Electron</span> v4.38.0</div>
                       </div>
-                      <button class="scanner-clone-btn">Clone</button>
+                      <button class="scanner-clone-btn" aria-label="Clone Slack">Clone</button>
                     </div>
 
                     <!-- App 7: Figma -->
@@ -429,7 +437,7 @@
                         <div class="scanner-card-name">Figma</div>
                         <div class="scanner-card-meta"><span class="engine-badge electron">Electron</span> v116.15</div>
                       </div>
-                      <button class="scanner-clone-btn">Clone</button>
+                      <button class="scanner-clone-btn" aria-label="Clone Figma">Clone</button>
                     </div>
 
                     <!-- App 8: Duplix -->
@@ -439,7 +447,7 @@
                         <div class="scanner-card-name">Duplix</div>
                         <div class="scanner-card-meta"><span class="engine-badge native">Native</span> v1.0.0</div>
                       </div>
-                      <button class="scanner-clone-btn">Clone</button>
+                      <button class="scanner-clone-btn" aria-label="Clone Duplix">Clone</button>
                     </div>
                   </div>
                 </main>
@@ -592,31 +600,31 @@
             </div>
             <div class="app-grid-selector">
               <button class="app-pill-btn active" data-app="antigravity">
-                <img src="assets/logos/antigravity.png" class="app-mini-icon" alt="Antigravity">
+                <img src="assets/logos/antigravity.png" class="app-mini-icon" alt="" aria-hidden="true">
                 <span>Antigravity</span>
               </button>
               <button class="app-pill-btn" data-app="cursor">
-                <img src="assets/logos/cursor.svg" class="app-mini-icon app-mini-icon-dark" alt="Cursor">
+                <img src="assets/logos/cursor.svg" class="app-mini-icon app-mini-icon-dark" alt="" aria-hidden="true">
                 <span>Cursor</span>
               </button>
               <button class="app-pill-btn" data-app="claude">
-                <img src="assets/logos/claude.svg" class="app-mini-icon app-mini-icon-dark" alt="Claude">
+                <img src="assets/logos/claude.svg" class="app-mini-icon app-mini-icon-dark" alt="" aria-hidden="true">
                 <span>Claude</span>
               </button>
               <button class="app-pill-btn" data-app="vscode">
-                <img src="assets/logos/vscode.svg" class="app-mini-icon" alt="VS Code">
+                <img src="assets/logos/vscode.svg" class="app-mini-icon" alt="" aria-hidden="true">
                 <span>VS Code</span>
               </button>
               <button class="app-pill-btn" data-app="telegram">
-                <img src="assets/logos/telegram.svg" class="app-mini-icon" alt="Telegram">
+                <img src="assets/logos/telegram.svg" class="app-mini-icon" alt="" aria-hidden="true">
                 <span>Telegram</span>
               </button>
               <button class="app-pill-btn" data-app="slack">
-                <img src="assets/logos/slack.svg" class="app-mini-icon app-mini-icon-dark" alt="Slack">
+                <img src="assets/logos/slack.svg" class="app-mini-icon app-mini-icon-dark" alt="" aria-hidden="true">
                 <span>Slack</span>
               </button>
               <button class="app-pill-btn" data-app="figma">
-                <img src="assets/logos/figma.svg" class="app-mini-icon app-mini-icon-dark" alt="Figma">
+                <img src="assets/logos/figma.svg" class="app-mini-icon app-mini-icon-dark" alt="" aria-hidden="true">
                 <span>Figma</span>
               </button>
             </div>
@@ -631,13 +639,13 @@
               Badge Color Palette
             </div>
             <div class="swatch-group">
-              <button class="swatch-item active" style="background:#4f46e5;" data-color="#4f46e5" title="Indigo"></button>
-              <button class="swatch-item" style="background:#06b6d4;" data-color="#06b6d4" title="Cyan"></button>
-              <button class="swatch-item" style="background:#7c3aed;" data-color="#7c3aed" title="Violet"></button>
-              <button class="swatch-item" style="background:#10b981;" data-color="#10b981" title="Green"></button>
-              <button class="swatch-item" style="background:#f59e0b;" data-color="#f59e0b" title="Amber"></button>
-              <button class="swatch-item" style="background:#ef4444;" data-color="#ef4444" title="Red"></button>
-              <button class="swatch-item" style="background:#ec4899;" data-color="#ec4899" title="Pink"></button>
+              <button class="swatch-item active" style="background:#4f46e5;" data-color="#4f46e5" aria-label="Indigo Badge Color" title="Indigo"></button>
+              <button class="swatch-item" style="background:#06b6d4;" data-color="#06b6d4" aria-label="Cyan Badge Color" title="Cyan"></button>
+              <button class="swatch-item" style="background:#7c3aed;" data-color="#7c3aed" aria-label="Violet Badge Color" title="Violet"></button>
+              <button class="swatch-item" style="background:#10b981;" data-color="#10b981" aria-label="Green Badge Color" title="Green"></button>
+              <button class="swatch-item" style="background:#f59e0b;" data-color="#f59e0b" aria-label="Amber Badge Color" title="Amber"></button>
+              <button class="swatch-item" style="background:#ef4444;" data-color="#ef4444" aria-label="Red Badge Color" title="Red"></button>
+              <button class="swatch-item" style="background:#ec4899;" data-color="#ec4899" aria-label="Pink Badge Color" title="Pink"></button>
             </div>
           </div>
 

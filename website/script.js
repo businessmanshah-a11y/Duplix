@@ -1,29 +1,36 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Ultra-Premium Page Preloader
-  const preloader = document.getElementById('preloader');
-  const preloaderBar = document.getElementById('preloader-bar');
-  const preloaderStatus = document.getElementById('preloader-status');
+  // 1. Mobile Menu Drawer Toggle & Responsiveness
+  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+  const mobileNavDrawer = document.getElementById('mobile-nav-drawer');
+  const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
 
-  if (preloader && preloaderBar) {
-    let progress = 0;
-    const interval = setInterval(() => {
-      progress += Math.floor(Math.random() * 22) + 16;
-      if (progress >= 100) {
-        progress = 100;
-        clearInterval(interval);
-        preloaderBar.style.width = '100%';
-        if (preloaderStatus) preloaderStatus.textContent = 'Engine Ready';
-        setTimeout(() => {
-          preloader.classList.add('fade-out');
-          setTimeout(() => preloader.remove(), 600);
-        }, 200);
-      } else {
-        preloaderBar.style.width = progress + '%';
-        if (progress > 50 && preloaderStatus) {
-          preloaderStatus.textContent = 'Loading Isolated Workspaces...';
-        }
+  if (mobileMenuBtn && mobileNavDrawer) {
+    mobileMenuBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = mobileNavDrawer.classList.contains('open');
+      mobileNavDrawer.classList.toggle('open');
+      mobileMenuBtn.classList.toggle('open');
+      mobileMenuBtn.setAttribute('aria-expanded', !isOpen);
+      mobileNavDrawer.setAttribute('aria-hidden', isOpen);
+    });
+
+    mobileNavLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        mobileNavDrawer.classList.remove('open');
+        mobileMenuBtn.classList.remove('open');
+        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+        mobileNavDrawer.setAttribute('aria-hidden', 'true');
+      });
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!mobileNavDrawer.contains(e.target) && !mobileMenuBtn.contains(e.target) && mobileNavDrawer.classList.contains('open')) {
+        mobileNavDrawer.classList.remove('open');
+        mobileMenuBtn.classList.remove('open');
+        mobileMenuBtn.setAttribute('aria-expanded', 'false');
+        mobileNavDrawer.setAttribute('aria-hidden', 'true');
       }
-    }, 55);
+    });
   }
 
   // 2. Scroll Reveal Engine (Smooth Micro-Animations)
