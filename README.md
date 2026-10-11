@@ -38,14 +38,35 @@ Detailed documentation and technical architecture reports are available in the [
 
 ## 🏗 Development Status
 
-Duplix is actively under development.
+All 5 core development phases are **100% Completed & Verified**:
 - **Phase 1 (Core Engine & CLI):** ✅ Completed & Verified (100% automated test coverage)
 - **Phase 2 (Icon Badging & Dock Distinction):** ✅ Completed & Verified (CoreGraphics + iconutil)
 - **Phase 3 (SwiftUI Native App & Dashboard):** ✅ Completed & Verified (`swift run DuplixApp`)
 - **Phase 4 (Multi-App QA & Hardening):** ✅ Completed & Verified (Chromium, Electron, Gecko, Native)
-- **Phase 5 (Public DMG Release):** Queued
+- **Phase 5 (Packaging & DMG Release):** ✅ Completed & Verified (`dist/Duplix-1.0.0.dmg`)
 
 ---
+
+## 📦 Installation & Releases
+
+### Option 1: Apple Disk Image (DMG)
+Download the latest `Duplix-1.0.0.dmg` from the Releases section or build it locally:
+```bash
+./scripts/build_dmg.sh
+open dist/Duplix-1.0.0.dmg
+```
+Drag **Duplix.app** into your **Applications** folder.
+
+### Option 2: Homebrew Cask
+```bash
+brew install --cask Casks/duplix.rb
+```
+
+### Option 3: Local CLI Installation
+Install the `duplix` command-line utility into your PATH:
+```bash
+./scripts/install_cli.sh
+```
 
 ## 🖥 Native macOS App (GUI)
 
