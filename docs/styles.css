@@ -628,11 +628,519 @@ body {
   pointer-events: auto;
 }
 
-.preview-graphic {
+/* Native macOS App Frame Replica */
+.app-window-frame {
+  display: flex;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  display: block;
+  background: #fbfbfd;
+  color: #1d1d1f;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", var(--font-sans);
+  text-align: left;
+  user-select: none;
+}
+
+/* Sidebar */
+.app-sidebar {
+  width: 200px;
+  background: #f2f0ec;
+  padding: 16px 12px;
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #8e8e93;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+  padding: 0 10px;
+}
+
+.sidebar-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #3a3a3c;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+  margin-bottom: 2px;
+}
+
+.sidebar-nav-item:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.sidebar-nav-item.active {
+  background: #007aff;
+  color: #ffffff;
+}
+
+.sidebar-icon {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  color: inherit;
+}
+
+.sidebar-label {
+  flex: 1;
+  font-size: 13px;
+}
+
+.sidebar-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.06);
+  color: #636366;
+}
+
+.sidebar-nav-item.active .sidebar-badge {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+/* Detail Area */
+.app-detail-view {
+  flex: 1;
+  background: #faf9f7;
+  padding: 22px 26px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-view-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.app-view-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1c1c1e;
+  letter-spacing: -0.4px;
+  margin-bottom: 4px;
+}
+
+.app-view-subtitle {
+  font-size: 13px;
+  color: #8e8e93;
+}
+
+.app-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mac-btn-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: #ffffff;
+  border: 1px solid #d1d1d6;
+  color: #3a3a3c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.mac-btn-icon:hover {
+  background: #f2f2f7;
+}
+
+.mac-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #007aff;
+  color: #ffffff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 122, 255, 0.3);
+  transition: background 0.15s ease;
+}
+
+.mac-btn-primary:hover {
+  background: #0066d6;
+}
+
+/* Mock Clone Card */
+.mock-clone-card {
+  background: #ffffff;
+  border: 1px solid #e5e5ea;
+  border-radius: 12px;
+  padding: 18px 20px;
+  max-width: 440px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+}
+
+.mock-card-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.mock-icon-wrap {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+}
+
+.mock-card-app-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  object-fit: contain;
+}
+
+.mock-card-badge {
+  position: absolute;
+  bottom: -2px;
+  right: -4px;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  background: #007aff;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.mock-card-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1c1c1e;
+}
+
+.mock-card-source {
+  font-size: 12px;
+  color: #8e8e93;
+  margin-bottom: 4px;
+}
+
+.mock-tags-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mock-tag-engine {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: #f3e8ff;
+  color: #9333ea;
+}
+
+.mock-tag-status {
+  font-size: 11px;
+  font-weight: 600;
+  color: #16a34a;
+}
+
+.mock-card-divider {
+  height: 1px;
+  background: #f2f2f7;
+  margin: 14px 0 12px;
+}
+
+.mock-meta-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 11px;
+  color: #636366;
+  margin-bottom: 16px;
+}
+
+.mock-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mock-meta-icon {
+  width: 12px;
+  height: 12px;
+  color: #8e8e93;
+}
+
+.mock-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mock-btn-launch {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #007aff;
+  color: #ffffff;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 122, 255, 0.3);
+}
+
+.mock-btn-subtle {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: #f2f2f7;
+  border: 1px solid #e5e5ea;
+  color: #48484a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* Scanner View Styles */
+.scanner-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.scanner-search-box {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  border: 1px solid #d1d1d6;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 12px;
+  color: #8e8e93;
+}
+
+.scanner-segmented {
+  display: flex;
+  background: #e5e5ea;
+  padding: 2px;
+  border-radius: 7px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.seg-item {
+  padding: 3px 8px;
+  border-radius: 5px;
+  color: #636366;
+  cursor: pointer;
+}
+
+.seg-item.active {
+  background: #ffffff;
+  color: #1c1c1e;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.scanner-apps-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  overflow-y: auto;
+}
+
+.scanner-app-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  border: 1px solid #e5e5ea;
+  border-radius: 8px;
+  padding: 8px 10px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+}
+
+.scanner-card-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 7px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.scanner-icon-bg {
+  background: #181a24;
+  padding: 4px;
+}
+
+.scanner-card-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.scanner-card-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: #1c1c1e;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.scanner-card-meta {
+  font-size: 10px;
+  color: #8e8e93;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-top: 2px;
+}
+
+.engine-badge {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 3px;
+  border-radius: 3px;
+}
+
+.engine-badge.electron {
+  background: #f3e8ff;
+  color: #9333ea;
+}
+
+.engine-badge.native {
+  background: #e0f2fe;
+  color: #0284c7;
+}
+
+.scanner-clone-btn {
+  background: #f2f2f7;
+  border: 1px solid #d1d1d6;
+  color: #1c1c1e;
+  padding: 3px 8px;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s ease;
+}
+
+.scanner-clone-btn:hover {
+  background: #e5e5ea;
+}
+
+/* About View Styles */
+.app-detail-about {
+  align-items: center;
+  text-align: center;
+  padding-top: 14px;
+}
+
+.about-hero-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.about-brand-logo {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.25);
+}
+
+.about-hero-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #1c1c1e;
+  letter-spacing: -0.4px;
+}
+
+.about-hero-tagline {
+  font-size: 12px;
+  color: #8e8e93;
+  margin-top: 2px;
+  margin-bottom: 6px;
+}
+
+.about-version-badge {
+  font-size: 10px;
+  font-weight: 600;
+  color: #636366;
+  background: rgba(0, 0, 0, 0.05);
+  padding: 2px 8px;
+  border-radius: 999px;
+}
+
+.about-features-list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  width: 100%;
+  max-width: 480px;
+  text-align: left;
+}
+
+.about-feature-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #ffffff;
+  border: 1px solid #e5e5ea;
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+.about-feat-icon-wrap {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.about-feat-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #1c1c1e;
+}
+
+.about-feat-desc {
+  font-size: 10px;
+  color: #8e8e93;
+  line-height: 1.3;
 }
 
 /* Showcase Controls */
@@ -1195,4 +1703,87 @@ body {
   .bento-grid { grid-template-columns: 1fr; }
   .simulator-panel { grid-template-columns: 1fr; }
   .nav-menu { display: none; }
+  .scanner-apps-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .hero-heading { font-size: 2.3rem; }
+  .hero-subheading { font-size: 1.05rem; }
+  .hero-metrics-strip { gap: 18px; }
+  .showcase-slider {
+    aspect-ratio: auto;
+    height: 480px;
+  }
+  .app-sidebar {
+    width: 150px;
+    padding: 12px 8px;
+  }
+  .sidebar-section-title {
+    font-size: 9px;
+  }
+  .sidebar-label {
+    font-size: 11px;
+  }
+  .scanner-apps-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .scanner-segmented {
+    display: none;
+  }
+  .window-tabs span {
+    display: none;
+  }
+  .window-tabs button {
+    padding: 5px 8px;
+  }
+  .window-caption {
+    font-size: 11px;
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 540px) {
+  .hero-actions { flex-direction: column; width: 100%; }
+  .btn-primary, .btn-secondary { width: 100%; justify-content: center; }
+  .showcase-slider {
+    height: 440px;
+  }
+  .app-sidebar {
+    width: 44px;
+    padding: 10px 4px;
+    align-items: center;
+  }
+  .sidebar-section-title,
+  .sidebar-label,
+  .sidebar-badge {
+    display: none;
+  }
+  .sidebar-nav-item {
+    justify-content: center;
+    padding: 8px;
+    width: 32px;
+    height: 32px;
+  }
+  .app-detail-view {
+    padding: 14px 12px;
+  }
+  .scanner-apps-grid {
+    grid-template-columns: 1fr;
+  }
+  .mock-clone-card {
+    padding: 12px;
+  }
+  .about-brand-logo {
+    width: 44px;
+    height: 44px;
+  }
+  .about-hero-title {
+    font-size: 18px;
+  }
+  .about-feature-row {
+    padding: 6px 8px;
+  }
 }

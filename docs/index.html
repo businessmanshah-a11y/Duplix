@@ -176,14 +176,377 @@
           </div>
 
           <div class="showcase-slider" id="showcase-slider">
-            <div class="showcase-slide active" data-title="Duplix Control Center — Active Clones">
-              <img src="assets/preview-clones.webp" alt="Duplix Active Clones Manager" class="preview-graphic">
+            <!-- Screen 1: Active Clones -->
+            <div class="showcase-slide active" data-title="Duplix Control Center — Active Clones" data-index="0">
+              <div class="app-window-frame">
+                <!-- Sidebar -->
+                <aside class="app-sidebar">
+                  <div class="sidebar-section-title">Workspace</div>
+                  <div class="sidebar-nav-item active" data-switch="0">
+                    <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                    <span class="sidebar-label">My Clones</span>
+                    <span class="sidebar-badge">1</span>
+                  </div>
+                  <div class="sidebar-nav-item" data-switch="1">
+                    <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="3" width="7" height="7"></rect>
+                      <rect x="14" y="3" width="7" height="7"></rect>
+                      <rect x="14" y="14" width="7" height="7"></rect>
+                      <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    <span class="sidebar-label">Installed Apps</span>
+                  </div>
+
+                  <div class="sidebar-section-title" style="margin-top:20px;">System</div>
+                  <div class="sidebar-nav-item" data-switch="2">
+                    <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <line x1="12" y1="16" x2="12" y2="12"></line>
+                      <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                    </svg>
+                    <span class="sidebar-label">About Duplix</span>
+                  </div>
+                </aside>
+
+                <!-- Detail Area: Active Clones View -->
+                <main class="app-detail-view">
+                  <div class="app-view-header">
+                    <div>
+                      <h3 class="app-view-title">Active Clones</h3>
+                      <p class="app-view-subtitle">1 isolated app instance registered</p>
+                    </div>
+                    <div class="app-header-actions">
+                      <button class="mac-btn-icon" title="Refresh">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                          <path d="M23 4v6h-6M1 20v-6h6"></path>
+                          <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                        </svg>
+                      </button>
+                      <button class="mac-btn-primary">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                          <line x1="12" y1="5" x2="12" y2="19"></line>
+                          <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        <span>New Clone</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Clone Card -->
+                  <div class="mock-clone-card">
+                    <div class="mock-card-top">
+                      <div class="mock-icon-wrap">
+                        <img src="assets/logos/antigravity.png" class="mock-card-app-icon" alt="Antigravity IDE">
+                        <div class="mock-card-badge">1</div>
+                      </div>
+                      <div class="mock-card-info">
+                        <div class="mock-card-title">Antigravity IDE (Clone 1)</div>
+                        <div class="mock-card-source">Antigravity IDE</div>
+                        <div class="mock-tags-row">
+                          <span class="mock-tag-engine">Electron</span>
+                          <span class="mock-tag-status">Ready</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="mock-card-divider"></div>
+
+                    <div class="mock-meta-row">
+                      <div class="mock-meta-item">
+                        <svg class="mock-meta-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        <span>Data: <code>1BBA1ACF-7176-4EA1-AD67-7B3D735BF719</code></span>
+                      </div>
+                      <div class="mock-meta-item">
+                        <svg class="mock-meta-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                          <circle cx="12" cy="12" r="10"></circle>
+                          <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        <span>Launched: 11 Oct 2026 at 2:28 PM</span>
+                      </div>
+                    </div>
+
+                    <div class="mock-actions-row">
+                      <button class="mock-btn-launch">
+                        <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24">
+                          <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                        </svg>
+                        Launch
+                      </button>
+                      <button class="mock-btn-subtle" title="Open Data Directory">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                      </button>
+                      <button class="mock-btn-subtle" title="Edit Badge">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                          <path d="M12 20h9"></path>
+                          <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                        </svg>
+                      </button>
+                      <button class="mock-btn-subtle" title="More">
+                        <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
+                          <circle cx="5" cy="12" r="2"></circle>
+                          <circle cx="12" cy="12" r="2"></circle>
+                          <circle cx="19" cy="12" r="2"></circle>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                </main>
+              </div>
             </div>
-            <div class="showcase-slide" data-title="Duplix Control Center — Installed Apps Scanner">
-              <img src="assets/preview-scanner.webp" alt="Duplix Installed Apps Scanner" class="preview-graphic">
+
+            <!-- Screen 2: Installed Apps Scanner -->
+            <div class="showcase-slide" data-title="Duplix Control Center — Installed Apps Scanner" data-index="1">
+              <div class="app-window-frame">
+                <!-- Sidebar -->
+                <aside class="app-sidebar">
+                  <div class="sidebar-section-title">Workspace</div>
+                  <div class="sidebar-nav-item" data-switch="0">
+                    <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                    <span class="sidebar-label">My Clones</span>
+                    <span class="sidebar-badge">1</span>
+                  </div>
+                  <div class="sidebar-nav-item active" data-switch="1">
+                    <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="3" width="7" height="7"></rect>
+                      <rect x="14" y="3" width="7" height="7"></rect>
+                      <rect x="14" y="14" width="7" height="7"></rect>
+                      <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    <span class="sidebar-label">Installed Apps</span>
+                  </div>
+
+                  <div class="sidebar-section-title" style="margin-top:20px;">System</div>
+                  <div class="sidebar-nav-item" data-switch="2">
+                    <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <line x1="12" y1="16" x2="12" y2="12"></line>
+                      <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                    </svg>
+                    <span class="sidebar-label">About Duplix</span>
+                  </div>
+                </aside>
+
+                <!-- Detail Area: Scanner View -->
+                <main class="app-detail-view">
+                  <div class="scanner-filter-bar">
+                    <div class="scanner-search-box">
+                      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                      </svg>
+                      <span>Search installed apps...</span>
+                    </div>
+
+                    <div class="scanner-segmented">
+                      <span class="seg-item active">All</span>
+                      <span class="seg-item">Electron</span>
+                      <span class="seg-item">Gecko</span>
+                      <span class="seg-item">Native</span>
+                    </div>
+
+                    <button class="mac-btn-icon" title="Refresh">
+                      <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M23 4v6h-6M1 20v-6h6"></path>
+                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                      </svg>
+                    </button>
+                  </div>
+
+                  <!-- Grid of scanned apps -->
+                  <div class="scanner-apps-grid">
+                    <!-- App 1: Antigravity IDE -->
+                    <div class="scanner-app-card">
+                      <img src="assets/logos/antigravity.png" class="scanner-card-icon" alt="Antigravity IDE">
+                      <div class="scanner-card-details">
+                        <div class="scanner-card-name">Antigravity IDE</div>
+                        <div class="scanner-card-meta"><span class="engine-badge electron">Electron</span> v2.5.5</div>
+                      </div>
+                      <button class="scanner-clone-btn">Clone</button>
+                    </div>
+
+                    <!-- App 2: Cursor -->
+                    <div class="scanner-app-card">
+                      <img src="assets/logos/cursor.svg" class="scanner-card-icon scanner-icon-bg" alt="Cursor">
+                      <div class="scanner-card-details">
+                        <div class="scanner-card-name">Cursor</div>
+                        <div class="scanner-card-meta"><span class="engine-badge electron">Electron</span> v3.17.8</div>
+                      </div>
+                      <button class="scanner-clone-btn">Clone</button>
+                    </div>
+
+                    <!-- App 3: Claude Desktop -->
+                    <div class="scanner-app-card">
+                      <img src="assets/logos/claude.svg" class="scanner-card-icon scanner-icon-bg" alt="Claude">
+                      <div class="scanner-card-details">
+                        <div class="scanner-card-name">Claude</div>
+                        <div class="scanner-card-meta"><span class="engine-badge electron">Electron</span> v1.0.4</div>
+                      </div>
+                      <button class="scanner-clone-btn">Clone</button>
+                    </div>
+
+                    <!-- App 4: VS Code -->
+                    <div class="scanner-app-card">
+                      <img src="assets/logos/vscode.svg" class="scanner-card-icon" alt="VS Code">
+                      <div class="scanner-card-details">
+                        <div class="scanner-card-name">Code</div>
+                        <div class="scanner-card-meta"><span class="engine-badge electron">Electron</span> v1.135.0</div>
+                      </div>
+                      <button class="scanner-clone-btn">Clone</button>
+                    </div>
+
+                    <!-- App 5: Telegram -->
+                    <div class="scanner-app-card">
+                      <img src="assets/logos/telegram.svg" class="scanner-card-icon" alt="Telegram">
+                      <div class="scanner-card-details">
+                        <div class="scanner-card-name">Telegram</div>
+                        <div class="scanner-card-meta"><span class="engine-badge native">Native</span> v10.4.0</div>
+                      </div>
+                      <button class="scanner-clone-btn">Clone</button>
+                    </div>
+
+                    <!-- App 6: Slack -->
+                    <div class="scanner-app-card">
+                      <img src="assets/logos/slack.svg" class="scanner-card-icon scanner-icon-bg" alt="Slack">
+                      <div class="scanner-card-details">
+                        <div class="scanner-card-name">Slack</div>
+                        <div class="scanner-card-meta"><span class="engine-badge electron">Electron</span> v4.38.0</div>
+                      </div>
+                      <button class="scanner-clone-btn">Clone</button>
+                    </div>
+
+                    <!-- App 7: Figma -->
+                    <div class="scanner-app-card">
+                      <img src="assets/logos/figma.svg" class="scanner-card-icon scanner-icon-bg" alt="Figma">
+                      <div class="scanner-card-details">
+                        <div class="scanner-card-name">Figma</div>
+                        <div class="scanner-card-meta"><span class="engine-badge electron">Electron</span> v116.15</div>
+                      </div>
+                      <button class="scanner-clone-btn">Clone</button>
+                    </div>
+
+                    <!-- App 8: Duplix -->
+                    <div class="scanner-app-card">
+                      <img src="assets/icon.png" class="scanner-card-icon" alt="Duplix">
+                      <div class="scanner-card-details">
+                        <div class="scanner-card-name">Duplix</div>
+                        <div class="scanner-card-meta"><span class="engine-badge native">Native</span> v1.0.0</div>
+                      </div>
+                      <button class="scanner-clone-btn">Clone</button>
+                    </div>
+                  </div>
+                </main>
+              </div>
             </div>
-            <div class="showcase-slide" data-title="Duplix Control Center — Architecture & About">
-              <img src="assets/preview-about.webp" alt="Duplix Native Architecture & Features" class="preview-graphic">
+
+            <!-- Screen 3: About Duplix -->
+            <div class="showcase-slide" data-title="Duplix Control Center — Architecture & About" data-index="2">
+              <div class="app-window-frame">
+                <!-- Sidebar -->
+                <aside class="app-sidebar">
+                  <div class="sidebar-section-title">Workspace</div>
+                  <div class="sidebar-nav-item" data-switch="0">
+                    <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                    <span class="sidebar-label">My Clones</span>
+                    <span class="sidebar-badge">1</span>
+                  </div>
+                  <div class="sidebar-nav-item" data-switch="1">
+                    <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="3" width="7" height="7"></rect>
+                      <rect x="14" y="3" width="7" height="7"></rect>
+                      <rect x="14" y="14" width="7" height="7"></rect>
+                      <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    <span class="sidebar-label">Installed Apps</span>
+                  </div>
+
+                  <div class="sidebar-section-title" style="margin-top:20px;">System</div>
+                  <div class="sidebar-nav-item active" data-switch="2">
+                    <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <line x1="12" y1="16" x2="12" y2="12"></line>
+                      <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                    </svg>
+                    <span class="sidebar-label">About Duplix</span>
+                  </div>
+                </aside>
+
+                <!-- Detail Area: About View -->
+                <main class="app-detail-view app-detail-about">
+                  <div class="about-hero-box">
+                    <img src="assets/icon.png" class="about-brand-logo" alt="Duplix">
+                    <h3 class="about-hero-title">Duplix</h3>
+                    <p class="about-hero-tagline">The Free, Native, Open-Source macOS App Cloner</p>
+                    <span class="about-version-badge">Version 1.0.0 (Phase 3 Native SwiftUI)</span>
+                  </div>
+
+                  <div class="about-features-list">
+                    <div class="about-feature-row">
+                      <div class="about-feat-icon-wrap" style="color:#f59e0b;background:rgba(245,158,11,0.12);">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                        </svg>
+                      </div>
+                      <div>
+                        <div class="about-feat-title">APFS Copy-on-Write (CoW)</div>
+                        <div class="about-feat-desc">Zero extra disk space. Apps duplicate instantly without taking duplicate storage.</div>
+                      </div>
+                    </div>
+
+                    <div class="about-feature-row">
+                      <div class="about-feat-icon-wrap" style="color:#10b981;background:rgba(16,185,129,0.12);">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                      </div>
+                      <div>
+                        <div class="about-feat-title">Complete Session Isolation</div>
+                        <div class="about-feat-desc">Independent accounts, cookies, cache, and directories for Electron and Native apps.</div>
+                      </div>
+                    </div>
+
+                    <div class="about-feature-row">
+                      <div class="about-feat-icon-wrap" style="color:#8b5cf6;background:rgba(139,92,246,0.12);">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                          <circle cx="12" cy="12" r="10"></circle>
+                          <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+                        </svg>
+                      </div>
+                      <div>
+                        <div class="about-feat-title">Distinct Dock Badges</div>
+                        <div class="about-feat-desc">Color-coded icons and custom labels so you recognize your clones in the Dock.</div>
+                      </div>
+                    </div>
+
+                    <div class="about-feature-row">
+                      <div class="about-feat-icon-wrap" style="color:#06b6d4;background:rgba(6,182,212,0.12);">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                          <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect>
+                          <rect x="9" y="9" width="6" height="6"></rect>
+                          <line x1="9" y1="1" x2="9" y2="4"></line>
+                          <line x1="15" y1="1" x2="15" y2="4"></line>
+                          <line x1="9" y1="20" x2="9" y2="23"></line>
+                          <line x1="15" y1="20" x2="15" y2="23"></line>
+                        </svg>
+                      </div>
+                      <div>
+                        <div class="about-feat-title">Apple Silicon Native</div>
+                        <div class="about-feat-desc">Ad-hoc code signing and Gatekeeper compliance for M1/M2/M3/M4 & Intel Macs.</div>
+                      </div>
+                    </div>
+                  </div>
+                </main>
+              </div>
             </div>
           </div>
 

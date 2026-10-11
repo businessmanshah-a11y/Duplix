@@ -267,7 +267,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     slideIndicators.forEach((ind, i) => {
-      ind.classList.toggle('active', i === currentSlide);
+      const fill = ind.querySelector('.indicator-fill');
+      if (i === currentSlide) {
+        ind.classList.add('active');
+        if (fill) {
+          fill.style.transition = 'none';
+          fill.style.width = '0%';
+          void fill.offsetWidth; // Trigger reflow
+          fill.style.transition = `width ${SLIDE_DURATION}ms linear`;
+          fill.style.width = '100%';
+        }
+      } else {
+        ind.classList.remove('active');
+        if (fill) {
+          fill.style.transition = 'none';
+          fill.style.width = '0%';
+        }
+      }
     });
 
     const activeSlide = showcaseSlides[currentSlide];
@@ -299,6 +315,27 @@ document.addEventListener('DOMContentLoaded', () => {
       const target = parseInt(btn.dataset.slide, 10);
       goToSlide(target);
       startAutoPlay();
+    });
+  });
+
+  // Sidebar navigation switching
+  const sidebarSwitchItems = document.querySelectorAll('.sidebar-nav-item[data-switch]');
+  sidebarSwitchItems.forEach(item => {
+    item.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const target = parseInt(item.dataset.switch, 10);
+      goToSlide(target);
+      startAutoPlay();
+    });
+  });
+
+  // Scanner segmented control toggle
+  const segItems = document.querySelectorAll('.seg-item');
+  segItems.forEach(item => {
+    item.addEventListener('click', (e) => {
+      e.stopPropagation();
+      segItems.forEach(s => s.classList.remove('active'));
+      item.classList.add('active');
     });
   });
 
