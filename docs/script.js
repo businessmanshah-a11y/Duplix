@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const appData = {
     antigravity: {
       name: 'Antigravity IDE',
-      icon: 'assets/icon.png',
+      icon: 'assets/logos/antigravity.png',
       defaultColor: '#4f46e5',
       defaultText: '1',
       isFullIcon: true
