@@ -1,0 +1,17 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Xcode / Swift
+.build/
+xcuserdata/
+*.xcodeproj
+*.xcworkspace
+build/
+DerivedData/
+
+# Duplix Runtime & Local Data
+/data/
+/clones/
+*.app
