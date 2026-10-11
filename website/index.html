@@ -3,54 +3,49 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Duplix — Free, Native macOS App Cloner (APFS CoW & Dock Badging)</title>
-  <meta name="description" content="Run multiple isolated instances of any macOS app simultaneously with zero disk overhead, independent session data, and color-coded Dock badges. Free & Open-Source.">
-  <meta name="keywords" content="macOS app cloner, duplicate Mac apps, APFS copy on write, multi-account Mac, run multiple Slack instances, multiple VS Code, Apple Silicon native, Product Hunt">
-  <meta property="og:title" content="Duplix — The Free, Native macOS App Cloner">
-  <meta property="og:description" content="Duplicate any Mac app in 1 second with 0 Byte extra storage. Run separate accounts simultaneously with distinct Dock icons.">
-  <meta property="og:type" content="website">
-  <meta property="og:image" content="assets/icon.png">
+  <title>Duplix — The Free, Native macOS App Cloner</title>
+  <meta name="description" content="Duplicate any macOS application with zero extra disk space, complete session isolation, and retina Dock badging. Free and open source for Apple Silicon and Intel.">
   <link rel="icon" type="image/png" href="assets/icon.png">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <!-- Ambient Glow Orbs -->
-  <div class="bg-glow-orb bg-orb-1"></div>
-  <div class="bg-glow-orb bg-orb-2"></div>
-  <div class="bg-glow-orb bg-orb-3"></div>
+  <!-- Ambient Light Orbs -->
+  <div class="ambient-glow glow-top-left"></div>
+  <div class="ambient-glow glow-mid-right"></div>
+  <div class="ambient-glow glow-bottom-left"></div>
 
-  <!-- Navbar -->
+  <!-- Navigation Bar -->
   <header class="navbar">
-    <div class="container nav-container">
-      <a href="#" class="nav-brand">
-        <img src="assets/icon.png" alt="Duplix Logo" class="nav-logo">
-        <span class="nav-title">Duplix</span>
-        <span class="version-badge">v1.0.0</span>
+    <div class="container nav-wrap">
+      <a href="#" class="brand-link">
+        <img src="assets/icon.png" alt="Duplix Icon" class="brand-icon">
+        <span class="brand-name">Duplix</span>
+        <span class="badge-version">v1.0.0</span>
       </a>
 
       <nav>
-        <ul class="nav-links">
-          <li><a href="#features" class="nav-link">Features</a></li>
-          <li><a href="#simulator" class="nav-link">Live Simulator</a></li>
-          <li><a href="#comparison" class="nav-link">Comparison</a></li>
-          <li><a href="#faq" class="nav-link">FAQ</a></li>
-          <li><a href="https://github.com/businessmanshah-a11y/Duplix" target="_blank" class="nav-link">Docs</a></li>
+        <ul class="nav-menu">
+          <li><a href="#features" class="nav-item-link">Features</a></li>
+          <li><a href="#simulator" class="nav-item-link">Dock Simulator</a></li>
+          <li><a href="#compare" class="nav-item-link">Comparison</a></li>
+          <li><a href="#faq" class="nav-item-link">FAQ</a></li>
+          <li><a href="https://github.com/businessmanshah-a11y/Duplix" target="_blank" class="nav-item-link">Source</a></li>
         </ul>
       </nav>
 
-      <div class="nav-actions">
-        <a href="https://github.com/businessmanshah-a11y/Duplix" target="_blank" class="btn btn-secondary">
+      <div class="nav-right-actions">
+        <a href="https://github.com/businessmanshah-a11y/Duplix" target="_blank" class="btn btn-ghost">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
           </svg>
-          Star on GitHub
+          GitHub
         </a>
         <a href="#download" class="btn btn-primary">
           <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
           </svg>
-          Download Free
+          Download DMG
         </a>
       </div>
     </div>
@@ -59,34 +54,35 @@
   <!-- Hero Section -->
   <section class="hero-section">
     <div class="container">
-      <a href="#" id="ph-banner" class="product-hunt-banner">
-        <span>🚀 Featured on Product Hunt</span>
-        <span>•</span>
-        <span>Join the Launch Upvote &rarr;</span>
+      <a href="#" id="ph-pill-link" class="ph-pill">
+        <svg class="ph-badge-icon" viewBox="0 0 24 24" fill="currentColor">
+          <circle cx="12" cy="12" r="10" fill="#f59e0b" fill-opacity="0.2"/>
+          <path d="M12 6.5H9v11h2v-4h1a3.5 3.5 0 000-7zm0 5h-1v-3h1a1.5 1.5 0 010 3z" fill="#f59e0b"/>
+        </svg>
+        Featured on Product Hunt
       </a>
 
-      <h1 class="hero-title">
-        Run Multiple Instances of <br>
-        <span class="gradient-text">Any Mac App Simultaneously</span>
+      <h1 class="hero-heading">
+        Run Simultaneous Instances of <br>
+        <span class="gradient-title">Any Mac App with Zero Overhead</span>
       </h1>
 
-      <p class="hero-subtitle">
-        Zero extra disk space. 100% isolated logins, caches, and accounts. 
-        Distinct color-coded Dock badges. Built natively for Apple Silicon & Intel macOS.
+      <p class="hero-description">
+        Clone apps in under 1 second with native APFS Copy-on-Write. Run independent accounts side-by-side with distinct, color-coded Dock icons.
       </p>
 
-      <div class="hero-cta-group">
+      <div class="hero-buttons">
         <a href="#download" class="btn btn-primary btn-lg">
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
           </svg>
-          Download Duplix DMG (1.5 MB)
+          Download Free for macOS (1.5 MB)
         </a>
 
-        <div class="terminal-copy-box" id="brew-cmd-box" title="Click to copy Homebrew command">
-          <span class="terminal-prompt">$</span>
+        <div class="cli-box" id="cli-copy-box" title="Click to copy Homebrew command">
+          <span class="cli-prefix">$</span>
           <span>brew install --cask duplix</span>
-          <button class="copy-icon-btn" aria-label="Copy Command">
+          <button class="cli-copy-btn" aria-label="Copy Command">
             <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
               <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -95,140 +91,171 @@
         </div>
       </div>
 
-      <!-- Trust Badges -->
-      <div class="trust-badges">
-        <div class="trust-item">
-          <svg class="trust-icon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <!-- Trust Metrics Strip -->
+      <div class="trust-strip">
+        <div class="trust-badge-card">
+          <svg class="trust-badge-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
           </svg>
-          <span>APFS Copy-on-Write (0 Byte Disk Cost)</span>
+          <span>0 B APFS Disk Overhead</span>
         </div>
-        <div class="trust-item">
-          <svg class="trust-icon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <div class="trust-badge-card">
+          <svg class="trust-badge-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
           </svg>
-          <span>100% Local & Private (Zero Telemetry)</span>
+          <span>Isolated Profiles & Sessions</span>
         </div>
-        <div class="trust-item">
-          <svg class="trust-icon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <div class="trust-badge-card">
+          <svg class="trust-badge-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
           </svg>
           <span>Apple Silicon & Intel Native</span>
         </div>
-        <div class="trust-item">
-          <svg class="trust-icon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        <div class="trust-badge-card">
+          <svg class="trust-badge-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
           </svg>
-          <span>100% Free Forever (MIT Open Source)</span>
+          <span>100% Free & Open Source</span>
         </div>
       </div>
 
-      <!-- App Preview Window -->
-      <div class="showcase-wrapper">
-        <div class="showcase-window">
-          <div class="window-header">
-            <div class="window-dots">
-              <div class="dot dot-red"></div>
-              <div class="dot dot-yellow"></div>
-              <div class="dot dot-green"></div>
+      <!-- Application Window Showcase -->
+      <div class="preview-container">
+        <div class="mac-window">
+          <div class="mac-titlebar">
+            <div class="window-buttons">
+              <div class="win-dot win-dot-close"></div>
+              <div class="win-dot win-dot-min"></div>
+              <div class="win-dot win-dot-max"></div>
             </div>
-            <div class="window-title">Duplix — Active Clones Dashboard</div>
+            <div class="window-caption">Duplix Control Center — Active Clones</div>
           </div>
-          <img src="assets/app-preview.png" alt="Duplix macOS Dashboard Preview" class="showcase-img">
+          <img src="assets/app-preview.png" alt="Duplix macOS Dashboard Preview" class="preview-graphic">
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Interactive Live Simulator Section -->
-  <section class="simulator-section" id="simulator">
+  <!-- Interactive Dock Simulator -->
+  <section class="sim-section" id="simulator">
     <div class="container">
-      <div class="section-header">
-        <span class="section-tag">Interactive Preview</span>
-        <h2 class="section-title">Test Duplix Dock Badging Live</h2>
-        <p class="section-subtitle">
-          See how your cloned apps look in the macOS Dock with crystal-clear color tags and custom labels.
+      <div class="section-head">
+        <span class="section-eyebrow">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 8v8M8 12h8"></path>
+          </svg>
+          Live Simulator
+        </span>
+        <h2 class="section-headline">Instant Dock Badging Engine</h2>
+        <p class="section-subtext">
+          Select an application, choose a distinctive badge color, and preview how it renders in the macOS Dock.
         </p>
       </div>
 
-      <div class="simulator-box">
-        <!-- Controls -->
-        <div class="sim-controls">
+      <div class="simulator-panel">
+        <!-- Settings -->
+        <div class="sim-settings">
           <div>
-            <label class="control-label">1. Select Target Application:</label>
-            <div class="app-selector-grid">
-              <button class="app-select-btn active" data-app="antigravity">
-                <img src="assets/icon.png" class="app-icon-mini" alt="Antigravity">
+            <div class="field-label">
+              <svg class="label-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                <line x1="8" y1="21" x2="16" y2="21"></line>
+                <line x1="12" y1="17" x2="12" y2="21"></line>
+              </svg>
+              Target Application
+            </div>
+            <div class="app-grid-selector">
+              <button class="app-pill-btn active" data-app="antigravity">
+                <img src="assets/icon.png" class="app-mini-icon" alt="Antigravity">
                 <span>Antigravity</span>
               </button>
-              <button class="app-select-btn" data-app="chrome">
-                <img src="https://cdn.simpleicons.org/googlechrome/38bdf8" class="app-icon-mini" alt="Chrome">
+              <button class="app-pill-btn" data-app="chrome">
+                <img src="https://cdn.simpleicons.org/googlechrome/06b6d4" class="app-mini-icon" alt="Chrome">
                 <span>Chrome</span>
               </button>
-              <button class="app-select-btn" data-app="vscode">
-                <img src="https://cdn.simpleicons.org/visualstudiocode/60a5fa" class="app-icon-mini" alt="VS Code">
+              <button class="app-pill-btn" data-app="vscode">
+                <img src="https://cdn.simpleicons.org/visualstudiocode/818cf8" class="app-mini-icon" alt="VS Code">
                 <span>VS Code</span>
               </button>
-              <button class="app-select-btn" data-app="telegram">
-                <img src="https://cdn.simpleicons.org/telegram/38bdf8" class="app-icon-mini" alt="Telegram">
+              <button class="app-pill-btn" data-app="telegram">
+                <img src="https://cdn.simpleicons.org/telegram/38bdf8" class="app-mini-icon" alt="Telegram">
                 <span>Telegram</span>
               </button>
-              <button class="app-select-btn" data-app="slack">
-                <img src="https://cdn.simpleicons.org/slack/e879f9" class="app-icon-mini" alt="Slack">
+              <button class="app-pill-btn" data-app="slack">
+                <img src="https://cdn.simpleicons.org/slack/f43f5e" class="app-mini-icon" alt="Slack">
                 <span>Slack</span>
               </button>
-              <button class="app-select-btn" data-app="figma">
-                <img src="https://cdn.simpleicons.org/figma/f43f5e" class="app-icon-mini" alt="Figma">
+              <button class="app-pill-btn" data-app="figma">
+                <img src="https://cdn.simpleicons.org/figma/a855f7" class="app-mini-icon" alt="Figma">
                 <span>Figma</span>
               </button>
             </div>
           </div>
 
           <div>
-            <label class="control-label">2. Pick Dock Badge Color:</label>
-            <div class="color-palette">
-              <button class="color-swatch active" style="background:#3b82f6;" data-color="#3b82f6" title="Blue"></button>
-              <button class="color-swatch" style="background:#10b981;" data-color="#10b981" title="Green"></button>
-              <button class="color-swatch" style="background:#8b5cf6;" data-color="#8b5cf6" title="Purple"></button>
-              <button class="color-swatch" style="background:#f59e0b;" data-color="#f59e0b" title="Orange"></button>
-              <button class="color-swatch" style="background:#ef4444;" data-color="#ef4444" title="Red"></button>
-              <button class="color-swatch" style="background:#06b6d4;" data-color="#06b6d4" title="Teal"></button>
-              <button class="color-swatch" style="background:#ec4899;" data-color="#ec4899" title="Pink"></button>
+            <div class="field-label">
+              <svg class="label-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+              </svg>
+              Badge Color Palette
+            </div>
+            <div class="swatch-group">
+              <button class="swatch-item active" style="background:#4f46e5;" data-color="#4f46e5" title="Indigo"></button>
+              <button class="swatch-item" style="background:#06b6d4;" data-color="#06b6d4" title="Cyan"></button>
+              <button class="swatch-item" style="background:#7c3aed;" data-color="#7c3aed" title="Violet"></button>
+              <button class="swatch-item" style="background:#10b981;" data-color="#10b981" title="Green"></button>
+              <button class="swatch-item" style="background:#f59e0b;" data-color="#f59e0b" title="Amber"></button>
+              <button class="swatch-item" style="background:#ef4444;" data-color="#ef4444" title="Red"></button>
+              <button class="swatch-item" style="background:#ec4899;" data-color="#ec4899" title="Pink"></button>
             </div>
           </div>
 
           <div>
-            <label class="control-label">3. Badge Label (1–4 characters):</label>
-            <input type="text" id="sim-badge-text" class="text-input-field" value="1" maxlength="4" placeholder="e.g. 1, DEV, WORK">
+            <div class="field-label">
+              <svg class="label-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+              </svg>
+              Badge Label (1 to 4 chars)
+            </div>
+            <input type="text" id="sim-badge-input" class="input-styled" value="1" maxlength="4" placeholder="e.g. 1, DEV, WORK">
           </div>
         </div>
 
-        <!-- Simulated Dock View -->
-        <div class="sim-preview-pane">
-          <div class="preview-label">Live macOS Dock Simulation (Click icons to bounce)</div>
+        <!-- Simulated Screen -->
+        <div class="dock-screen">
+          <div class="dock-screen-note">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            macOS Dock Interactive Simulation
+          </div>
           
-          <div class="dock-mockup">
+          <div class="mac-dock-bar">
             <!-- Finder -->
-            <div class="dock-item">
-              <img src="https://cdn.simpleicons.org/apple/ffffff" class="dock-icon" style="background:linear-gradient(135deg,#38bdf8,#1d4ed8);padding:14px;" alt="Finder">
+            <div class="dock-slot">
+              <img src="https://cdn.simpleicons.org/apple/ffffff" class="dock-slot-icon" style="background:linear-gradient(135deg,#0284c7,#4338ca);padding:14px;" alt="Finder">
             </div>
 
             <!-- Original App -->
-            <div class="dock-item">
-              <img src="assets/icon.png" class="dock-icon" alt="Original App">
-              <div class="dock-dot-active"></div>
+            <div class="dock-slot">
+              <img src="assets/icon.png" class="dock-slot-icon" alt="Original App">
+              <div class="dock-running-dot"></div>
             </div>
 
-            <!-- Cloned & Badged App -->
-            <div class="dock-item" id="sim-target-app">
-              <img src="assets/icon.png" class="dock-icon" id="sim-target-icon" alt="Target Clone">
-              <div class="dock-badge-sim" id="sim-target-badge">1</div>
-              <div class="dock-dot-active"></div>
+            <!-- Target Clone -->
+            <div class="dock-slot" id="sim-target-app">
+              <img src="assets/icon.png" class="dock-slot-icon" id="sim-target-icon" alt="Clone App">
+              <div class="dock-badge-rendered" id="sim-target-badge">1</div>
+              <div class="dock-running-dot"></div>
             </div>
 
             <!-- Chrome -->
-            <div class="dock-item">
-              <img src="https://cdn.simpleicons.org/googlechrome/ffffff" class="dock-icon" style="background:#222;padding:12px;" alt="Chrome">
+            <div class="dock-slot">
+              <img src="https://cdn.simpleicons.org/googlechrome/ffffff" class="dock-slot-icon" style="background:#1e202e;padding:13px;" alt="Chrome">
             </div>
           </div>
         </div>
@@ -236,132 +263,175 @@
     </div>
   </section>
 
-  <!-- Features Grid Section -->
+  <!-- Bento Features Grid -->
   <section class="features-section" id="features">
     <div class="container">
-      <div class="section-header">
-        <span class="section-tag">Core Capabilities</span>
-        <h2 class="section-title">Engineered Specifically for macOS</h2>
-        <p class="section-subtitle">
-          No slow virtual machines, no complex terminal hacks, and zero recurring subscription fees.
+      <div class="section-head">
+        <span class="section-eyebrow">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+          </svg>
+          Architecture
+        </span>
+        <h2 class="section-headline">Engineered for Peak Performance</h2>
+        <p class="section-subtext">
+          Native macOS subsystems deliver instantaneous cloning and complete runtime isolation.
         </p>
       </div>
 
-      <div class="features-grid">
-        <!-- Feature 1 -->
-        <div class="feature-card">
-          <div class="feature-icon-wrapper">⚡️</div>
-          <h3 class="feature-title">Instant APFS Copy-on-Write</h3>
-          <p class="feature-desc">
-            Duplicates gigabyte-sized app bundles in milliseconds using macOS kernel-level pointer referencing. Consumes 0 additional bytes on your SSD until files mutate.
+      <div class="bento-grid">
+        <!-- Card 1 -->
+        <div class="bento-card">
+          <div class="bento-icon-box">
+            <svg class="bento-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+            </svg>
+          </div>
+          <h3 class="bento-title">APFS Copy-on-Write</h3>
+          <p class="bento-copy">
+            Instantaneous bundle duplication via file system metadata cloning. Multi-gigabyte apps duplicate in milliseconds using 0 bytes of extra SSD storage.
           </p>
         </div>
 
-        <!-- Feature 2 -->
-        <div class="feature-card">
-          <div class="feature-icon-wrapper">🔒</div>
-          <h3 class="feature-title">Full Session & Data Isolation</h3>
-          <p class="feature-desc">
-            Each clone runs with its own sandboxed <code>Application Support</code>, preferences, cookies, cache, and token stores. Sign into work, personal, and client accounts side-by-side.
+        <!-- Card 2 -->
+        <div class="bento-card">
+          <div class="bento-icon-box">
+            <svg class="bento-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+          </div>
+          <h3 class="bento-title">Strict Session Isolation</h3>
+          <p class="bento-copy">
+            Each clone runs with its own isolated application data, local cookies, authentication tokens, and cache. Run work and personal accounts in parallel.
           </p>
         </div>
 
-        <!-- Feature 3 -->
-        <div class="feature-card">
-          <div class="feature-icon-wrapper">🎨</div>
-          <h3 class="feature-title">CoreGraphics Retina Badging</h3>
-          <p class="feature-desc">
-            Renders crisp, vector badges in all 10 standard macOS icon resolutions (16px to 1024px) with drop shadows and contrast borders for instant identification in Dock and Spotlight.
+        <!-- Card 3 -->
+        <div class="bento-card">
+          <div class="bento-icon-box">
+            <svg class="bento-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+            </svg>
+          </div>
+          <h3 class="bento-title">Retina Dock Badges</h3>
+          <p class="bento-copy">
+            CoreGraphics renders crisp vector indicators in all 10 macOS icon resolutions with drop shadows and contrast rings for high readability in Dark & Light modes.
           </p>
         </div>
 
-        <!-- Feature 4 -->
-        <div class="feature-card">
-          <div class="feature-icon-wrapper">🖥</div>
-          <h3 class="feature-title">Native SwiftUI Dashboard</h3>
-          <p class="feature-desc">
-            Features an intuitive application scanner, batch clone generator (up to 5 copies in 1 click), live badge editor, and one-click session cache resets.
+        <!-- Card 4 -->
+        <div class="bento-card">
+          <div class="bento-icon-box">
+            <svg class="bento-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+              <line x1="8" y1="21" x2="16" y2="21"></line>
+              <line x1="12" y1="17" x2="12" y2="21"></line>
+            </svg>
+          </div>
+          <h3 class="bento-title">SwiftUI Dashboard</h3>
+          <p class="bento-copy">
+            Integrated system scanner detects installed apps automatically. One-click batch cloning (up to 5 copies), live badge customizer, and clean data wiping.
           </p>
         </div>
 
-        <!-- Feature 5 -->
-        <div class="feature-card">
-          <div class="feature-icon-wrapper">🧠</div>
-          <h3 class="feature-title">Multi-Engine Intelligence</h3>
-          <p class="feature-desc">
-            Automatically detects Electron, Chromium (Chrome, Brave, Arc, Edge), Gecko (Firefox), and Native Cocoa/AppKit binaries to pass the exact sandboxing flags required.
+        <!-- Card 5 -->
+        <div class="bento-card">
+          <div class="bento-icon-box">
+            <svg class="bento-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <polyline points="16 18 22 12 16 6"></polyline>
+              <polyline points="8 6 2 12 8 18"></polyline>
+            </svg>
+          </div>
+          <h3 class="bento-title">Multi-Engine Intelligence</h3>
+          <p class="bento-copy">
+            Automatic framework inspection identifies Electron, Chromium (Chrome, Brave, Arc, Edge), Gecko, and Native Cocoa to apply tailored sandbox flags.
           </p>
         </div>
 
-        <!-- Feature 6 -->
-        <div class="feature-card">
-          <div class="feature-icon-wrapper">🛡</div>
-          <h3 class="feature-title">Apple Silicon Ad-hoc Signing</h3>
-          <p class="feature-desc">
-            Automates recursive quarantine stripping (<code>xattr -cr</code>) and ad-hoc code signing (<code>codesign -s -</code>) so clones launch instantly without Gatekeeper warnings.
+        <!-- Card 6 -->
+        <div class="bento-card">
+          <div class="bento-icon-box">
+            <svg class="bento-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+          </div>
+          <h3 class="bento-title">Ad-hoc Code Signing</h3>
+          <p class="bento-copy">
+            Automates recursive quarantine stripping and ad-hoc code signature injection, ensuring seamless launches on Apple Silicon without security warnings.
           </p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Comparison Table Section -->
-  <section class="comparison-section" id="comparison">
+  <!-- Comparison Matrix -->
+  <section class="compare-section" id="compare">
     <div class="container">
-      <div class="section-header">
-        <span class="section-tag">Direct Comparison</span>
-        <h2 class="section-title">Why Duplix is the Best Choice</h2>
-        <p class="section-subtitle">
-          See how Duplix beats traditional workarounds like multi-user accounts, virtual machines, and paid subscription tools.
+      <div class="section-head">
+        <span class="section-eyebrow">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <line x1="18" y1="20" x2="18" y2="10"></line>
+            <line x1="12" y1="20" x2="12" y2="4"></line>
+            <line x1="6" y1="20" x2="6" y2="14"></line>
+          </svg>
+          Comparison
+        </span>
+        <h2 class="section-headline">Why Duplix Outperforms the Rest</h2>
+        <p class="section-subtext">
+          Zero disk overhead and native execution compared to traditional workarounds.
         </p>
       </div>
 
-      <div class="table-wrapper">
-        <table class="comparison-table">
+      <div class="compare-matrix-wrap">
+        <table class="compare-matrix">
           <thead>
             <tr>
-              <th>Feature</th>
-              <th class="highlight-col">✨ Duplix</th>
-              <th>Fast User Switching</th>
-              <th>Parallels / UTM VMs</th>
-              <th>Paid Cloners</th>
+              <th>Criteria</th>
+              <th class="duplix-highlight-col">Duplix</th>
+              <th>User Accounts</th>
+              <th>Virtual Machines</th>
+              <th>Commercial Cloners</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td><strong>Extra Disk Space</strong></td>
-              <td class="highlight-col"><span class="table-check">0 Bytes (APFS CoW)</span></td>
-              <td>5 GB – 20 GB</td>
-              <td>25 GB – 60 GB</td>
-              <td>Full clone copy (GBs)</td>
+              <td class="duplix-highlight-col"><span class="status-icon-good">0 Bytes (APFS CoW)</span></td>
+              <td>10 GB to 30 GB</td>
+              <td>25 GB to 60 GB</td>
+              <td>Full clone size (GBs)</td>
             </tr>
             <tr>
-              <td><strong>Simultaneous Dock Windows</strong></td>
-              <td class="highlight-col"><span class="table-check">Yes (Side-by-side)</span></td>
-              <td><span class="table-cross">No (Requires Switching)</span></td>
-              <td>Separate VM Window</td>
-              <td><span class="table-check">Yes</span></td>
+              <td><strong>Simultaneous Windows</strong></td>
+              <td class="duplix-highlight-col"><span class="status-icon-good">Native side-by-side</span></td>
+              <td><span class="status-icon-bad">Requires Switching</span></td>
+              <td>Inside VM Window</td>
+              <td><span class="status-icon-good">Yes</span></td>
             </tr>
             <tr>
-              <td><strong>Distinct Dock Badging</strong></td>
-              <td class="highlight-col"><span class="table-check">Custom Colors & Labels</span></td>
-              <td><span class="table-cross">Identical Icons</span></td>
+              <td><strong>Distinct Dock Badges</strong></td>
+              <td class="duplix-highlight-col"><span class="status-icon-good">Dynamic Colors & Text</span></td>
+              <td><span class="status-icon-bad">Identical</span></td>
               <td>VM App Icon</td>
               <td>Limited</td>
             </tr>
             <tr>
-              <td><strong>RAM & Battery Impact</strong></td>
-              <td class="highlight-col"><span class="table-check">Near Zero Overhead</span></td>
+              <td><strong>System Memory Impact</strong></td>
+              <td class="duplix-highlight-col"><span class="status-icon-good">Near Zero</span></td>
               <td>Moderate</td>
-              <td><span class="table-cross">Heavy (4GB+ RAM)</span></td>
+              <td><span class="status-icon-bad">Heavy (4GB+ RAM)</span></td>
               <td>Low</td>
             </tr>
             <tr>
               <td><strong>Price & Licensing</strong></td>
-              <td class="highlight-col"><span class="table-check">100% Free & Open Source</span></td>
+              <td class="duplix-highlight-col"><span class="status-icon-good">100% Free & Open Source</span></td>
               <td>Free (macOS built-in)</td>
               <td>$99 / year</td>
-              <td>$20 – $39 / year</td>
+              <td>$20 to $39 / year</td>
             </tr>
           </tbody>
         </table>
@@ -372,105 +442,115 @@
   <!-- FAQ Section -->
   <section class="faq-section" id="faq">
     <div class="container">
-      <div class="section-header">
-        <span class="section-tag">Frequently Asked Questions</span>
-        <h2 class="section-title">Got Questions? We’ve Got Answers.</h2>
+      <div class="section-head">
+        <span class="section-eyebrow">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          Support
+        </span>
+        <h2 class="section-headline">Frequently Asked Questions</h2>
       </div>
 
-      <div class="faq-list">
-        <div class="faq-item open">
-          <button class="faq-question">
-            <span>Does cloning an app take up extra disk space?</span>
-            <span class="faq-icon">▼</span>
+      <div class="faq-accordion-box">
+        <div class="faq-card open">
+          <button class="faq-trigger">
+            <span>Does cloning an app consume extra disk space?</span>
+            <svg class="faq-chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
           </button>
-          <div class="faq-answer">
-            No! Duplix leverages Apple File System (APFS) Copy-on-Write (CoW). A 2GB app bundle takes 0 bytes of extra storage upon cloning. Only modified files or new cache data written during app usage consume disk space.
+          <div class="faq-body">
+            No. Duplix utilizes Apple File System (APFS) Copy-on-Write. Cloned application bundles reference existing disk blocks and take zero additional storage until individual files are modified.
           </div>
         </div>
 
-        <div class="faq-item">
-          <button class="faq-question">
-            <span>Can I run original apps and clones at the same time?</span>
-            <span class="faq-icon">▼</span>
+        <div class="faq-card">
+          <button class="faq-trigger">
+            <span>Can I run original apps and clones simultaneously?</span>
+            <svg class="faq-chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
           </button>
-          <div class="faq-answer">
-            Yes, absolutely. Duplix assigns unique Bundle Identifiers (<code>CFBundleIdentifier</code>) and dedicated session directories so both the original application and your clone run concurrently without conflict.
+          <div class="faq-body">
+            Yes. Duplix assigns unique bundle identifiers and directs session data to independent sandbox directories, allowing concurrent execution without conflict.
           </div>
         </div>
 
-        <div class="faq-item">
-          <button class="faq-question">
-            <span>Which macOS versions and Macs are supported?</span>
-            <span class="faq-icon">▼</span>
+        <div class="faq-card">
+          <button class="faq-trigger">
+            <span>Which macOS versions are supported?</span>
+            <svg class="faq-chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
           </button>
-          <div class="faq-answer">
-            Duplix runs natively on macOS 13 (Ventura), macOS 14 (Sonoma), and macOS 15+ (Sequoia) across all Apple Silicon (M1, M2, M3, M4) and Intel Macs.
+          <div class="faq-body">
+            Duplix runs on macOS 13 (Ventura), macOS 14 (Sonoma), and macOS 15+ (Sequoia) across both Apple Silicon (M1, M2, M3, M4) and Intel architectures.
           </div>
         </div>
 
-        <div class="faq-item">
-          <button class="faq-question">
-            <span>How do I uninstall a clone and clean up its data?</span>
-            <span class="faq-icon">▼</span>
+        <div class="faq-card">
+          <button class="faq-trigger">
+            <span>How do I delete a clone and clean up its data?</span>
+            <svg class="faq-chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
           </button>
-          <div class="faq-answer">
-            Simply open Duplix, click the menu on any clone card, and choose Delete. Or in the terminal, run <code>duplix delete &lt;name&gt;</code>. Duplix unregisters the bundle and removes the isolated Application Support folder cleanly.
-          </div>
-        </div>
-
-        <div class="faq-item">
-          <button class="faq-question">
-            <span>Is Duplix safe and really 100% free?</span>
-            <span class="faq-icon">▼</span>
-          </button>
-          <div class="faq-answer">
-            Yes. Duplix is 100% free and open-source under the MIT license. There are no tracking scripts, analytics, telemetries, background daemons, or paywalls. All operations run strictly on your local Mac.
+          <div class="faq-body">
+            In the Duplix dashboard, select Delete on any clone card, or run <code>duplix delete &lt;name&gt;</code> in the terminal. The bundle and its associated Application Support data are removed cleanly.
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CTA Download Banner -->
+  <!-- Download Action Banner -->
   <section class="container" id="download">
-    <div class="cta-banner">
-      <h2 class="cta-banner-title">Start Cloning Your Mac Apps Today</h2>
-      <p class="cta-banner-sub">
-        Download Duplix for free and start running separate workspaces, accounts, and environments side-by-side.
+    <div class="download-card">
+      <h2 class="download-title">Get Started with Duplix</h2>
+      <p class="download-subtext">
+        Free, native, and open source. Run your independent Mac workspaces side-by-side today.
       </p>
 
-      <div class="hero-cta-group">
+      <div class="hero-buttons">
         <a href="https://github.com/businessmanshah-a11y/Duplix/releases" target="_blank" class="btn btn-primary btn-lg">
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
           </svg>
           Download Duplix-1.0.0.dmg
         </a>
-        <a href="https://github.com/businessmanshah-a11y/Duplix" target="_blank" class="btn btn-secondary btn-lg">
-          Explore Source on GitHub
+        <a href="https://github.com/businessmanshah-a11y/Duplix" target="_blank" class="btn btn-ghost btn-lg">
+          View on GitHub
         </a>
       </div>
     </div>
   </section>
 
   <!-- Footer -->
-  <footer class="footer">
-    <div class="container footer-content">
+  <footer class="site-footer">
+    <div class="container footer-row">
       <div>
-        <p><strong>Duplix</strong> — Free, Native macOS App Cloner. MIT License.</p>
-        <p style="margin-top:4px;">Built with Swift & SwiftUI for Apple Silicon and Intel.</p>
+        <p><strong>Duplix</strong> — Native macOS App Cloner under MIT License.</p>
+        <p style="margin-top:4px;">Built with Swift & SwiftUI for Apple Silicon and Intel Macs.</p>
       </div>
 
-      <div class="footer-links">
-        <a href="https://github.com/businessmanshah-a11y/Duplix" target="_blank" class="footer-link">GitHub Repository</a>
-        <a href="https://github.com/businessmanshah-a11y/Duplix/releases" target="_blank" class="footer-link">Releases</a>
-        <a href="https://github.com/businessmanshah-a11y/Duplix/blob/main/LICENSE" target="_blank" class="footer-link">License</a>
+      <div class="footer-nav">
+        <a href="https://github.com/businessmanshah-a11y/Duplix" target="_blank" class="footer-link-item">GitHub Repository</a>
+        <a href="https://github.com/businessmanshah-a11y/Duplix/releases" target="_blank" class="footer-link-item">Releases</a>
+        <a href="https://github.com/businessmanshah-a11y/Duplix/blob/main/LICENSE" target="_blank" class="footer-link-item">MIT License</a>
       </div>
     </div>
   </footer>
 
   <!-- Toast Notification -->
-  <div id="toast" class="toast">Copied to clipboard!</div>
+  <div id="toast-notice" class="toast-notice">
+    <svg width="18" height="18" fill="none" stroke="#06b6d4" stroke-width="2" viewBox="0 0 24 24">
+      <polyline points="20 6 9 17 4 12"></polyline>
+    </svg>
+    <span id="toast-message">Copied to clipboard</span>
+  </div>
 
   <script src="script.js"></script>
 </body>

@@ -1,10 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Terminal Command Copy Helper
-  const terminalBox = document.getElementById('brew-cmd-box');
-  const toast = document.getElementById('toast');
+  // 1. Homebrew & CLI Copy Notification
+  const cliBox = document.getElementById('cli-copy-box');
+  const toast = document.getElementById('toast-notice');
+  const toastText = document.getElementById('toast-message');
 
-  if (terminalBox) {
-    terminalBox.addEventListener('click', () => {
+  if (cliBox) {
+    cliBox.addEventListener('click', () => {
       const code = 'brew install --cask duplix';
       navigator.clipboard.writeText(code).then(() => {
         showToast('Copied to clipboard: ' + code);
@@ -12,15 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  window.copySnippet = function (text) {
-    navigator.clipboard.writeText(text).then(() => {
-      showToast('Copied: ' + text);
-    });
-  };
-
   function showToast(message) {
-    if (!toast) return;
-    toast.textContent = message;
+    if (!toast || !toastText) return;
+    toastText.textContent = message;
     toast.classList.add('show');
     setTimeout(() => {
       toast.classList.remove('show');
@@ -28,9 +23,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // 2. Interactive Dock Simulator Logic
-  const appButtons = document.querySelectorAll('.app-select-btn');
-  const colorSwatches = document.querySelectorAll('.color-swatch');
-  const badgeTextInput = document.getElementById('sim-badge-text');
+  const appButtons = document.querySelectorAll('.app-pill-btn');
+  const colorSwatches = document.querySelectorAll('.swatch-item');
+  const badgeTextInput = document.getElementById('sim-badge-input');
   const simTargetApp = document.getElementById('sim-target-app');
   const simTargetBadge = document.getElementById('sim-target-badge');
   const simTargetIcon = document.getElementById('sim-target-icon');
@@ -39,43 +34,43 @@ document.addEventListener('DOMContentLoaded', () => {
     antigravity: {
       name: 'Antigravity IDE',
       icon: 'assets/icon.png',
-      defaultColor: '#3b82f6',
+      defaultColor: '#4f46e5',
       defaultText: '1'
     },
     chrome: {
       name: 'Google Chrome',
-      icon: 'https://cdn.simpleicons.org/googlechrome/ffffff',
-      defaultColor: '#10b981',
+      icon: 'https://cdn.simpleicons.org/googlechrome/06b6d4',
+      defaultColor: '#06b6d4',
       defaultText: 'DEV'
     },
     vscode: {
       name: 'VS Code',
-      icon: 'https://cdn.simpleicons.org/visualstudiocode/ffffff',
-      defaultColor: '#8b5cf6',
+      icon: 'https://cdn.simpleicons.org/visualstudiocode/818cf8',
+      defaultColor: '#7c3aed',
       defaultText: '2'
     },
     telegram: {
       name: 'Telegram',
-      icon: 'https://cdn.simpleicons.org/telegram/ffffff',
-      defaultColor: '#f59e0b',
+      icon: 'https://cdn.simpleicons.org/telegram/38bdf8',
+      defaultColor: '#0284c7',
       defaultText: 'W'
     },
     slack: {
       name: 'Slack',
-      icon: 'https://cdn.simpleicons.org/slack/ffffff',
-      defaultColor: '#ef4444',
+      icon: 'https://cdn.simpleicons.org/slack/f43f5e',
+      defaultColor: '#e11d48',
       defaultText: '3'
     },
     figma: {
       name: 'Figma',
-      icon: 'https://cdn.simpleicons.org/figma/ffffff',
-      defaultColor: '#06b6d4',
+      icon: 'https://cdn.simpleicons.org/figma/a855f7',
+      defaultColor: '#9333ea',
       defaultText: 'ALT'
     }
   };
 
   let currentApp = 'antigravity';
-  let currentColor = '#3b82f6';
+  let currentColor = '#4f46e5';
   let currentText = '1';
 
   function updateDockSim() {
@@ -84,15 +79,19 @@ document.addEventListener('DOMContentLoaded', () => {
     simTargetBadge.textContent = currentText || '1';
     simTargetIcon.src = appData[currentApp]?.icon || 'assets/icon.png';
 
-    // Trigger bounce micro-animation
+    // Physics-like Dock Bounce Animation
     if (simTargetApp) {
-      simTargetApp.style.transform = 'translateY(-14px) scale(1.15)';
+      simTargetApp.style.transform = 'translateY(-16px) scale(1.18)';
       setTimeout(() => {
-        simTargetApp.style.transform = '';
-      }, 300);
+        simTargetApp.style.transform = 'translateY(-4px) scale(1.05)';
+        setTimeout(() => {
+          simTargetApp.style.transform = '';
+        }, 150);
+      }, 200);
     }
   }
 
+  // App Selection
   appButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       appButtons.forEach(b => b.classList.remove('active'));
@@ -104,7 +103,6 @@ document.addEventListener('DOMContentLoaded', () => {
         currentText = appData[appKey].defaultText;
         if (badgeTextInput) badgeTextInput.value = currentText;
 
-        // Activate corresponding swatch
         colorSwatches.forEach(s => {
           s.classList.toggle('active', s.dataset.color.toLowerCase() === currentColor.toLowerCase());
         });
@@ -114,6 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Color Swatch Selection
   colorSwatches.forEach(swatch => {
     swatch.addEventListener('click', () => {
       colorSwatches.forEach(s => s.classList.remove('active'));
@@ -123,6 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Badge Text Input
   if (badgeTextInput) {
     badgeTextInput.addEventListener('input', (e) => {
       currentText = e.target.value.trim().substring(0, 4);
@@ -130,30 +130,41 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Dock items bounce on click
+  const dockSlots = document.querySelectorAll('.dock-slot');
+  dockSlots.forEach(slot => {
+    slot.addEventListener('click', () => {
+      slot.style.transform = 'translateY(-14px) scale(1.15)';
+      setTimeout(() => {
+        slot.style.transform = '';
+      }, 250);
+    });
+  });
+
   // 3. FAQ Accordion Logic
-  const faqItems = document.querySelectorAll('.faq-item');
-  faqItems.forEach(item => {
-    const questionBtn = item.querySelector('.faq-question');
-    if (questionBtn) {
-      questionBtn.addEventListener('click', () => {
-        const isOpen = item.classList.contains('open');
-        faqItems.forEach(i => i.classList.remove('open'));
+  const faqCards = document.querySelectorAll('.faq-card');
+  faqCards.forEach(card => {
+    const trigger = card.querySelector('.faq-trigger');
+    if (trigger) {
+      trigger.addEventListener('click', () => {
+        const isOpen = card.classList.contains('open');
+        faqCards.forEach(c => c.classList.remove('open'));
         if (!isOpen) {
-          item.classList.add('open');
+          card.classList.add('open');
         }
       });
     }
   });
 
-  // 4. Product Hunt Banner Click
-  const phBanner = document.getElementById('ph-banner');
+  // 4. Product Hunt Banner
+  const phBanner = document.getElementById('ph-pill-link');
   if (phBanner) {
     phBanner.addEventListener('click', (e) => {
       e.preventDefault();
-      showToast('🚀 Duplix Product Hunt launch page is coming soon!');
+      showToast('Product Hunt launch campaign ready for submission!');
     });
   }
 
-  // Initialize Dock Simulation
+  // Initial render
   updateDockSim();
 });
