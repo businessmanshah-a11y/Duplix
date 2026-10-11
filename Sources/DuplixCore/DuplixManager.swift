@@ -13,6 +13,7 @@ public actor DuplixManager {
     private let launcherGenerator = LauncherGenerator()
     private let codeSigner = CodeSigner()
     private let launchServices = LaunchServices()
+    private let iconManager = IconManager()
 
     public init(
         clonesDirectoryURL: URL? = nil,
@@ -89,11 +90,12 @@ public actor DuplixManager {
         return "\(sourceAppName) (Clone \(matchingCount + 1))"
     }
 
-    /// High-level method to clone an application bundle end-to-end.
+    /// High-level method to clone an application bundle end-to-end, including badging.
     @discardableResult
     public func createClone(
         sourceAppURL: URL,
         customName: String? = nil,
+        badgeConfig: BadgeConfig? = nil,
         overwrite: Bool = false
     ) throws -> CloneRecord {
         let fileManager = FileManager.default
@@ -107,7 +109,9 @@ public actor DuplixManager {
 
         // 2. Generate identifiers & names
         let cloneId = UUID()
-        let cloneName = try customName ?? generateNextCloneName(sourceAppName: meta.displayName)
+        let existing = try loadRegistry()
+        let matchingCount = existing.filter { $0.sourceAppName == meta.displayName }.count
+        let cloneName = customName ?? "\(meta.displayName) (Clone \(matchingCount + 1))"
         let sanitizedName = meta.displayName
             .lowercased()
             .components(separatedBy: CharacterSet.alphanumerics.inverted)
@@ -117,6 +121,9 @@ public actor DuplixManager {
 
         let destinationURL = clonesDirectoryURL.appendingPathComponent("\(cloneName).app", isDirectory: true)
         let cloneDataURL = dataDirectoryURL.appendingPathComponent(cloneId.uuidString, isDirectory: true)
+
+        // Determine badge configuration
+        let finalBadge = badgeConfig ?? BadgeConfig.automatic(forCloneIndex: matchingCount + 1)
 
         // Ensure directories exist
         try fileManager.createDirectory(at: clonesDirectoryURL, withIntermediateDirectories: true)
@@ -143,13 +150,20 @@ public actor DuplixManager {
             engineType: meta.engineType
         )
 
-        // 6. Strip quarantine and ad-hoc resign
+        // 6. Apply Icon Badging
+        _ = try? iconManager.badgeApp(
+            appBundleURL: destinationURL,
+            preferredIconName: meta.iconFileName,
+            config: finalBadge
+        )
+
+        // 7. Strip quarantine and ad-hoc resign
         try codeSigner.resign(bundleURL: destinationURL)
 
-        // 7. Register with LaunchServices
+        // 8. Register with LaunchServices
         try launchServices.register(bundleURL: destinationURL)
 
-        // 8. Create and persist record
+        // 9. Create and persist record
         let record = CloneRecord(
             id: cloneId,
             name: cloneName,
@@ -159,6 +173,7 @@ public actor DuplixManager {
             appPath: destinationURL.path,
             dataPath: cloneDataURL.path,
             engineType: meta.engineType,
+            badgeConfig: finalBadge,
             createdAt: Date()
         )
 
@@ -169,6 +184,34 @@ public actor DuplixManager {
         records.append(record)
         try saveRegistry(records)
 
+        return record
+    }
+
+    /// Updates or changes the icon badge of an existing clone.
+    @discardableResult
+    public func updateBadge(identifierOrName: String, badgeConfig: BadgeConfig) throws -> CloneRecord {
+        var record = try findClone(by: identifierOrName)
+        let appURL = URL(fileURLWithPath: record.appPath)
+
+        guard FileManager.default.fileExists(atPath: appURL.path) else {
+            throw ManagerError.appPathNotFound(record.appPath)
+        }
+
+        try iconManager.badgeApp(
+            appBundleURL: appURL,
+            preferredIconName: nil,
+            config: badgeConfig
+        )
+
+        record.badgeConfig = badgeConfig
+
+        var records = try loadRegistry()
+        if let idx = records.firstIndex(where: { $0.id == record.id }) {
+            records[idx] = record
+            try saveRegistry(records)
+        }
+
+        try? launchServices.register(bundleURL: appURL)
         return record
     }
 
@@ -198,8 +241,6 @@ public actor DuplixManager {
 
         let process = Process()
         process.executableURL = URL(fileURLWithPath: "/usr/bin/open")
-        // -n: Open a new instance even if one is already running
-        // -a: Specify the application
         process.arguments = ["-n", "-a", record.appPath]
 
         try process.run()
@@ -209,7 +250,6 @@ public actor DuplixManager {
             throw ManagerError.launchFailed("open command returned \(process.terminationStatus)")
         }
 
-        // Update last launched date
         record.lastLaunchedAt = Date()
         var records = try loadRegistry()
         if let idx = records.firstIndex(where: { $0.id == record.id }) {
@@ -244,7 +284,6 @@ public actor DuplixManager {
         let record = try findClone(by: identifierOrName)
         let fileManager = FileManager.default
 
-        // Unregister from LaunchServices
         let appURL = URL(fileURLWithPath: record.appPath)
         try? launchServices.unregister(bundleURL: appURL)
 

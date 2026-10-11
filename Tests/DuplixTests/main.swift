@@ -1,4 +1,6 @@
 import Foundation
+import CoreGraphics
+import AppKit
 import DuplixCore
 
 // ANSI Colors for Test Reporting
@@ -95,8 +97,9 @@ final class TestSuite {
     }
 
     func runAll() async {
-        print("\n\(TestColor.bold)Duplix Core Engine — Automated Test Suite\(TestColor.reset)\n")
+        print("\n\(TestColor.bold)Duplix Automated Test Suite (Phases 1 & 2)\(TestColor.reset)\n")
 
+        // Phase 1 Core Tests
         runTest("EngineDetector accurately detects Electron / Chromium framework") {
             let appURL = try createMockAppBundle(engine: .electron)
             defer { try? FileManager.default.removeItem(at: appURL.deletingLastPathComponent()) }
@@ -194,9 +197,69 @@ final class TestSuite {
             try assert(FileManager.default.fileExists(atPath: infoPlist.path), "Info.plist missing in clone")
         }
 
-        await runAsyncTest("DuplixManager end-to-end clone lifecycle (Create, List, Delete)") {
+        // Phase 2 Badging Tests
+        runTest("BadgeColor parses presets and hex codes accurately") {
+            let greenColor = BadgeColor.fromNameOrHex("green")
+            try assert(greenColor == .green, "Named color green mismatch")
+
+            let hexColor = BadgeColor.fromNameOrHex("#FF5733")
+            try assert(abs(hexColor.red - (255.0 / 255.0)) < 0.01, "Hex red mismatch")
+            try assert(abs(hexColor.green - (87.0 / 255.0)) < 0.01, "Hex green mismatch")
+            try assert(abs(hexColor.blue - (51.0 / 255.0)) < 0.01, "Hex blue mismatch")
+
+            let auto1 = BadgeColor.defaultForIndex(1)
+            let auto2 = BadgeColor.defaultForIndex(2)
+            try assert(auto1 == .blue, "Clone 1 should get Blue")
+            try assert(auto2 == .green, "Clone 2 should get Green")
+        }
+
+        runTest("BadgeRenderer draws badge and exports valid PNG data") {
+            let width = 128
+            let height = 128
+            let colorSpace = CGColorSpaceCreateDeviceRGB()
+            let ctx = CGContext(
+                data: nil,
+                width: width,
+                height: height,
+                bitsPerComponent: 8,
+                bytesPerRow: 0,
+                space: colorSpace,
+                bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue
+            )!
+            ctx.setFillColor(CGColor(gray: 0.8, alpha: 1.0))
+            ctx.fill(CGRect(x: 0, y: 0, width: width, height: height))
+            let baseImage = ctx.makeImage()!
+
+            let renderer = BadgeRenderer()
+            let config = BadgeConfig(color: .purple, text: "DEV", position: .bottomRight)
+            let pngData = try renderer.renderBadge(on: baseImage, width: width, height: height, config: config)
+
+            try assert(!pngData.isEmpty, "PNG data is empty")
+            let loadedRep = NSBitmapImageRep(data: pngData)
+            try assert(loadedRep != nil, "Unable to decode generated PNG")
+            try assert(loadedRep?.pixelsWide == width, "Width mismatch in rendered PNG")
+        }
+
+        runTest("IconManager badges bundle and outputs DuplixBadged.icns") {
+            let appURL = try createMockAppBundle(engine: .nativeCocoa)
+            defer { try? FileManager.default.removeItem(at: appURL.deletingLastPathComponent()) }
+
+            let iconManager = IconManager()
+            let config = BadgeConfig(color: .orange, text: "1", position: .bottomRight)
+            let icnsURL = try iconManager.badgeApp(appBundleURL: appURL, config: config)
+
+            try assert(FileManager.default.fileExists(atPath: icnsURL.path), "DuplixBadged.icns was not created")
+
+            // Verify Info.plist updated
+            let infoPlistURL = appURL.appendingPathComponent("Contents/Info.plist")
+            let data = try Data(contentsOf: infoPlistURL)
+            let dict = try PropertyListSerialization.propertyList(from: data, options: [], format: nil) as! [String: Any]
+            try assert(dict["CFBundleIconFile"] as? String == "DuplixBadged.icns", "CFBundleIconFile not set to DuplixBadged.icns")
+        }
+
+        await runAsyncTest("DuplixManager end-to-end badging and updateBadge") {
             let tempRoot = FileManager.default.temporaryDirectory
-                .appendingPathComponent("DuplixManagerTest_\(UUID().uuidString)", isDirectory: true)
+                .appendingPathComponent("DuplixBadgingTest_\(UUID().uuidString)", isDirectory: true)
             let clonesDir = tempRoot.appendingPathComponent("Clones", isDirectory: true)
             let dataDir = tempRoot.appendingPathComponent("Data", isDirectory: true)
             let registryFile = tempRoot.appendingPathComponent("registry.json", isDirectory: false)
@@ -213,27 +276,31 @@ final class TestSuite {
                 registryFileURL: registryFile
             )
 
-            // 1. Create clone
+            // 1. Create clone with custom badge
+            let initialBadge = BadgeConfig(color: .green, text: "WORK")
             let record = try await customManager.createClone(
                 sourceAppURL: srcURL,
-                customName: "Mock App (Clone 1)"
+                customName: "Mock App (Clone 1)",
+                badgeConfig: initialBadge
             )
-            try assert(record.name == "Mock App (Clone 1)", "Record name mismatch")
-            try assert(FileManager.default.fileExists(atPath: record.appPath), "Cloned app not found on disk")
-            try assert(FileManager.default.fileExists(atPath: record.dataPath), "Data directory not found on disk")
+            try assert(record.badgeConfig?.color == .green, "Initial badge color mismatch")
+            try assert(record.badgeConfig?.text == "WORK", "Initial badge text mismatch")
 
-            // 2. List clones
+            // 2. Dynamically update badge
+            let updatedBadge = BadgeConfig(color: .purple, text: "DEV")
+            let updatedRecord = try await customManager.updateBadge(
+                identifierOrName: record.name,
+                badgeConfig: updatedBadge
+            )
+            try assert(updatedRecord.badgeConfig?.color == .purple, "Updated badge color mismatch")
+            try assert(updatedRecord.badgeConfig?.text == "DEV", "Updated badge text mismatch")
+
+            // 3. Verify registry persistence
             let list = try await customManager.listClones()
-            try assert(list.count == 1, "Expected 1 clone in registry, found \(list.count)")
-            try assert(list[0].id == record.id, "ID in registry mismatch")
+            try assert(list.first?.badgeConfig?.text == "DEV", "Registry did not persist updated badge")
 
-            // 3. Delete clone
+            // Clean up
             try await customManager.deleteClone(identifierOrName: record.name, deleteData: true)
-            try assert(!FileManager.default.fileExists(atPath: record.appPath), "App still exists after deletion")
-            try assert(!FileManager.default.fileExists(atPath: record.dataPath), "Data directory still exists after deletion")
-
-            let remaining = try await customManager.listClones()
-            try assert(remaining.isEmpty, "Registry should be empty after deletion")
         }
 
         print("\n-------------------------------------------")

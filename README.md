@@ -40,22 +40,25 @@ Detailed documentation and technical architecture reports are available in the [
 
 Duplix is actively under development.
 - **Phase 1 (Core Engine & CLI):** ✅ Completed & Verified (100% automated test coverage)
-- **Phase 2 (Icon Badging):** Queued
+- **Phase 2 (Icon Badging & Dock Distinction):** ✅ Completed & Verified (CoreGraphics + iconutil)
 - **Phase 3 (SwiftUI Native UI):** Queued
 - **Phase 4 (Multi-App QA):** Queued
 - **Phase 5 (Public DMG Release):** Queued
 
 ---
 
-## 💻 CLI Quickstart (Phase 1)
+## 💻 CLI Quickstart
 
 Build and run Duplix CLI directly using Swift:
 
 ```bash
-# Clone any app instantly with APFS CoW (0 extra bytes)
-swift run duplix clone "/Applications/Antigravity IDE.app" --name "Antigravity Work"
+# Clone any app instantly with APFS CoW & custom Dock badge
+swift run duplix clone "/Applications/Antigravity IDE.app" --name "Antigravity Work" --badge-color green --badge-text "W"
 
-# List all created clones and their isolated data directories
+# Dynamically update/customize Dock badge color & text without recreating
+swift run duplix badge "Antigravity Work" --color purple --text "DEV"
+
+# List all created clones, badge status, and isolated data directories
 swift run duplix list
 
 # Launch an isolated instance simultaneously with existing apps
@@ -70,7 +73,7 @@ swift run duplix reset "Antigravity Work"
 # Delete a clone cleanly
 swift run duplix delete "Antigravity Work"
 
-# Run automated tests
+# Run automated test suite (10 automated unit & integration tests)
 swift run DuplixTests
 ```
 

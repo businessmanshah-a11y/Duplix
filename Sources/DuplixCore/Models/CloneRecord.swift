@@ -8,6 +8,7 @@ public struct CloneConfig: Codable, Sendable {
     public let destinationURL: URL
     public let dataDirectoryURL: URL
     public let engineType: EngineType
+    public let badgeConfig: BadgeConfig?
     public let createdAt: Date
 
     public init(
@@ -18,6 +19,7 @@ public struct CloneConfig: Codable, Sendable {
         destinationURL: URL,
         dataDirectoryURL: URL,
         engineType: EngineType,
+        badgeConfig: BadgeConfig? = nil,
         createdAt: Date = Date()
     ) {
         self.id = id
@@ -27,6 +29,7 @@ public struct CloneConfig: Codable, Sendable {
         self.destinationURL = destinationURL
         self.dataDirectoryURL = dataDirectoryURL
         self.engineType = engineType
+        self.badgeConfig = badgeConfig
         self.createdAt = createdAt
     }
 }
@@ -40,6 +43,7 @@ public struct CloneRecord: Codable, Sendable, Identifiable {
     public let appPath: String
     public let dataPath: String
     public let engineType: EngineType
+    public var badgeConfig: BadgeConfig?
     public let createdAt: Date
     public var lastLaunchedAt: Date?
 
@@ -52,6 +56,7 @@ public struct CloneRecord: Codable, Sendable, Identifiable {
         appPath: String,
         dataPath: String,
         engineType: EngineType,
+        badgeConfig: BadgeConfig? = nil,
         createdAt: Date,
         lastLaunchedAt: Date? = nil
     ) {
@@ -63,6 +68,7 @@ public struct CloneRecord: Codable, Sendable, Identifiable {
         self.appPath = appPath
         self.dataPath = dataPath
         self.engineType = engineType
+        self.badgeConfig = badgeConfig
         self.createdAt = createdAt
         self.lastLaunchedAt = lastLaunchedAt
     }

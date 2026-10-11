@@ -16,7 +16,7 @@ enum ConsoleColor {
 
 func printBanner() {
     print("""
-    \(ConsoleColor.cyan)\(ConsoleColor.bold)Duplix\(ConsoleColor.reset) \(ConsoleColor.dim)— Native macOS App Cloner (Phase 1 Engine)\(ConsoleColor.reset)
+    \(ConsoleColor.cyan)\(ConsoleColor.bold)Duplix\(ConsoleColor.reset) \(ConsoleColor.dim)— Native macOS App Cloner (Phase 2 Badging)\(ConsoleColor.reset)
     """)
 }
 
@@ -27,11 +27,14 @@ func printUsage() {
       duplix <command> [options]
 
     \(ConsoleColor.bold)COMMANDS:\(ConsoleColor.reset)
-      \(ConsoleColor.green)clone\(ConsoleColor.reset) <app-path> [--name <name>] [--overwrite]
-            Clones any macOS .app bundle using instant APFS CoW and isolates its data.
+      \(ConsoleColor.green)clone\(ConsoleColor.reset) <app-path> [--name <name>] [--badge-color <color>] [--badge-text <text>] [--overwrite]
+            Clones any macOS .app bundle using APFS CoW, isolates its data, and applies a distinct Dock badge.
+
+      \(ConsoleColor.green)badge\(ConsoleColor.reset) <id-or-name> [--color <color>] [--text <text>]
+            Updates or customizes the Dock icon badge of an existing clone without recreating it.
 
       \(ConsoleColor.green)list\(ConsoleColor.reset)
-            Lists all created clones, identifiers, engine types, and data paths.
+            Lists all created clones, identifiers, badge status, engine types, and data paths.
 
       \(ConsoleColor.green)launch\(ConsoleColor.reset) <id-or-name>
             Runs an isolated instance of the clone simultaneously with existing apps.
@@ -51,9 +54,13 @@ func printUsage() {
       \(ConsoleColor.green)help\(ConsoleColor.reset), --help, -h
             Displays this help message.
 
+    \(ConsoleColor.bold)BADGE COLORS:\(ConsoleColor.reset)
+      blue, green, orange, purple, red, teal, pink, yellow, or custom HEX (e.g. #7B2CBF)
+
     \(ConsoleColor.bold)EXAMPLES:\(ConsoleColor.reset)
       duplix clone "/Applications/Antigravity IDE.app"
-      duplix clone "/Applications/Antigravity IDE.app" --name "Antigravity Work"
+      duplix clone "/Applications/Antigravity IDE.app" --name "Antigravity Work" --badge-color green --badge-text "W"
+      duplix badge "Antigravity Work" --color purple --text "DEV"
       duplix launch "Antigravity Work"
       duplix list
     """)
@@ -79,12 +86,20 @@ func main() async {
             }
             let appPath = args[2]
             var customName: String? = nil
+            var badgeColorName: String? = nil
+            var badgeText: String? = nil
             var overwrite = false
 
             var i = 3
             while i < args.count {
                 if args[i] == "--name" && i + 1 < args.count {
                     customName = args[i + 1]
+                    i += 2
+                } else if args[i] == "--badge-color" && i + 1 < args.count {
+                    badgeColorName = args[i + 1]
+                    i += 2
+                } else if args[i] == "--badge-text" && i + 1 < args.count {
+                    badgeText = args[i + 1]
                     i += 2
                 } else if args[i] == "--overwrite" {
                     overwrite = true
@@ -103,24 +118,71 @@ func main() async {
             print("   \(ConsoleColor.dim)Bundle ID:\(ConsoleColor.reset) \(meta.bundleIdentifier)")
             print("   \(ConsoleColor.dim)Detected Engine:\(ConsoleColor.reset) \(ConsoleColor.magenta)\(meta.engineType.description)\(ConsoleColor.reset)")
 
-            print("\(ConsoleColor.cyan)🚀 Cloning with APFS CoW (Zero extra disk footprint)...\(ConsoleColor.reset)")
+            let badgeConfig: BadgeConfig?
+            if let badgeColorName = badgeColorName {
+                let color = BadgeColor.fromNameOrHex(badgeColorName)
+                badgeConfig = BadgeConfig(color: color, text: badgeText, position: .bottomRight)
+            } else if let badgeText = badgeText {
+                badgeConfig = BadgeConfig(color: .blue, text: badgeText, position: .bottomRight)
+            } else {
+                badgeConfig = nil
+            }
+
+            print("\(ConsoleColor.cyan)🚀 Cloning with APFS CoW & Badging Dock Icon...\(ConsoleColor.reset)")
             let start = Date()
             let record = try await manager.createClone(
                 sourceAppURL: sourceURL,
                 customName: customName,
+                badgeConfig: badgeConfig,
                 overwrite: overwrite
             )
             let duration = String(format: "%.2f", Date().timeIntervalSince(start))
+
+            let badgeDesc = record.badgeConfig.map { "\($0.color.name) (Text: '\($0.text ?? "-")')" } ?? "Default"
 
             print("""
             \(ConsoleColor.green)\(ConsoleColor.bold)✔ Clone created successfully in \(duration)s!\(ConsoleColor.reset)
                \(ConsoleColor.dim)Name:\(ConsoleColor.reset) \(record.name)
                \(ConsoleColor.dim)Bundle ID:\(ConsoleColor.reset) \(record.cloneBundleID)
+               \(ConsoleColor.dim)Dock Badge:\(ConsoleColor.reset) \(ConsoleColor.green)\(badgeDesc)\(ConsoleColor.reset)
                \(ConsoleColor.dim)Location:\(ConsoleColor.reset) \(record.appPath)
                \(ConsoleColor.dim)Isolated Data:\(ConsoleColor.reset) \(record.dataPath)
 
             \(ConsoleColor.yellow)To run this instance simultaneously, type:\(ConsoleColor.reset)
               duplix launch "\(record.name)"
+            """)
+
+        case "badge":
+            guard args.count > 2 else {
+                print("\(ConsoleColor.red)Error:\(ConsoleColor.reset) Missing clone name or UUID. Example: duplix badge \"Antigravity (Clone 1)\" --color purple --text \"DEV\"")
+                exit(1)
+            }
+            let target = args[2]
+            var badgeColorName = "blue"
+            var badgeText: String? = nil
+
+            var i = 3
+            while i < args.count {
+                if (args[i] == "--color" || args[i] == "-c") && i + 1 < args.count {
+                    badgeColorName = args[i + 1]
+                    i += 2
+                } else if (args[i] == "--text" || args[i] == "-t") && i + 1 < args.count {
+                    badgeText = args[i + 1]
+                    i += 2
+                } else {
+                    i += 1
+                }
+            }
+
+            let color = BadgeColor.fromNameOrHex(badgeColorName)
+            let newConfig = BadgeConfig(color: color, text: badgeText, position: .bottomRight)
+
+            print("\(ConsoleColor.cyan)🎨 Updating icon badge for:\(ConsoleColor.reset) \(target)...")
+            let updated = try await manager.updateBadge(identifierOrName: target, badgeConfig: newConfig)
+            print("""
+            \(ConsoleColor.green)\(ConsoleColor.bold)✔ Icon badge updated successfully!\(ConsoleColor.reset)
+               \(ConsoleColor.dim)Clone:\(ConsoleColor.reset) \(updated.name)
+               \(ConsoleColor.dim)New Badge:\(ConsoleColor.reset) \(ConsoleColor.green)\(color.name) (Text: '\(badgeText ?? "-")')\(ConsoleColor.reset)
             """)
 
         case "list":
@@ -132,8 +194,11 @@ func main() async {
                 for (idx, clone) in clones.enumerated() {
                     let exists = FileManager.default.fileExists(atPath: clone.appPath)
                     let status = exists ? "\(ConsoleColor.green)● Available\(ConsoleColor.reset)" : "\(ConsoleColor.red)✖ Missing\(ConsoleColor.reset)"
+                    let badgeInfo = clone.badgeConfig.map { "\($0.color.name) [\($0.text ?? "-")]" } ?? "None"
+
                     print("  \(ConsoleColor.bold)\(idx + 1). \(clone.name)\(ConsoleColor.reset) [\(status)]")
                     print("     \(ConsoleColor.dim)Engine:\(ConsoleColor.reset) \(clone.engineType.description)")
+                    print("     \(ConsoleColor.dim)Dock Badge:\(ConsoleColor.reset) \(ConsoleColor.cyan)\(badgeInfo)\(ConsoleColor.reset)")
                     print("     \(ConsoleColor.dim)ID:\(ConsoleColor.reset) \(clone.id.uuidString)")
                     print("     \(ConsoleColor.dim)Bundle ID:\(ConsoleColor.reset) \(clone.cloneBundleID)")
                     print("     \(ConsoleColor.dim)App Path:\(ConsoleColor.reset) \(clone.appPath)")
