@@ -529,17 +529,22 @@ body {
 }
 
 .mac-titlebar {
-  height: 40px;
-  background: rgba(255, 255, 255, 0.02);
+  height: 44px;
+  background: rgba(255, 255, 255, 0.03);
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 0 16px;
   border-bottom: 1px solid var(--border-subtle);
+  position: relative;
+  gap: 12px;
 }
 
 .window-buttons {
   display: flex;
   gap: 7px;
+  z-index: 2;
+  flex-shrink: 0;
 }
 
 .win-dot {
@@ -553,17 +558,124 @@ body {
 .win-dot-max { background: #27c93f; }
 
 .window-caption {
-  margin: 0 auto;
   font-size: 0.82rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: opacity 0.25s ease;
+}
+
+.window-tabs {
+  display: flex;
+  gap: 6px;
+  z-index: 2;
+  flex-shrink: 0;
+}
+
+.win-tab-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
   color: var(--text-muted);
-  font-weight: 500;
-  transform: translateX(-24px);
+  border-radius: var(--radius-xs);
+  padding: 5px 10px;
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: inherit;
+}
+
+.win-tab-btn:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.win-tab-btn.active {
+  color: #ffffff;
+  background: rgba(79, 70, 229, 0.25);
+  border-color: var(--indigo);
+  box-shadow: 0 0 12px rgba(79, 70, 229, 0.35);
+}
+
+.showcase-slider {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1024 / 665;
+  background: #000;
+  overflow: hidden;
+}
+
+.showcase-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(1.02);
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.5s ease;
+  pointer-events: none;
+}
+
+.showcase-slide.active {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+  pointer-events: auto;
 }
 
 .preview-graphic {
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
   display: block;
+}
+
+/* Showcase Controls */
+.showcase-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: rgba(10, 12, 20, 0.95);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.slide-indicator {
+  width: 32px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  transition: width 0.3s ease, background-color 0.2s ease;
+}
+
+.slide-indicator:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.slide-indicator.active {
+  width: 46px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.indicator-fill {
+  width: 0%;
+  height: 100%;
+  background: var(--gradient-brand);
+  border-radius: 999px;
+}
+
+.slide-indicator.active .indicator-fill {
+  width: 100%;
+  transition: width 3s linear;
 }
 
 /* Live Interactive Simulator Section */

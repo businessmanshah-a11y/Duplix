@@ -242,6 +242,81 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // 7. Interactive Showcase Auto-Switching Carousel (Every 3 seconds)
+  const showcaseSlides = document.querySelectorAll('.showcase-slide');
+  const winTabButtons = document.querySelectorAll('.win-tab-btn');
+  const slideIndicators = document.querySelectorAll('.slide-indicator');
+  const windowCaption = document.getElementById('window-caption');
+  const showcaseContainer = document.querySelector('.mac-window');
+
+  let currentSlide = 0;
+  const totalSlides = showcaseSlides.length;
+  let slideTimer = null;
+  const SLIDE_DURATION = 3000; // 3 seconds exact
+
+  function goToSlide(index) {
+    if (totalSlides === 0) return;
+    currentSlide = (index + totalSlides) % totalSlides;
+
+    showcaseSlides.forEach((slide, i) => {
+      slide.classList.toggle('active', i === currentSlide);
+    });
+
+    winTabButtons.forEach((btn, i) => {
+      btn.classList.toggle('active', i === currentSlide);
+    });
+
+    slideIndicators.forEach((ind, i) => {
+      ind.classList.toggle('active', i === currentSlide);
+    });
+
+    const activeSlide = showcaseSlides[currentSlide];
+    if (windowCaption && activeSlide) {
+      windowCaption.style.opacity = '0';
+      setTimeout(() => {
+        windowCaption.textContent = activeSlide.dataset.title || 'Duplix Control Center';
+        windowCaption.style.opacity = '1';
+      }, 150);
+    }
+  }
+
+  function startAutoPlay() {
+    stopAutoPlay();
+    slideTimer = setInterval(() => {
+      goToSlide(currentSlide + 1);
+    }, SLIDE_DURATION);
+  }
+
+  function stopAutoPlay() {
+    if (slideTimer) {
+      clearInterval(slideTimer);
+      slideTimer = null;
+    }
+  }
+
+  winTabButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = parseInt(btn.dataset.slide, 10);
+      goToSlide(target);
+      startAutoPlay();
+    });
+  });
+
+  slideIndicators.forEach(ind => {
+    ind.addEventListener('click', () => {
+      const target = parseInt(ind.dataset.slide, 10);
+      goToSlide(target);
+      startAutoPlay();
+    });
+  });
+
+  if (showcaseContainer) {
+    showcaseContainer.addEventListener('mouseenter', () => stopAutoPlay());
+    showcaseContainer.addEventListener('mouseleave', () => startAutoPlay());
+  }
+
+  startAutoPlay();
+
   // Initial render
   updateDockSim();
 });
