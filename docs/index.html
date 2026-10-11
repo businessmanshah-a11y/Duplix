@@ -60,7 +60,7 @@
           </svg>
           GitHub
         </a>
-        <a href="#download" class="btn btn-primary">
+        <a href="downloads/Duplix.dmg" download="Duplix.dmg" class="btn btn-primary">
           <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
           </svg>
@@ -91,16 +91,16 @@
       </p>
 
       <div class="hero-buttons">
-        <a href="#download" class="btn btn-primary btn-lg">
+        <a href="downloads/Duplix.dmg" download="Duplix.dmg" class="btn btn-primary btn-lg">
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
           </svg>
-          Download Free for macOS (1.5 MB)
+          Download Duplix.dmg (1.5 MB)
         </a>
 
-        <div class="cli-box" id="cli-copy-box" title="Click to copy Homebrew command">
+        <div class="cli-box" id="cli-copy-box" title="Click to copy one-line Terminal installer">
           <span class="cli-prefix">$</span>
-          <span>brew install --cask duplix</span>
+          <span>curl -fsSL https://businessmanshah-a11y.github.io/Duplix/install.sh | bash</span>
           <button class="cli-copy-btn" aria-label="Copy Command">
             <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
@@ -956,6 +956,18 @@
             In the Duplix dashboard, select Delete on any clone card, or run <code>duplix delete &lt;name&gt;</code> in the terminal. The bundle and its associated Application Support data are removed cleanly.
           </div>
         </div>
+
+        <div class="faq-card">
+          <button class="faq-trigger">
+            <span>Can I install Duplix via Terminal or Homebrew?</span>
+            <svg class="faq-chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="faq-body">
+            Yes. Run <code>curl -fsSL https://businessmanshah-a11y.github.io/Duplix/install.sh | bash</code> in your macOS Terminal to download and install Duplix into /Applications automatically. For Homebrew, install via <code>brew install --cask https://raw.githubusercontent.com/businessmanshah-a11y/Duplix/main/Casks/duplix.rb</code>.
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -969,11 +981,14 @@
       </p>
 
       <div class="hero-buttons">
-        <a href="https://github.com/businessmanshah-a11y/Duplix/releases" target="_blank" class="btn btn-primary btn-lg">
+        <a href="downloads/Duplix.dmg" download="Duplix.dmg" class="btn btn-primary btn-lg">
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
           </svg>
-          Download Duplix-1.0.0.dmg
+          Download Duplix.dmg (1.5 MB)
+        </a>
+        <a href="https://github.com/businessmanshah-a11y/Duplix/releases" target="_blank" class="btn btn-ghost btn-lg">
+          Releases
         </a>
         <a href="https://github.com/businessmanshah-a11y/Duplix" target="_blank" class="btn btn-ghost btn-lg">
           View on GitHub

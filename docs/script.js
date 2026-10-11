@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (cliBox) {
     cliBox.addEventListener('click', () => {
-      const code = 'brew install --cask duplix';
+      const code = 'curl -fsSL https://businessmanshah-a11y.github.io/Duplix/install.sh | bash';
       navigator.clipboard.writeText(code).then(() => {
         showToast('Copied to clipboard: ' + code);
       });
