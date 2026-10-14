@@ -19,7 +19,7 @@ public final class CloneCreatorFormState: ObservableObject {
     public var currentBadgeConfig: BadgeConfig {
         BadgeConfig(
             color: selectedColor,
-            text: autoNumberBadges ? "1" : (badgeText.isEmpty ? nil : badgeText),
+            text: autoNumberBadges ? (badgeText.isEmpty ? "1" : badgeText) : (badgeText.isEmpty ? nil : badgeText),
             position: .bottomRight
         )
     }
@@ -200,6 +200,16 @@ public struct CloneCreatorSheet: View {
             .background(Color(NSColor.windowBackgroundColor))
         }
         .frame(width: 480, height: 530)
+        .task {
+            let existing = (try? await manager.loadRegistry()) ?? []
+            let matchingCount = existing.filter { $0.sourceAppName == sourceApp.displayName }.count
+            let nextIndex = matchingCount + 1
+            if form.cloneName == "\(sourceApp.displayName) (Clone 1)" && nextIndex > 1 {
+                form.cloneName = "\(sourceApp.displayName) (Clone \(nextIndex))"
+                form.badgeText = "\(nextIndex)"
+                form.selectedColor = BadgeColor.defaultForIndex(nextIndex)
+            }
+        }
     }
 
     private func createClones() {
@@ -208,10 +218,14 @@ public struct CloneCreatorSheet: View {
 
         Task {
             do {
+                let existing = (try? await manager.loadRegistry()) ?? []
+                let matchingCount = existing.filter { $0.sourceAppName == sourceApp.displayName }.count
+
                 for i in 1...form.cloneCount {
-                    let name = form.cloneCount == 1 ? form.cloneName : "\(form.cloneName) \(i)"
-                    let color = (form.cloneCount > 1 && form.customHex.isEmpty) ? BadgeColor.defaultForIndex(i) : form.selectedColor
-                    let text = form.autoNumberBadges ? "\(i)" : (form.badgeText.isEmpty ? nil : form.badgeText)
+                    let nextIndex = matchingCount + i
+                    let name = form.cloneCount == 1 ? form.cloneName : "\(form.cloneName) \(nextIndex)"
+                    let color = (form.cloneCount > 1 && form.customHex.isEmpty) ? BadgeColor.defaultForIndex(nextIndex) : form.selectedColor
+                    let text = form.autoNumberBadges ? "\(nextIndex)" : (form.badgeText.isEmpty ? nil : form.badgeText)
                     let config = BadgeConfig(color: color, text: text, position: .bottomRight)
 
                     _ = try await manager.createClone(
