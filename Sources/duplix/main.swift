@@ -16,7 +16,7 @@ enum ConsoleColor {
 
 func printBanner() {
     print("""
-    \(ConsoleColor.cyan)\(ConsoleColor.bold)Duplix\(ConsoleColor.reset) \(ConsoleColor.dim)— Native macOS App Cloner (Phase 2 Badging)\(ConsoleColor.reset)
+    \(ConsoleColor.cyan)\(ConsoleColor.bold)Duplix\(ConsoleColor.reset) \(ConsoleColor.dim)— Native macOS App Cloner (v1.1.0)\(ConsoleColor.reset)
     """)
 }
 
@@ -30,11 +30,17 @@ func printUsage() {
       \(ConsoleColor.green)clone\(ConsoleColor.reset) <app-path> [--name <name>] [--badge-color <color>] [--badge-text <text>] [--overwrite]
             Clones any macOS .app bundle using APFS CoW, isolates its data, and applies a distinct Dock badge.
 
+      \(ConsoleColor.green)update\(ConsoleColor.reset) <id-or-name | --all>
+            Updates clone bundle(s) to match the latest original app version with ZERO session or data loss.
+
+      \(ConsoleColor.green)check-updates\(ConsoleColor.reset)
+            Checks all registered clones for available updates from their source applications.
+
       \(ConsoleColor.green)badge\(ConsoleColor.reset) <id-or-name> [--color <color>] [--text <text>]
             Updates or customizes the Dock icon badge of an existing clone without recreating it.
 
       \(ConsoleColor.green)list\(ConsoleColor.reset)
-            Lists all created clones, identifiers, badge status, engine types, and data paths.
+            Lists all created clones, versions, update status, badge status, and data paths.
 
       \(ConsoleColor.green)launch\(ConsoleColor.reset) <id-or-name>
             Runs an isolated instance of the clone simultaneously with existing apps.
@@ -59,9 +65,9 @@ func printUsage() {
 
     \(ConsoleColor.bold)EXAMPLES:\(ConsoleColor.reset)
       duplix clone "/Applications/Antigravity IDE.app"
-      duplix clone "/Applications/Antigravity IDE.app" --name "Antigravity Work" --badge-color green --badge-text "W"
-      duplix badge "Antigravity Work" --color purple --text "DEV"
-      duplix launch "Antigravity Work"
+      duplix check-updates
+      duplix update "Antigravity IDE (Clone 1)"
+      duplix update --all
       duplix list
     """)
 }
@@ -152,6 +158,91 @@ func main() async {
               duplix launch "\(record.name)"
             """)
 
+        case "check-updates":
+            print("\(ConsoleColor.cyan)🔍 Checking clones for available updates from original apps...\(ConsoleColor.reset)\n")
+            let clones = try await manager.listClones()
+            if clones.isEmpty {
+                print("\(ConsoleColor.yellow)No clones found to check.\(ConsoleColor.reset)")
+                break
+            }
+
+            var outdatedCount = 0
+            for (idx, clone) in clones.enumerated() {
+                let updateInfo = try? await manager.checkUpdate(for: clone)
+                let currentVer = updateInfo?.cloneVersion ?? "Unknown"
+                let sourceVer = updateInfo?.sourceVersion ?? "Unknown"
+
+                print("  \(ConsoleColor.bold)\(idx + 1). \(clone.name)\(ConsoleColor.reset)")
+                print("     \(ConsoleColor.dim)Current Clone Version:\(ConsoleColor.reset) v\(currentVer)")
+                print("     \(ConsoleColor.dim)Source App Version:\(ConsoleColor.reset)    v\(sourceVer)")
+
+                if let info = updateInfo, info.hasUpdate {
+                    outdatedCount += 1
+                    print("     \(ConsoleColor.yellow)\(ConsoleColor.bold)➔ UPDATE AVAILABLE:\(ConsoleColor.reset) \(ConsoleColor.dim)v\(currentVer) ➔\(ConsoleColor.reset) \(ConsoleColor.green)v\(sourceVer)\(ConsoleColor.reset)")
+                    print("     \(ConsoleColor.dim)Run to update:\(ConsoleColor.reset) duplix update \"\(clone.name)\"")
+                } else if updateInfo != nil {
+                    print("     \(ConsoleColor.green)✔ Up to date\(ConsoleColor.reset)")
+                } else {
+                    print("     \(ConsoleColor.dim)Source app not currently found on disk.\(ConsoleColor.reset)")
+                }
+                print()
+            }
+
+            if outdatedCount > 0 {
+                print("\(ConsoleColor.yellow)\(ConsoleColor.bold)Summary:\(ConsoleColor.reset) \(outdatedCount) clone(s) have updates available. Run \(ConsoleColor.green)duplix update --all\(ConsoleColor.reset) to update.")
+            } else {
+                print("\(ConsoleColor.green)\(ConsoleColor.bold)All clones are up to date with their original applications.\(ConsoleColor.reset)")
+            }
+
+        case "update":
+            guard args.count > 2 else {
+                print("\(ConsoleColor.red)Error:\(ConsoleColor.reset) Missing clone name/UUID or '--all'. Example: duplix update \"Antigravity IDE (Clone 1)\"")
+                exit(1)
+            }
+
+            let target = args[2]
+            if target == "--all" {
+                print("\(ConsoleColor.cyan)🔄 Checking and updating all outdated clones...\(ConsoleColor.reset)\n")
+                let clones = try await manager.listClones()
+                var updatedCount = 0
+
+                for clone in clones {
+                    if let info = try? await manager.checkUpdate(for: clone), info.hasUpdate {
+                        print("\(ConsoleColor.cyan)⚡ Updating \(clone.name)...\(ConsoleColor.reset) (\(info.cloneVersion) ➔ \(info.sourceVersion))")
+                        let start = Date()
+                        do {
+                            let updated = try await manager.updateClone(identifierOrName: clone.id.uuidString)
+                            let duration = String(format: "%.2f", Date().timeIntervalSince(start))
+                            print("  \(ConsoleColor.green)✔ Updated successfully in \(duration)s (Session data preserved: \(updated.dataPath))\(ConsoleColor.reset)")
+                            updatedCount += 1
+                        } catch {
+                            print("  \(ConsoleColor.red)✖ Failed to update \(clone.name): \(error.localizedDescription)\(ConsoleColor.reset)")
+                        }
+                    }
+                }
+
+                if updatedCount == 0 {
+                    print("\(ConsoleColor.green)All clones are already up to date.\(ConsoleColor.reset)")
+                } else {
+                    print("\n\(ConsoleColor.green)\(ConsoleColor.bold)✔ Finished updating \(updatedCount) clone(s).\(ConsoleColor.reset)")
+                }
+            } else {
+                print("\(ConsoleColor.cyan)🔄 Updating clone: \(target)...\(ConsoleColor.reset)")
+                let start = Date()
+                let updated = try await manager.updateClone(identifierOrName: target)
+                let duration = String(format: "%.2f", Date().timeIntervalSince(start))
+
+                print("""
+                \(ConsoleColor.green)\(ConsoleColor.bold)✔ Clone updated successfully in \(duration)s!\(ConsoleColor.reset)
+                   \(ConsoleColor.dim)Name:\(ConsoleColor.reset) \(updated.name)
+                   \(ConsoleColor.dim)App Path:\(ConsoleColor.reset) \(updated.appPath)
+                   \(ConsoleColor.dim)Session Data (Untouched):\(ConsoleColor.reset) \(ConsoleColor.green)\(updated.dataPath)\(ConsoleColor.reset)
+
+                \(ConsoleColor.yellow)You can now launch the updated instance:\(ConsoleColor.reset)
+                  duplix launch "\(updated.name)"
+                """)
+            }
+
         case "badge":
             guard args.count > 2 else {
                 print("\(ConsoleColor.red)Error:\(ConsoleColor.reset) Missing clone name or UUID. Example: duplix badge \"Antigravity (Clone 1)\" --color purple --text \"DEV\"")
@@ -196,9 +287,17 @@ func main() async {
                     let status = exists ? "\(ConsoleColor.green)● Available\(ConsoleColor.reset)" : "\(ConsoleColor.red)✖ Missing\(ConsoleColor.reset)"
                     let badgeInfo = clone.badgeConfig.map { "\($0.color.name) [\($0.text ?? "-")]" } ?? "None"
 
-                    print("  \(ConsoleColor.bold)\(idx + 1). \(clone.name)\(ConsoleColor.reset) [\(status)]")
+                    let updateInfo = try? await manager.checkUpdate(for: clone)
+                    let versionText = updateInfo.map { "v\($0.cloneVersion)" } ?? ""
+
+                    print("  \(ConsoleColor.bold)\(idx + 1). \(clone.name)\(ConsoleColor.reset) [\(status)] \(versionText)")
                     print("     \(ConsoleColor.dim)Engine:\(ConsoleColor.reset) \(clone.engineType.description)")
                     print("     \(ConsoleColor.dim)Dock Badge:\(ConsoleColor.reset) \(ConsoleColor.cyan)\(badgeInfo)\(ConsoleColor.reset)")
+
+                    if let info = updateInfo, info.hasUpdate {
+                        print("     \(ConsoleColor.yellow)\(ConsoleColor.bold)Update:\(ConsoleColor.reset)     \(ConsoleColor.yellow)v\(info.cloneVersion) ➔ v\(info.sourceVersion) Available (run: duplix update \"\(clone.name)\")\(ConsoleColor.reset)")
+                    }
+
                     print("     \(ConsoleColor.dim)ID:\(ConsoleColor.reset) \(clone.id.uuidString)")
                     print("     \(ConsoleColor.dim)Bundle ID:\(ConsoleColor.reset) \(clone.cloneBundleID)")
                     print("     \(ConsoleColor.dim)App Path:\(ConsoleColor.reset) \(clone.appPath)")

@@ -42,6 +42,10 @@ public struct MainView: View {
                 NavigationLink(value: NavigationSection.scanner) {
                     Label(NavigationSection.scanner.rawValue, systemImage: NavigationSection.scanner.icon)
                 }
+
+                NavigationLink(value: NavigationSection.voiceMemo) {
+                    Label(NavigationSection.voiceMemo.rawValue, systemImage: NavigationSection.voiceMemo.icon)
+                }
             }
 
             Section("System") {
@@ -74,6 +78,8 @@ public struct MainView: View {
                     }
                 }
             )
+        case .voiceMemo:
+            VoiceMemoView()
         case .about:
             AboutView()
         }

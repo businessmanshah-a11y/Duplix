@@ -4,13 +4,11 @@ set -e
 DIR="$(cd "$(dirname "$0")/.." && pwd)"
 DIST_DIR="$DIR/dist"
 APP_PATH="$DIST_DIR/Duplix.app"
-DMG_PATH="$DIST_DIR/Duplix-1.0.0.dmg"
+DMG_PATH="$DIST_DIR/Duplix-1.1.0.dmg"
 STAGING_DIR="$DIST_DIR/dmg_staging"
 
-if [ ! -d "$APP_PATH" ]; then
-    echo "==> Duplix.app not found. Building it first..."
-    "$DIR/scripts/build_app.sh"
-fi
+echo "==> Building Duplix.app..."
+"$DIR/scripts/build_app.sh"
 
 echo "==> Preparing DMG staging environment..."
 rm -rf "$STAGING_DIR"
@@ -41,6 +39,7 @@ chmod +x "$STAGING_DIR/Install CLI.command"
 
 echo "==> Generating compressed Apple Disk Image (DMG)..."
 rm -f "$DMG_PATH"
+rm -f "$DIST_DIR/Duplix-1.0.0.dmg"
 hdiutil create \
     -volname "Duplix" \
     -srcfolder "$STAGING_DIR" \
@@ -49,6 +48,12 @@ hdiutil create \
     "$DMG_PATH"
 
 rm -rf "$STAGING_DIR"
+
+echo "==> Updating distribution download locations..."
+mkdir -p "$DIR/website/downloads"
+mkdir -p "$DIR/docs/downloads"
+cp -f "$DMG_PATH" "$DIR/website/downloads/Duplix.dmg"
+cp -f "$DMG_PATH" "$DIR/docs/downloads/Duplix.dmg"
 
 echo "==> DMG successfully created at: $DMG_PATH"
 echo "==> File Size: $(ls -lh "$DMG_PATH" | awk '{print $5}')"

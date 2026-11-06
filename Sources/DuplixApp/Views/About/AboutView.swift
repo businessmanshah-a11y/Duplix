@@ -26,7 +26,7 @@ public struct AboutView: View {
                         .font(.subheadline)
                         .foregroundColor(.secondary)
 
-                    Text("Version 1.0.0 (Phase 3 Native SwiftUI)")
+                    Text("Version 1.1.0 (Smart Updates & Voice Memo)")
                         .font(.caption)
                         .padding(.horizontal, 10)
                         .padding(.vertical, 4)
@@ -37,6 +37,18 @@ public struct AboutView: View {
 
                 // Feature Highlights
                 VStack(spacing: 12) {
+                    featureRow(
+                        icon: "arrow.triangle.2.circlepath.circle.fill",
+                        color: .orange,
+                        title: "1-Click Clone Updates",
+                        desc: "Sync clones when original apps update with zero data, cookie, or session loss."
+                    )
+                    featureRow(
+                        icon: "waveform.circle.fill",
+                        color: .red,
+                        title: "Voice Memo Companion",
+                        desc: "Instant floating AI audio recorder with global ⌥ ⌘ hotkey and auto-chat pasting."
+                    )
                     featureRow(
                         icon: "bolt.fill",
                         color: .yellow,
@@ -55,12 +67,6 @@ public struct AboutView: View {
                         title: "Distinct Dock Badges",
                         desc: "Color-coded icons and custom labels so you recognize your clones in the Dock."
                     )
-                    featureRow(
-                        icon: "cpu.fill",
-                        color: .blue,
-                        title: "Apple Silicon Native",
-                        desc: "Ad-hoc code signing and Gatekeeper compliance for M1/M2/M3/M4 & Intel Macs."
-                    )
                 }
                 .frame(maxWidth: 500)
                 .padding(.horizontal, 20)
@@ -76,12 +82,14 @@ public struct AboutView: View {
 
                     HStack(spacing: 16) {
                         Button("Documentation") {
-                            NSWorkspace.shared.open(URL(fileURLWithPath: FileManager.default.currentDirectoryPath + "/docs"))
+                            if let url = URL(string: "https://businessmanshah-a11y.github.io/Duplix/") {
+                                NSWorkspace.shared.open(url)
+                            }
                         }
                         .buttonStyle(.link)
 
-                        Button("GitHub Project") {
-                            if let url = URL(string: "https://github.com") {
+                        Button("GitHub Repository") {
+                            if let url = URL(string: "https://github.com/businessmanshah-a11y/Duplix") {
                                 NSWorkspace.shared.open(url)
                             }
                         }

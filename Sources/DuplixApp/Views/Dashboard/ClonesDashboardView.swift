@@ -35,7 +35,7 @@ public struct ClonesDashboardView: View {
                         Image(systemName: "arrow.clockwise")
                     }
                     .buttonStyle(.bordered)
-                    .help("Refresh Clones")
+                    .help("Refresh Clones & Check Updates")
 
                     Button(action: onBrowseAppsRequested) {
                         HStack(spacing: 6) {
@@ -47,6 +47,85 @@ public struct ClonesDashboardView: View {
                 }
                 .padding(.horizontal, 24)
                 .padding(.top, 24)
+
+                // Updates Available Banner
+                if !viewModel.outdatedClones.isEmpty {
+                    HStack(spacing: 12) {
+                        Image(systemName: "sparkles")
+                            .font(.title3)
+                            .foregroundColor(.orange)
+
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("\(viewModel.outdatedClones.count) Clone Update\(viewModel.outdatedClones.count == 1 ? "" : "s") Available")
+                                .font(.headline)
+                                .foregroundColor(.primary)
+
+                            Text("Original apps have been updated. Sync your clones in 1 click with zero data or session loss.")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+
+                        Spacer()
+
+                        Button(action: {
+                            Task { await viewModel.updateAllClones() }
+                        }) {
+                            HStack(spacing: 5) {
+                                Image(systemName: "arrow.triangle.2.circlepath")
+                                Text("Update All")
+                                    .fontWeight(.semibold)
+                            }
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .tint(.orange)
+                        .controlSize(.regular)
+                    }
+                    .padding(14)
+                    .background(Color.orange.opacity(0.12))
+                    .cornerRadius(12)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12)
+                            .strokeBorder(Color.orange.opacity(0.25), lineWidth: 1)
+                    )
+                    .padding(.horizontal, 24)
+                }
+
+                // Error / Success banners
+                if let err = viewModel.errorMessage {
+                    HStack {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundColor(.red)
+                        Text(err)
+                            .font(.caption)
+                            .foregroundColor(.red)
+                        Spacer()
+                        Button("Dismiss") { viewModel.errorMessage = nil }
+                            .buttonStyle(.plain)
+                            .font(.caption2)
+                    }
+                    .padding(10)
+                    .background(Color.red.opacity(0.1))
+                    .cornerRadius(8)
+                    .padding(.horizontal, 24)
+                }
+
+                if let succ = viewModel.successMessage {
+                    HStack {
+                        Image(systemName: "checkmark.circle.fill")
+                            .foregroundColor(.green)
+                        Text(succ)
+                            .font(.caption)
+                            .foregroundColor(.green)
+                        Spacer()
+                        Button("Dismiss") { viewModel.successMessage = nil }
+                            .buttonStyle(.plain)
+                            .font(.caption2)
+                    }
+                    .padding(10)
+                    .background(Color.green.opacity(0.1))
+                    .cornerRadius(8)
+                    .padding(.horizontal, 24)
+                }
 
                 if viewModel.isLoading {
                     HStack {
@@ -63,8 +142,13 @@ public struct ClonesDashboardView: View {
                         ForEach(viewModel.clones) { clone in
                             CloneCardView(
                                 clone: clone,
+                                updateInfo: viewModel.updateInfos[clone.id],
+                                isUpdating: viewModel.isUpdating[clone.id] ?? false,
                                 onLaunch: {
                                     Task { await viewModel.launch(clone: clone) }
+                                },
+                                onUpdate: {
+                                    viewModel.cloneToConfirmUpdate = clone
                                 },
                                 onOpenData: {
                                     Task { await viewModel.openDataDirectory(clone: clone) }
@@ -94,6 +178,25 @@ public struct ClonesDashboardView: View {
                     Task { await viewModel.loadClones() }
                 }
             )
+        }
+        .alert("Update Clone?", isPresented: Binding(
+            get: { viewModel.cloneToConfirmUpdate != nil },
+            set: { if !$0 { viewModel.cloneToConfirmUpdate = nil } }
+        )) {
+            Button("Cancel", role: .cancel) { viewModel.cloneToConfirmUpdate = nil }
+            Button("Update Now") {
+                if let c = viewModel.cloneToConfirmUpdate {
+                    Task { await viewModel.updateClone(clone: c) }
+                    viewModel.cloneToConfirmUpdate = nil
+                }
+            }
+        } message: {
+            if let c = viewModel.cloneToConfirmUpdate,
+               let info = viewModel.updateInfos[c.id] {
+                Text("Update '\(c.name)' to v\(info.sourceVersion)?\n\nAll your logins, accounts, extensions, cookies, and workspace data in '\(c.dataPath)' will remain 100% intact.")
+            } else if let c = viewModel.cloneToConfirmUpdate {
+                Text("Update '\(c.name)' to the latest version of its source application? All session data will be preserved.")
+            }
         }
         .alert("Reset Session Data?", isPresented: Binding(
             get: { viewModel.cloneToReset != nil },

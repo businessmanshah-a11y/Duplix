@@ -24,7 +24,7 @@
       <a href="#" class="brand-link">
         <img src="assets/icon.png" alt="Duplix Icon" class="brand-icon">
         <span class="brand-name">Duplix</span>
-        <span class="badge-version">v1.0.0</span>
+        <span class="badge-version">v1.1.0</span>
       </a>
 
       <nav>
@@ -445,7 +445,7 @@
                       <img src="assets/icon.png" class="scanner-card-icon" alt="Duplix">
                       <div class="scanner-card-details">
                         <div class="scanner-card-name">Duplix</div>
-                        <div class="scanner-card-meta"><span class="engine-badge native">Native</span> v1.0.0</div>
+                        <div class="scanner-card-meta"><span class="engine-badge native">Native</span> v1.1.0</div>
                       </div>
                       <button class="scanner-clone-btn" aria-label="Clone Duplix">Clone</button>
                     </div>
@@ -494,7 +494,7 @@
                     <img src="assets/icon.png" class="about-brand-logo" alt="Duplix">
                     <h3 class="about-hero-title">Duplix</h3>
                     <p class="about-hero-tagline">The Free, Native, Open-Source macOS App Cloner</p>
-                    <span class="about-version-badge">Version 1.0.0 (Phase 3 Native SwiftUI)</span>
+                    <span class="about-version-badge">Version 1.1.0 (Smart Updates & Voice Memo)</span>
                   </div>
 
                   <div class="about-features-list">
@@ -814,6 +814,32 @@
             Automates recursive quarantine stripping and ad-hoc code signature injection, ensuring seamless launches on Apple Silicon without security warnings.
           </p>
         </div>
+
+        <!-- Card 7: Smart 1-Click Updates -->
+        <div class="bento-card reveal-on-scroll reveal-delay-3">
+          <div class="bento-icon-box">
+            <svg class="bento-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+          </div>
+          <h3 class="bento-title">Smart 1-Click Updates</h3>
+          <p class="bento-copy">
+            When original applications receive updates, Duplix detects version divergence. Update any clone with 1 click while 100% of your logins, extensions, and session data remain untouched.
+          </p>
+        </div>
+
+        <!-- Card 8: Voice Memo Companion -->
+        <div class="bento-card reveal-on-scroll reveal-delay-4">
+          <div class="bento-icon-box">
+            <svg class="bento-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+            </svg>
+          </div>
+          <h3 class="bento-title">Voice Memo Companion</h3>
+          <p class="bento-copy">
+            Instant floating AI audio recorder with global ⌥ ⌘ hotkey and live waveform HUD. Automatically attaches crystal-clear AAC voice memos into Antigravity IDE, Cursor, Slack, or any focused chat.
+          </p>
+        </div>
       </div>
     </div>
   </section>
@@ -926,6 +952,18 @@
           </button>
           <div class="faq-body">
             Yes. Duplix assigns unique bundle identifiers and directs session data to independent sandbox directories, allowing concurrent execution without conflict.
+          </div>
+        </div>
+
+        <div class="faq-card">
+          <button class="faq-trigger">
+            <span>What happens when the original application gets updated?</span>
+            <svg class="faq-chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="faq-body">
+            Duplix automatically detects version differences between original applications and your clones. When an update is available, an "Update" button appears in the dashboard and CLI. Clicking "Update" instantly refreshes the application bundle to match the newest version while keeping 100% of your logins, extensions, and session data untouched.
           </div>
         </div>
 

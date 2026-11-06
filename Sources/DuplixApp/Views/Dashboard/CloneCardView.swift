@@ -3,7 +3,10 @@ import DuplixCore
 
 public struct CloneCardView: View {
     public let clone: CloneRecord
+    public let updateInfo: CloneVersionInfo?
+    public let isUpdating: Bool
     public let onLaunch: () -> Void
+    public let onUpdate: () -> Void
     public let onOpenData: () -> Void
     public let onEditBadge: () -> Void
     public let onReset: () -> Void
@@ -11,14 +14,20 @@ public struct CloneCardView: View {
 
     public init(
         clone: CloneRecord,
+        updateInfo: CloneVersionInfo? = nil,
+        isUpdating: Bool = false,
         onLaunch: @escaping () -> Void,
+        onUpdate: @escaping () -> Void = {},
         onOpenData: @escaping () -> Void,
         onEditBadge: @escaping () -> Void,
         onReset: @escaping () -> Void,
         onDelete: @escaping () -> Void
     ) {
         self.clone = clone
+        self.updateInfo = updateInfo
+        self.isUpdating = isUpdating
         self.onLaunch = onLaunch
+        self.onUpdate = onUpdate
         self.onOpenData = onOpenData
         self.onEditBadge = onEditBadge
         self.onReset = onReset
@@ -52,10 +61,27 @@ public struct CloneCardView: View {
                     HStack(spacing: 6) {
                         enginePill(engine: clone.engineType)
 
-                        if existsOnDisk {
-                            Text("Ready")
-                                .font(.caption2)
-                                .foregroundColor(.green)
+                        if let info = updateInfo, info.hasUpdate {
+                            HStack(spacing: 3) {
+                                Image(systemName: "sparkles")
+                                    .font(.system(size: 8))
+                                Text("v\(info.cloneVersion) ➔ v\(info.sourceVersion)")
+                            }
+                            .font(.system(size: 9, weight: .bold))
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2)
+                            .background(Color.orange.opacity(0.18))
+                            .foregroundColor(.orange)
+                            .clipShape(Capsule())
+                        } else if existsOnDisk {
+                            HStack(spacing: 3) {
+                                if let ver = updateInfo?.cloneVersion {
+                                    Text("v\(ver) • ")
+                                }
+                                Text("Ready")
+                            }
+                            .font(.caption2)
+                            .foregroundColor(.green)
                         } else {
                             Text("Missing")
                                 .font(.caption2)
@@ -108,7 +134,30 @@ public struct CloneCardView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .controlSize(.regular)
-                .disabled(!existsOnDisk)
+                .disabled(!existsOnDisk || isUpdating)
+
+                if updateInfo?.hasUpdate == true {
+                    Button(action: onUpdate) {
+                        HStack(spacing: 5) {
+                            if isUpdating {
+                                ProgressView()
+                                    .controlSize(.mini)
+                                Text("Updating...")
+                                    .font(.caption2)
+                            } else {
+                                Image(systemName: "arrow.triangle.2.circlepath")
+                                    .font(.caption)
+                                Text("Update")
+                                    .fontWeight(.semibold)
+                            }
+                        }
+                    }
+                    .buttonStyle(.bordered)
+                    .tint(.orange)
+                    .controlSize(.regular)
+                    .disabled(isUpdating)
+                    .help("Update clone bundle to v\(updateInfo?.sourceVersion ?? "") (sessions preserved)")
+                }
 
                 Spacer()
 
@@ -145,7 +194,7 @@ public struct CloneCardView: View {
         )
         .overlay(
             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .strokeBorder(Color.white.opacity(0.1), lineWidth: 1)
+                .strokeBorder(updateInfo?.hasUpdate == true ? Color.orange.opacity(0.3) : Color.white.opacity(0.1), lineWidth: 1)
         )
     }
 

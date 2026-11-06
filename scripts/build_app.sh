@@ -26,6 +26,12 @@ chmod +x "$MACOS_DIR/duplix"
 echo "==> Generating AppIcon.icns..."
 swift "$DIR/scripts/generate_app_icon.swift" "$RESOURCES_DIR/AppIcon.icns"
 
+echo "==> Bundling VoiceMemo.app..."
+if [ -f "$DIR/scripts/voice_memo/build.sh" ]; then
+    "$DIR/scripts/voice_memo/build.sh"
+    cp -R "$DIR/scripts/voice_memo/VoiceMemo.app" "$RESOURCES_DIR/VoiceMemo.app"
+fi
+
 echo "==> Writing Info.plist..."
 cat << 'EOF' > "$CONTENTS_DIR/Info.plist"
 <?xml version="1.0" encoding="UTF-8"?>
@@ -45,9 +51,9 @@ cat << 'EOF' > "$CONTENTS_DIR/Info.plist"
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
-    <string>1.0.0</string>
+    <string>1.1.0</string>
     <key>CFBundleVersion</key>
-    <string>1</string>
+    <string>2</string>
     <key>LSMinimumSystemVersion</key>
     <string>13.0</string>
     <key>NSHighResolutionCapable</key>

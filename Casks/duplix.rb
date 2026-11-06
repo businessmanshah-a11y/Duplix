@@ -1,6 +1,6 @@
 cask "duplix" do
-  version "1.0.0"
-  sha256 "1c39945b615a107585d0f150dde405b7861a506586b31872befa61f19ab17b38"
+  version "1.1.0"
+  sha256 "df102d1f37d028018794c5c2d946c0b62d01c4cedc5fedbf4ad363b24bd8f41a"
 
   url "https://businessmanshah-a11y.github.io/Duplix/downloads/Duplix.dmg"
   name "Duplix"
@@ -14,7 +14,7 @@ cask "duplix" do
 
   zap trash: [
     "~/Library/Application Support/Duplix",
-    "~/Library/Preferences/com.businessmanshah.duplix.plist",
-    "~/Library/Saved Application State/com.businessmanshah.duplix.savedState",
+    "~/Library/Preferences/com.duplix.app.plist",
+    "~/Library/Saved Application State/com.duplix.app.savedState",
   ]
 end

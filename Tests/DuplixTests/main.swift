@@ -338,6 +338,75 @@ final class TestSuite {
             try await customManager.deleteClone(identifierOrName: record.name, deleteData: true)
         }
 
+        await runAsyncTest("DuplixManager checkUpdate detects version mismatch and updateClone safely refreshes bundle") {
+            let fileManager = FileManager.default
+            let tempRoot = fileManager.temporaryDirectory
+                .appendingPathComponent("DuplixUpdateTest_\(UUID().uuidString)", isDirectory: true)
+            let clonesDir = tempRoot.appendingPathComponent("Clones", isDirectory: true)
+            let dataDir = tempRoot.appendingPathComponent("Data", isDirectory: true)
+            let registryFile = tempRoot.appendingPathComponent("registry.json", isDirectory: false)
+            let srcURL = try createMockAppBundle(engine: .electron)
+
+            defer {
+                try? fileManager.removeItem(at: tempRoot)
+                try? fileManager.removeItem(at: srcURL.deletingLastPathComponent())
+            }
+
+            let customManager = DuplixManager(
+                clonesDirectoryURL: clonesDir,
+                dataDirectoryURL: dataDir,
+                registryFileURL: registryFile
+            )
+
+            // 1. Create clone with initial v1.0.0
+            let record = try await customManager.createClone(
+                sourceAppURL: srcURL,
+                customName: "Updatable App"
+            )
+
+            // Simulate user session data inside dataPath
+            let sessionFile = URL(fileURLWithPath: record.dataPath).appendingPathComponent("user_session.txt")
+            try "USER_LOGGED_IN_TOKEN_12345".write(to: sessionFile, atomically: true, encoding: .utf8)
+
+            // Verify initial status: up to date
+            let initialUpdate = try await customManager.checkUpdate(for: record)
+            try assert(initialUpdate?.hasUpdate == false, "Clone should initially be up to date")
+
+            // 2. Simulate source app updating from 1.0.0 to 2.0.0
+            let srcPlistURL = srcURL.appendingPathComponent("Contents/Info.plist")
+            var srcPlist = try PropertyListSerialization.propertyList(from: Data(contentsOf: srcPlistURL), options: [], format: nil) as! [String: Any]
+            srcPlist["CFBundleShortVersionString"] = "2.0.0"
+            let newPlistData = try PropertyListSerialization.data(fromPropertyList: srcPlist, format: .xml, options: 0)
+            try newPlistData.write(to: srcPlistURL)
+
+            // 3. Check for update: must detect update available (1.0.0 -> 2.0.0)
+            let detectedUpdate = try await customManager.checkUpdate(for: record)
+            try assert(detectedUpdate?.hasUpdate == true, "Should detect update available")
+            try assert(detectedUpdate?.cloneVersion == "1.0.0", "Clone version should be 1.0.0")
+            try assert(detectedUpdate?.sourceVersion == "2.0.0", "Source version should be 2.0.0")
+
+            // 4. Perform atomic update
+            let updatedRecord = try await customManager.updateClone(identifierOrName: record.name)
+            try assert(updatedRecord.name == "Updatable App", "Name should remain unchanged")
+
+            // 5. Verify bundle updated to 2.0.0
+            let clonePlistURL = URL(fileURLWithPath: updatedRecord.appPath).appendingPathComponent("Contents/Info.plist")
+            let clonePlist = try PropertyListSerialization.propertyList(from: Data(contentsOf: clonePlistURL), options: [], format: nil) as! [String: Any]
+            try assert((clonePlist["CFBundleShortVersionString"] as? String) == "2.0.0", "Clone bundle was not updated to 2.0.0")
+
+            // 6. CRUCIAL: Verify user session data is 100% intact!
+            try assert(fileManager.fileExists(atPath: sessionFile.path), "Session file was deleted!")
+            let readSession = try String(contentsOf: sessionFile, encoding: .utf8)
+            try assert(readSession == "USER_LOGGED_IN_TOKEN_12345", "Session data was altered or corrupted!")
+
+            // 7. Verify checkUpdate now reports up to date
+            let postUpdate = try await customManager.checkUpdate(for: updatedRecord)
+            try assert(postUpdate?.hasUpdate == false, "Clone should now be up to date")
+
+            // Clean up
+            try await customManager.deleteClone(identifierOrName: record.name, deleteData: true)
+        }
+
         print("\n-------------------------------------------")
         print("Test Results: \(passedCount) Passed, \(failedCount) Failed")
         print("-------------------------------------------\n")

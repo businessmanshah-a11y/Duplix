@@ -34,11 +34,31 @@ public struct CloneConfig: Codable, Sendable {
     }
 }
 
+public struct CloneVersionInfo: Codable, Sendable, Equatable {
+    public let cloneVersion: String
+    public let sourceVersion: String
+    public let hasUpdate: Bool
+    public let sourceAppURL: URL
+
+    public init(
+        cloneVersion: String,
+        sourceVersion: String,
+        hasUpdate: Bool,
+        sourceAppURL: URL
+    ) {
+        self.cloneVersion = cloneVersion
+        self.sourceVersion = sourceVersion
+        self.hasUpdate = hasUpdate
+        self.sourceAppURL = sourceAppURL
+    }
+}
+
 public struct CloneRecord: Codable, Sendable, Identifiable {
     public let id: UUID
     public let name: String
     public let sourceAppName: String
     public let sourceAppBundleID: String
+    public var sourceAppPath: String?
     public let cloneBundleID: String
     public let appPath: String
     public let dataPath: String
@@ -52,6 +72,7 @@ public struct CloneRecord: Codable, Sendable, Identifiable {
         name: String,
         sourceAppName: String,
         sourceAppBundleID: String,
+        sourceAppPath: String? = nil,
         cloneBundleID: String,
         appPath: String,
         dataPath: String,
@@ -64,6 +85,7 @@ public struct CloneRecord: Codable, Sendable, Identifiable {
         self.name = name
         self.sourceAppName = sourceAppName
         self.sourceAppBundleID = sourceAppBundleID
+        self.sourceAppPath = sourceAppPath
         self.cloneBundleID = cloneBundleID
         self.appPath = appPath
         self.dataPath = dataPath

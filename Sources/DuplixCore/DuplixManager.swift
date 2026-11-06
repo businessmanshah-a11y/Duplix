@@ -1,4 +1,5 @@
 import Foundation
+import AppKit
 
 public actor DuplixManager {
     public static let shared = DuplixManager()
@@ -41,6 +42,9 @@ public actor DuplixManager {
         case cloneNotFound(String)
         case launchFailed(String)
         case appPathNotFound(String)
+        case sourceAppNotFound(String)
+        case appIsRunning(String)
+        case updateFailed(String)
 
         public var errorDescription: String? {
             switch self {
@@ -50,6 +54,12 @@ public actor DuplixManager {
                 return "Failed to launch clone: \(msg)"
             case .appPathNotFound(let path):
                 return "Application bundle does not exist at path: \(path)"
+            case .sourceAppNotFound(let msg):
+                return "Source application not found: \(msg)"
+            case .appIsRunning(let msg):
+                return msg
+            case .updateFailed(let msg):
+                return "Update failed: \(msg)"
             }
         }
     }
@@ -170,6 +180,7 @@ public actor DuplixManager {
             name: cloneName,
             sourceAppName: meta.displayName,
             sourceAppBundleID: meta.bundleIdentifier,
+            sourceAppPath: sourceAppURL.standardized.path,
             cloneBundleID: cloneBundleID,
             appPath: destinationURL.path,
             dataPath: cloneDataURL.path,
@@ -230,6 +241,210 @@ public actor DuplixManager {
             return match
         }
         throw ManagerError.cloneNotFound(identifierOrName)
+    }
+
+    /// Locates the source app URL for a given clone record.
+    public func resolveSourceAppURL(for record: CloneRecord) -> URL? {
+        let fileManager = FileManager.default
+
+        if let path = record.sourceAppPath, fileManager.fileExists(atPath: path) {
+            return URL(fileURLWithPath: path).standardized
+        }
+
+        if let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: record.sourceAppBundleID),
+           fileManager.fileExists(atPath: url.path) {
+            return url.standardized
+        }
+
+        let candidates = [
+            URL(fileURLWithPath: "/Applications/\(record.sourceAppName).app"),
+            fileManager.homeDirectoryForCurrentUser.appendingPathComponent("Applications/\(record.sourceAppName).app", isDirectory: true),
+            URL(fileURLWithPath: "/System/Applications/\(record.sourceAppName).app")
+        ]
+
+        for candidate in candidates {
+            if fileManager.fileExists(atPath: candidate.path) {
+                return candidate.standardized
+            }
+        }
+
+        return nil
+    }
+
+    /// Reads CFBundleShortVersionString or CFBundleVersion from an app bundle's Info.plist.
+    public func getBundleVersion(at appURL: URL) -> String? {
+        let plistURL = appURL.appendingPathComponent("Contents/Info.plist", isDirectory: false)
+        guard let data = try? Data(contentsOf: plistURL),
+              let plist = (try? PropertyListSerialization.propertyList(from: data, options: [], format: nil)) as? [String: Any] else {
+            return nil
+        }
+        return (plist["CFBundleShortVersionString"] as? String) ?? (plist["CFBundleVersion"] as? String)
+    }
+
+    /// Compares two version strings (e.g. "2.5.5" vs "2.6.0").
+    private func isVersion(_ v1: String, olderThan v2: String) -> Bool {
+        let clean1 = v1.trimmingCharacters(in: .whitespacesAndNewlines)
+        let clean2 = v2.trimmingCharacters(in: .whitespacesAndNewlines)
+        if clean1 == clean2 { return false }
+
+        let parts1 = clean1.split(separator: ".").compactMap { Int($0) }
+        let parts2 = clean2.split(separator: ".").compactMap { Int($0) }
+
+        for i in 0..<max(parts1.count, parts2.count) {
+            let num1 = i < parts1.count ? parts1[i] : 0
+            let num2 = i < parts2.count ? parts2[i] : 0
+            if num1 < num2 { return true }
+            if num1 > num2 { return false }
+        }
+
+        return clean1.compare(clean2, options: .numeric) == .orderedAscending
+    }
+
+    /// Checks if a clone has an update available from its original source application.
+    public func checkUpdate(for clone: CloneRecord) throws -> CloneVersionInfo? {
+        guard let sourceURL = resolveSourceAppURL(for: clone) else {
+            return nil
+        }
+
+        let cloneURL = URL(fileURLWithPath: clone.appPath)
+        guard FileManager.default.fileExists(atPath: cloneURL.path),
+              let cloneVersion = getBundleVersion(at: cloneURL),
+              let sourceVersion = getBundleVersion(at: sourceURL) else {
+            return nil
+        }
+
+        let hasUpdate = isVersion(cloneVersion, olderThan: sourceVersion) || (cloneVersion != sourceVersion)
+
+        return CloneVersionInfo(
+            cloneVersion: cloneVersion,
+            sourceVersion: sourceVersion,
+            hasUpdate: hasUpdate,
+            sourceAppURL: sourceURL
+        )
+    }
+
+    /// Checks updates for all registered clones.
+    public func checkAllUpdates() throws -> [UUID: CloneVersionInfo] {
+        let clones = try loadRegistry()
+        var result: [UUID: CloneVersionInfo] = [:]
+        for clone in clones {
+            if let info = try? checkUpdate(for: clone) {
+                result[clone.id] = info
+            }
+        }
+        return result
+    }
+
+    /// Updates a clone bundle to match the latest version of its source app with ZERO data loss.
+    @discardableResult
+    public func updateClone(identifierOrName: String) throws -> CloneRecord {
+        var record = try findClone(by: identifierOrName)
+        let fileManager = FileManager.default
+
+        guard let sourceURL = resolveSourceAppURL(for: record) else {
+            throw ManagerError.sourceAppNotFound("Could not locate original application for '\(record.name)' (\(record.sourceAppName)).")
+        }
+
+        let destinationURL = URL(fileURLWithPath: record.appPath)
+        guard fileManager.fileExists(atPath: destinationURL.path) else {
+            throw ManagerError.appPathNotFound(record.appPath)
+        }
+
+        // 1. Process Check: ensure clone is not currently running
+        let runningApps = NSWorkspace.shared.runningApplications
+        let isRunning = runningApps.contains { app in
+            if let bundleURL = app.bundleURL, bundleURL.standardized.path == destinationURL.standardized.path {
+                return true
+            }
+            if let bundleID = app.bundleIdentifier, bundleID == record.cloneBundleID {
+                return true
+            }
+            return false
+        }
+
+        if isRunning {
+            throw ManagerError.appIsRunning("Cannot update '\(record.name)' because it is currently running. Please quit '\(record.name)' and try again.")
+        }
+
+        // 2. Unregister from LaunchServices
+        try? launchServices.unregister(bundleURL: destinationURL)
+
+        // 3. Create temporary atomic backup: <destinationURL>.bak
+        let backupURL = destinationURL.deletingLastPathComponent()
+            .appendingPathComponent("\(destinationURL.lastPathComponent).bak", isDirectory: true)
+
+        if fileManager.fileExists(atPath: backupURL.path) {
+            try? fileManager.removeItem(at: backupURL)
+        }
+
+        do {
+            try fileManager.moveItem(at: destinationURL, to: backupURL)
+        } catch {
+            throw ManagerError.updateFailed("Failed to create temporary backup: \(error.localizedDescription)")
+        }
+
+        // 4. Perform fresh APFS CoW clone from updated source app
+        do {
+            try cloner.clone(sourceURL: sourceURL, destinationURL: destinationURL, overwrite: true)
+
+            // Inspect the updated source app
+            let meta = try engineDetector.inspect(appURL: sourceURL)
+
+            // 5. Re-apply Info.plist modifications
+            let launcherName = "duplix_launcher"
+            let (originalExecutable, _) = try plistModifier.modify(
+                appBundleURL: destinationURL,
+                newBundleIdentifier: record.cloneBundleID,
+                displayName: record.name,
+                launcherExecutableName: launcherName
+            )
+
+            // 6. Re-generate isolated launcher script pointing to EXACT SAME dataPath
+            try launcherGenerator.generateLauncher(
+                appBundleURL: destinationURL,
+                originalExecutableName: originalExecutable,
+                launcherExecutableName: launcherName,
+                dataDirectoryPath: record.dataPath,
+                engineType: meta.engineType
+            )
+
+            // 7. Re-apply icon badge if configured
+            if let badgeConfig = record.badgeConfig {
+                _ = try? iconManager.badgeApp(
+                    appBundleURL: destinationURL,
+                    preferredIconName: meta.iconFileName,
+                    config: badgeConfig
+                )
+            }
+
+            // 8. Resign bundle
+            try codeSigner.resign(bundleURL: destinationURL)
+
+            // 9. Re-register with LaunchServices
+            try launchServices.register(bundleURL: destinationURL)
+
+            // Success! Remove the backup
+            try? fileManager.removeItem(at: backupURL)
+
+            // Update record in registry
+            record.sourceAppPath = sourceURL.path
+            var records = try loadRegistry()
+            if let idx = records.firstIndex(where: { $0.id == record.id }) {
+                records[idx] = record
+                try saveRegistry(records)
+            }
+
+            return record
+        } catch {
+            // ROLLBACK on failure: restore backup
+            if fileManager.fileExists(atPath: destinationURL.path) {
+                try? fileManager.removeItem(at: destinationURL)
+            }
+            try? fileManager.moveItem(at: backupURL, to: destinationURL)
+            try? launchServices.register(bundleURL: destinationURL)
+
+            throw ManagerError.updateFailed("Update failed: \(error.localizedDescription). Restored previous clone bundle.")
+        }
     }
 
     /// Launches an isolated clone using `/usr/bin/open -n -a`
