@@ -16,6 +16,8 @@ DerivedData/
 /clones/
 *.app
 dist/
+scripts/voice_memo/VoiceMemoApp
+.vscode/
 
 # Security & Secrets Prevention
 .env

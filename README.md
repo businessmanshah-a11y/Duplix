@@ -39,6 +39,12 @@
 
 ---
 
+## 🎙️ Companion Tools
+
+- **[Duplix Voice Memo](./scripts/voice_memo/README.md):** A lightweight native macOS floating voice recorder for AI chats (Antigravity IDE, Cursor, etc.) with a global hotkey (`⌥⌘` Option + Command) and instant auto-attachment to your active prompt.
+
+---
+
 ## 📁 Documentation
 
 Detailed documentation and technical architecture reports are available in the [`docs/`](./docs) directory:
