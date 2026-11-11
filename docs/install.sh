@@ -37,7 +37,7 @@ cleanup() {
 }
 trap cleanup EXIT
 
-echo "--> Downloading Duplix (1.5 MB)..."
+echo "--> Downloading Duplix (2.8 MB)..."
 if curl -fsSL "$DMG_URL" -o "$DMG_FILE"; then
     echo "Downloaded from primary distribution."
 else

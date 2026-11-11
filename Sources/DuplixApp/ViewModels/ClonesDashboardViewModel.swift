@@ -119,6 +119,19 @@ public final class ClonesDashboardViewModel: ObservableObject {
         }
     }
 
+    public func repairClone(clone: CloneRecord) async {
+        isUpdating[clone.id] = true
+        defer { isUpdating[clone.id] = false }
+
+        do {
+            _ = try await manager.repairClone(identifierOrName: clone.id.uuidString)
+            self.successMessage = "Successfully upgraded isolation (Keychain + HOME + URL schemes) for '\(clone.name)'!"
+            await loadClones()
+        } catch {
+            self.errorMessage = "Failed to repair isolation: \(error.localizedDescription)"
+        }
+    }
+
     public func resetData(clone: CloneRecord) async {
         do {
             try await manager.resetData(identifierOrName: clone.id.uuidString)

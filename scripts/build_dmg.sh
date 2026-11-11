@@ -4,7 +4,7 @@ set -e
 DIR="$(cd "$(dirname "$0")/.." && pwd)"
 DIST_DIR="$DIR/dist"
 APP_PATH="$DIST_DIR/Duplix.app"
-DMG_PATH="$DIST_DIR/Duplix-1.1.0.dmg"
+DMG_PATH="$DIST_DIR/Duplix-1.2.0.dmg"
 STAGING_DIR="$DIST_DIR/dmg_staging"
 
 echo "==> Building Duplix.app..."
@@ -39,7 +39,7 @@ chmod +x "$STAGING_DIR/Install CLI.command"
 
 echo "==> Generating compressed Apple Disk Image (DMG)..."
 rm -f "$DMG_PATH"
-rm -f "$DIST_DIR/Duplix-1.0.0.dmg"
+rm -f "$DIST_DIR/Duplix-1.0.0.dmg" "$DIST_DIR/Duplix-1.1.0.dmg"
 hdiutil create \
     -volname "Duplix" \
     -srcfolder "$STAGING_DIR" \

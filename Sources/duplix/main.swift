@@ -16,7 +16,7 @@ enum ConsoleColor {
 
 func printBanner() {
     print("""
-    \(ConsoleColor.cyan)\(ConsoleColor.bold)Duplix\(ConsoleColor.reset) \(ConsoleColor.dim)— Native macOS App Cloner (v1.1.0)\(ConsoleColor.reset)
+    \(ConsoleColor.cyan)\(ConsoleColor.bold)Duplix\(ConsoleColor.reset) \(ConsoleColor.dim)— Native macOS App Cloner (v1.2.0)\(ConsoleColor.reset)
     """)
 }
 
@@ -32,6 +32,9 @@ func printUsage() {
 
       \(ConsoleColor.green)update\(ConsoleColor.reset) <id-or-name | --all>
             Updates clone bundle(s) to match the latest original app version with ZERO session or data loss.
+
+      \(ConsoleColor.green)repair\(ConsoleColor.reset) <id-or-name | --all>
+            Upgrades existing clone launcher(s) with isolated macOS Keychain, HOME, and URL scheme isolation.
 
       \(ConsoleColor.green)check-updates\(ConsoleColor.reset)
             Checks all registered clones for available updates from their source applications.
@@ -240,6 +243,39 @@ func main() async {
 
                 \(ConsoleColor.yellow)You can now launch the updated instance:\(ConsoleColor.reset)
                   duplix launch "\(updated.name)"
+                """)
+            }
+
+        case "repair":
+            guard args.count > 2 else {
+                print("\(ConsoleColor.red)Error:\(ConsoleColor.reset) Missing clone name/UUID or '--all'. Example: duplix repair --all")
+                exit(1)
+            }
+
+            let target = args[2]
+            if target == "--all" {
+                print("\(ConsoleColor.cyan)🔧 Repairing isolation for all registered clones...\(ConsoleColor.reset)\n")
+                let clones = try await manager.listClones()
+                var repairedCount = 0
+
+                for clone in clones {
+                    do {
+                        let repaired = try await manager.repairClone(identifierOrName: clone.id.uuidString)
+                        print("  \(ConsoleColor.green)✔ Repaired:\(ConsoleColor.reset) \(repaired.name) (Keychain + HOME + URL schemes isolated)")
+                        repairedCount += 1
+                    } catch {
+                        print("  \(ConsoleColor.red)✖ Failed to repair \(clone.name): \(error.localizedDescription)\(ConsoleColor.reset)")
+                    }
+                }
+
+                print("\n\(ConsoleColor.green)\(ConsoleColor.bold)✔ Finished repairing \(repairedCount) clone(s).\(ConsoleColor.reset)")
+            } else {
+                print("\(ConsoleColor.cyan)🔧 Repairing isolation for:\(ConsoleColor.reset) \(target)...")
+                let repaired = try await manager.repairClone(identifierOrName: target)
+                print("""
+                \(ConsoleColor.green)\(ConsoleColor.bold)✔ Clone isolation repaired successfully!\(ConsoleColor.reset)
+                   \(ConsoleColor.dim)Name:\(ConsoleColor.reset) \(repaired.name)
+                   \(ConsoleColor.dim)Isolated Data & Keychain:\(ConsoleColor.reset) \(repaired.dataPath)
                 """)
             }
 

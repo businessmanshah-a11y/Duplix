@@ -447,6 +447,66 @@ public actor DuplixManager {
         }
     }
 
+    /// Re-generates the launcher script, isolates keychains/URL schemes, and re-signs an existing clone without wiping user data.
+    @discardableResult
+    public func repairClone(identifierOrName: String) throws -> CloneRecord {
+        let record = try findClone(by: identifierOrName)
+        let fileManager = FileManager.default
+        let appURL = URL(fileURLWithPath: record.appPath)
+
+        guard fileManager.fileExists(atPath: appURL.path) else {
+            throw ManagerError.appPathNotFound(record.appPath)
+        }
+
+        let runningApps = NSWorkspace.shared.runningApplications
+        let isRunning = runningApps.contains { app in
+            if let bundleURL = app.bundleURL, bundleURL.standardized.path == appURL.standardized.path {
+                return true
+            }
+            if let bundleID = app.bundleIdentifier, bundleID == record.cloneBundleID {
+                return true
+            }
+            return false
+        }
+
+        if isRunning {
+            throw ManagerError.appIsRunning("Cannot repair '\(record.name)' because it is currently running. Please quit '\(record.name)' and try again.")
+        }
+
+        let launcherName = "duplix_launcher"
+        let (originalExecutable, _) = try plistModifier.modify(
+            appBundleURL: appURL,
+            newBundleIdentifier: record.cloneBundleID,
+            displayName: record.name,
+            launcherExecutableName: launcherName,
+            originalBundleIDHint: record.sourceAppBundleID
+        )
+
+        try launcherGenerator.generateLauncher(
+            appBundleURL: appURL,
+            originalExecutableName: originalExecutable,
+            launcherExecutableName: launcherName,
+            dataDirectoryPath: record.dataPath,
+            engineType: record.engineType
+        )
+
+        try codeSigner.resign(bundleURL: appURL)
+        try launchServices.register(bundleURL: appURL)
+
+        return record
+    }
+
+    /// Repairs all registered clones with the latest isolation launchers and bundle settings.
+    @discardableResult
+    public func repairAllClones() throws -> [CloneRecord] {
+        let clones = try loadRegistry()
+        var repaired: [CloneRecord] = []
+        for clone in clones {
+            repaired.append(try repairClone(identifierOrName: clone.id.uuidString))
+        }
+        return repaired
+    }
+
     /// Launches an isolated clone using `/usr/bin/open -n -a`
     public func launchClone(identifierOrName: String) throws {
         var record = try findClone(by: identifierOrName)

@@ -156,6 +156,9 @@ public struct ClonesDashboardView: View {
                                 onEditBadge: {
                                     viewModel.cloneToEditBadge = clone
                                 },
+                                onRepair: {
+                                    Task { await viewModel.repairClone(clone: clone) }
+                                },
                                 onReset: {
                                     viewModel.cloneToReset = clone
                                 },

@@ -190,7 +190,7 @@ final class TestSuite {
             try assert(dict["DuplixOriginalExecutable"] as? String == "MockExecutable", "DuplixOriginalExecutable missing")
         }
 
-        runTest("LauncherGenerator creates runnable script with flags and 0755 perms") {
+        runTest("LauncherGenerator creates runnable script with Keychain, HOME, and GEMINI_DIR isolation") {
             let appURL = try createMockAppBundle(engine: .electron)
             defer { try? FileManager.default.removeItem(at: appURL.deletingLastPathComponent()) }
 
@@ -213,10 +213,126 @@ final class TestSuite {
             try assert(content.contains("--password-store=basic"), "Missing password-store flag")
             try assert(content.contains("--extensions-dir=\"$DATA_DIR/Extensions\""), "Missing extensions-dir flag")
             try assert(content.contains("--use-mock-keychain"), "Missing mock-keychain flag")
+            try assert(content.contains("export HOME=\"$DATA_DIR\""), "Missing HOME isolation for Electron")
+            try assert(content.contains("export GEMINI_DIR=\"$DATA_DIR/.gemini\""), "Missing GEMINI_DIR isolation")
+            try assert(content.contains("export ANTIGRAVITY_GEMINI_DIR=\"$DATA_DIR/.gemini\""), "Missing ANTIGRAVITY_GEMINI_DIR isolation")
+            try assert(!content.contains("export ANTIGRAVITY_APP_DATA_DIR="), "Should not hardcode ANTIGRAVITY_APP_DATA_DIR")
+            try assert(content.contains("/usr/bin/security create-keychain"), "Missing isolated keychain creation")
+
+            if let homeRange = content.range(of: "export HOME=\"$DATA_DIR\""),
+               let kcRange = content.range(of: "/usr/bin/security create-keychain") {
+                try assert(homeRange.lowerBound < kcRange.lowerBound, "HOME must be exported before security create-keychain")
+            } else {
+                try assert(false, "Expected both HOME export and security create-keychain")
+            }
 
             let attrs = try FileManager.default.attributesOfItem(atPath: launcherURL.path)
             let perms = (attrs[.posixPermissions] as? NSNumber)?.uint16Value
             try assert(perms == 0o755, "Permissions should be 0755")
+        }
+
+        runTest("LauncherGenerator runtime execution isolates HOME, Keychain, and bridges .gemini/bin") {
+            let fileManager = FileManager.default
+            let appURL = try createMockAppBundle(engine: .electron)
+            let sandboxRoot = fileManager.temporaryDirectory
+                .appendingPathComponent("DuplixExecTest_\(UUID().uuidString)", isDirectory: true)
+            let fakeRealHome = sandboxRoot.appendingPathComponent("RealHome", isDirectory: true)
+            let dataDir = sandboxRoot.appendingPathComponent("CloneData", isDirectory: true)
+            defer {
+                try? fileManager.removeItem(at: appURL.deletingLastPathComponent())
+                try? fileManager.removeItem(at: sandboxRoot)
+            }
+
+            try fileManager.createDirectory(at: fakeRealHome.appendingPathComponent(".gemini/bin", isDirectory: true), withIntermediateDirectories: true)
+            try "fake-agy".write(to: fakeRealHome.appendingPathComponent(".gemini/bin/agy"), atomically: true, encoding: .utf8)
+            try "user=test".write(to: fakeRealHome.appendingPathComponent(".gitconfig"), atomically: true, encoding: .utf8)
+
+            // Replace MockExecutable with a script that dumps isolated env & default keychain
+            let mockExecURL = appURL.appendingPathComponent("Contents/MacOS/MockExecutable")
+            let dumpScript = """
+            #!/bin/bash
+            echo "HOME=$HOME"
+            echo "GEMINI_DIR=$GEMINI_DIR"
+            echo "ANTIGRAVITY_GEMINI_DIR=$ANTIGRAVITY_GEMINI_DIR"
+            echo "INHERITED_APP_DATA=${ANTIGRAVITY_APP_DATA_DIR:-UNSET}"
+            echo "DEFAULT_KC=$(/usr/bin/security default-keychain | tr -d ' \"')"
+            echo "LIST_KC=$(/usr/bin/security list-keychains | tr '\n' '|')"
+            echo "ARGS=$*"
+            """
+            try dumpScript.write(to: mockExecURL, atomically: true, encoding: .utf8)
+            try fileManager.setAttributes([.posixPermissions: 0o755], ofItemAtPath: mockExecURL.path)
+
+            let generator = LauncherGenerator()
+            try generator.generateLauncher(
+                appBundleURL: appURL,
+                originalExecutableName: "MockExecutable",
+                launcherExecutableName: "duplix_launcher",
+                dataDirectoryPath: dataDir.path,
+                engineType: .electron
+            )
+
+            let process = Process()
+            process.executableURL = appURL.appendingPathComponent("Contents/MacOS/duplix_launcher")
+            var env = ProcessInfo.processInfo.environment
+            env["HOME"] = fakeRealHome.path
+            env["ANTIGRAVITY_APP_DATA_DIR"] = "/leaked/parent/path"
+            process.environment = env
+
+            let pipe = Pipe()
+            process.standardOutput = pipe
+            process.standardError = pipe
+            try process.run()
+            process.waitUntilExit()
+
+            let outputData = pipe.fileHandleForReading.readDataToEndOfFile()
+            let output = String(data: outputData, encoding: .utf8) ?? ""
+            try assert(process.terminationStatus == 0, "Launcher exited with \(process.terminationStatus): \(output)")
+            try assert(output.contains("HOME=\(dataDir.path)"), "HOME was not isolated: \(output)")
+            try assert(output.contains("GEMINI_DIR=\(dataDir.path)/.gemini"), "GEMINI_DIR mismatch: \(output)")
+            try assert(output.contains("ANTIGRAVITY_GEMINI_DIR=\(dataDir.path)/.gemini"), "ANTIGRAVITY_GEMINI_DIR mismatch: \(output)")
+            try assert(output.contains("INHERITED_APP_DATA=UNSET"), "Inherited ANTIGRAVITY_APP_DATA_DIR should be unset: \(output)")
+            try assert(output.contains("duplix.keychain-db"), "Isolated keychain not set as default: \(output)")
+            try assert(!output.contains("login.keychain"), "Host login.keychain must not appear in clone keychain search list: \(output)")
+            try assert(fileManager.fileExists(atPath: dataDir.appendingPathComponent(".gemini/bin/agy").path), "Symlink to .gemini/bin/agy missing")
+            try assert(fileManager.fileExists(atPath: dataDir.appendingPathComponent(".gitconfig").path), "Symlink to .gitconfig missing")
+        }
+
+        runTest("PlistModifier isolates CFBundleURLTypes and is idempotent on repair") {
+            let appURL = try createMockAppBundle(engine: .electron)
+            defer { try? FileManager.default.removeItem(at: appURL.deletingLastPathComponent()) }
+
+            // Add CFBundleURLTypes to mock plist
+            let plistURL = appURL.appendingPathComponent("Contents/Info.plist")
+            var dict = try PropertyListSerialization.propertyList(from: Data(contentsOf: plistURL), options: [], format: nil) as! [String: Any]
+            dict["CFBundleURLTypes"] = [
+                ["CFBundleURLName": "Antigravity IDE", "CFBundleURLSchemes": ["antigravity-ide"]]
+            ]
+            try PropertyListSerialization.data(fromPropertyList: dict, format: .xml, options: 0).write(to: plistURL)
+
+            let modifier = PlistModifier()
+            let (exec1, origID1) = try modifier.modify(
+                appBundleURL: appURL,
+                newBundleIdentifier: "com.duplix.clone.mockapp.abcd1234",
+                displayName: "Mock App (Clone 1)",
+                launcherExecutableName: "duplix_launcher"
+            )
+            try assert(exec1 == "MockExecutable", "First modify original executable mismatch")
+            try assert(origID1 == "com.example.mockapp", "First modify original bundle ID mismatch")
+
+            // Call modify again (simulating repairClone)
+            let (exec2, origID2) = try modifier.modify(
+                appBundleURL: appURL,
+                newBundleIdentifier: "com.duplix.clone.mockapp.abcd1234",
+                displayName: "Mock App (Clone 1)",
+                launcherExecutableName: "duplix_launcher"
+            )
+            try assert(exec2 == "MockExecutable", "Idempotent modify must preserve original executable, not overwrite with duplix_launcher")
+            try assert(origID2 == "com.example.mockapp", "Idempotent modify must preserve original bundle ID")
+
+            let updatedDict = try PropertyListSerialization.propertyList(from: Data(contentsOf: plistURL), options: [], format: nil) as! [String: Any]
+            let urlTypes = updatedDict["CFBundleURLTypes"] as? [[String: Any]]
+            let schemes = urlTypes?.first?["CFBundleURLSchemes"] as? [String]
+            try assert(schemes == ["antigravity-ide-clone-abcd1234"], "URL schemes should be suffixed and not double-suffixed: \(String(describing: schemes))")
         }
 
         runTest("APFSCloner duplicates bundle with APFS CoW") {
@@ -404,6 +520,53 @@ final class TestSuite {
             try assert(postUpdate?.hasUpdate == false, "Clone should now be up to date")
 
             // Clean up
+            try await customManager.deleteClone(identifierOrName: record.name, deleteData: true)
+        }
+
+        await runAsyncTest("DuplixManager repairClone upgrades launcher without losing session data") {
+            let fileManager = FileManager.default
+            let tempRoot = fileManager.temporaryDirectory
+                .appendingPathComponent("DuplixRepairTest_\(UUID().uuidString)", isDirectory: true)
+            let clonesDir = tempRoot.appendingPathComponent("Clones", isDirectory: true)
+            let dataDir = tempRoot.appendingPathComponent("Data", isDirectory: true)
+            let registryFile = tempRoot.appendingPathComponent("registry.json", isDirectory: false)
+            let srcURL = try createMockAppBundle(engine: .electron)
+
+            defer {
+                try? fileManager.removeItem(at: tempRoot)
+                try? fileManager.removeItem(at: srcURL.deletingLastPathComponent())
+            }
+
+            let customManager = DuplixManager(
+                clonesDirectoryURL: clonesDir,
+                dataDirectoryURL: dataDir,
+                registryFileURL: registryFile
+            )
+
+            let record = try await customManager.createClone(
+                sourceAppURL: srcURL,
+                customName: "Repairable App"
+            )
+
+            // Overwrite launcher with legacy script to simulate old clone
+            let launcherURL = URL(fileURLWithPath: record.appPath).appendingPathComponent("Contents/MacOS/duplix_launcher")
+            try "#!/bin/bash\n# legacy launcher\n".write(to: launcherURL, atomically: true, encoding: .utf8)
+
+            // Simulate user data
+            let sessionFile = URL(fileURLWithPath: record.dataPath).appendingPathComponent("user_data.txt")
+            try "IMPORTANT_SESSION_DATA".write(to: sessionFile, atomically: true, encoding: .utf8)
+
+            let repaired = try await customManager.repairClone(identifierOrName: record.name)
+            try assert(repaired.name == "Repairable App", "Clone name mismatch after repair")
+
+            let newLauncherContent = try String(contentsOf: launcherURL, encoding: .utf8)
+            try assert(newLauncherContent.contains("duplix.keychain-db"), "Repaired launcher missing isolated keychain")
+            try assert(newLauncherContent.contains("export HOME=\"$DATA_DIR\""), "Repaired launcher missing HOME isolation")
+
+            // Verify user data untouched
+            let readSession = try String(contentsOf: sessionFile, encoding: .utf8)
+            try assert(readSession == "IMPORTANT_SESSION_DATA", "Session data was altered during repair")
+
             try await customManager.deleteClone(identifierOrName: record.name, deleteData: true)
         }
 

@@ -26,7 +26,7 @@ public struct AboutView: View {
                         .font(.subheadline)
                         .foregroundColor(.secondary)
 
-                    Text("Version 1.1.0 (Smart Updates & Voice Memo)")
+                    Text("Version 1.2.0 (Deep Keychain & Session Isolation)")
                         .font(.caption)
                         .padding(.horizontal, 10)
                         .padding(.vertical, 4)

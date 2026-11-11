@@ -28,7 +28,8 @@ public struct PlistModifier: Sendable {
         appBundleURL: URL,
         newBundleIdentifier: String,
         displayName: String,
-        launcherExecutableName: String
+        launcherExecutableName: String,
+        originalBundleIDHint: String? = nil
     ) throws -> (originalExecutable: String, originalBundleID: String) {
         let infoPlistURL = appBundleURL
             .appendingPathComponent("Contents", isDirectory: true)
@@ -48,12 +49,24 @@ public struct PlistModifier: Sendable {
             throw PlistError.deserializationFailed(infoPlistURL, "Invalid plist dictionary")
         }
 
-        let originalBundleID = (dict["CFBundleIdentifier"] as? String) ?? "com.unknown.app"
-        guard let originalExecutable = dict["CFBundleExecutable"] as? String else {
+        let originalBundleID = (dict["DuplixOriginalBundleID"] as? String)
+            ?? originalBundleIDHint
+            ?? (dict["CFBundleIdentifier"] as? String)
+            ?? "com.unknown.app"
+        let originalExecutable: String
+        if let existingOriginal = dict["DuplixOriginalExecutable"] as? String,
+           !existingOriginal.isEmpty,
+           existingOriginal != launcherExecutableName {
+            originalExecutable = existingOriginal
+        } else if let currentExec = dict["CFBundleExecutable"] as? String,
+                  currentExec != launcherExecutableName {
+            originalExecutable = currentExec
+        } else {
             throw PlistError.missingKey("CFBundleExecutable")
         }
 
         // Update bundle identity
+        dict["DuplixOriginalBundleID"] = originalBundleID
         dict["CFBundleIdentifier"] = newBundleIdentifier
         dict["CFBundleDisplayName"] = displayName
         // Preserve original CFBundleName so frameworks (Electron, Chromium) can find their Helper apps
@@ -65,9 +78,22 @@ public struct PlistModifier: Sendable {
         dict["DuplixOriginalExecutable"] = originalExecutable
         dict["CFBundleExecutable"] = launcherExecutableName
 
+        // Isolate CFBundleURLTypes to avoid LaunchServices scheme collisions with source app
+        if var urlTypes = dict["CFBundleURLTypes"] as? [[String: Any]] {
+            let suffix = newBundleIdentifier.components(separatedBy: ".").last ?? "clone"
+            for i in 0..<urlTypes.count {
+                if let schemes = urlTypes[i]["CFBundleURLSchemes"] as? [String] {
+                    urlTypes[i]["CFBundleURLSchemes"] = schemes.map { scheme in
+                        scheme.hasSuffix("-clone-\(suffix)") ? scheme : "\(scheme)-clone-\(suffix)"
+                    }
+                }
+            }
+            dict["CFBundleURLTypes"] = urlTypes
+        }
+
         // Also add Duplix metadata markers
         dict["DuplixIsClone"] = true
-        dict["DuplixEngineVersion"] = "1.0.0"
+        dict["DuplixEngineVersion"] = "1.2.0"
 
         do {
             let modifiedData = try PropertyListSerialization.data(

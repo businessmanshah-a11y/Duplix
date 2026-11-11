@@ -9,6 +9,7 @@ public struct CloneCardView: View {
     public let onUpdate: () -> Void
     public let onOpenData: () -> Void
     public let onEditBadge: () -> Void
+    public let onRepair: () -> Void
     public let onReset: () -> Void
     public let onDelete: () -> Void
 
@@ -20,6 +21,7 @@ public struct CloneCardView: View {
         onUpdate: @escaping () -> Void = {},
         onOpenData: @escaping () -> Void,
         onEditBadge: @escaping () -> Void,
+        onRepair: @escaping () -> Void = {},
         onReset: @escaping () -> Void,
         onDelete: @escaping () -> Void
     ) {
@@ -30,6 +32,7 @@ public struct CloneCardView: View {
         self.onUpdate = onUpdate
         self.onOpenData = onOpenData
         self.onEditBadge = onEditBadge
+        self.onRepair = onRepair
         self.onReset = onReset
         self.onDelete = onDelete
     }
@@ -176,6 +179,8 @@ public struct CloneCardView: View {
                 .help("Customize Dock badge")
 
                 Menu {
+                    Button("Repair Isolation", action: onRepair)
+                    Divider()
                     Button("Reset Session Data...", role: .destructive, action: onReset)
                     Divider()
                     Button("Delete Clone...", role: .destructive, action: onDelete)
@@ -184,6 +189,7 @@ public struct CloneCardView: View {
                 }
                 .menuStyle(.borderlessButton)
                 .frame(width: 24)
+                .disabled(isUpdating)
             }
         }
         .padding(16)

@@ -24,7 +24,7 @@
       <a href="#" class="brand-link">
         <img src="assets/icon.png" alt="Duplix Icon" class="brand-icon">
         <span class="brand-name">Duplix</span>
-        <span class="badge-version">v1.1.0</span>
+        <span class="badge-version">v1.2.0</span>
       </a>
 
       <nav>
@@ -72,7 +72,7 @@
           <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
           </svg>
-          Download Duplix.dmg (1.5 MB)
+          Download Duplix.dmg (2.8 MB)
         </a>
       </div>
     </div>
@@ -95,7 +95,7 @@
       </h1>
 
       <p class="hero-description">
-        Clone apps in under 1 second with native APFS Copy-on-Write. Run independent accounts side-by-side with distinct, color-coded Dock icons.
+        Clone apps in under 1 second with native APFS Copy-on-Write. Run independent accounts side-by-side with isolated macOS Keychains, sandboxed <code>$HOME</code> environments, and distinct color-coded Dock icons.
       </p>
 
       <div class="hero-buttons">
@@ -103,7 +103,7 @@
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
           </svg>
-          Download Duplix.dmg (1.5 MB)
+          Download Duplix.dmg (2.8 MB)
         </a>
 
         <div class="cli-box" id="cli-copy-box" title="Click to copy one-line Terminal installer">
@@ -130,7 +130,7 @@
           <svg class="trust-badge-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
           </svg>
-          <span>Isolated Profiles & Sessions</span>
+          <span>Isolated Keychains & Sessions</span>
         </div>
         <div class="trust-badge-card">
           <svg class="trust-badge-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -445,7 +445,7 @@
                       <img src="assets/icon.png" class="scanner-card-icon" alt="Duplix">
                       <div class="scanner-card-details">
                         <div class="scanner-card-name">Duplix</div>
-                        <div class="scanner-card-meta"><span class="engine-badge native">Native</span> v1.1.0</div>
+                        <div class="scanner-card-meta"><span class="engine-badge native">Native</span> v1.2.0</div>
                       </div>
                       <button class="scanner-clone-btn" aria-label="Clone Duplix">Clone</button>
                     </div>
@@ -494,7 +494,7 @@
                     <img src="assets/icon.png" class="about-brand-logo" alt="Duplix">
                     <h3 class="about-hero-title">Duplix</h3>
                     <p class="about-hero-tagline">The Free, Native, Open-Source macOS App Cloner</p>
-                    <span class="about-version-badge">Version 1.1.0 (Smart Updates & Voice Memo)</span>
+                    <span class="about-version-badge">Version 1.2.0 (Deep Keychain & Session Isolation)</span>
                   </div>
 
                   <div class="about-features-list">
@@ -518,8 +518,8 @@
                         </svg>
                       </div>
                       <div>
-                        <div class="about-feat-title">Complete Session Isolation</div>
-                        <div class="about-feat-desc">Independent accounts, cookies, cache, and directories for Electron and Native apps.</div>
+                        <div class="about-feat-title">Deep Keychain & Session Isolation</div>
+                        <div class="about-feat-desc">Per-clone macOS Keychain, isolated <code>$HOME</code>, cookies, and unique URL schemes per instance.</div>
                       </div>
                     </div>
 
@@ -753,9 +753,9 @@
               <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
             </svg>
           </div>
-          <h3 class="bento-title">Strict Session Isolation</h3>
+          <h3 class="bento-title">Deep Keychain & Session Isolation</h3>
           <p class="bento-copy">
-            Each clone runs with its own isolated application data, local cookies, authentication tokens, and cache. Run work and personal accounts in parallel.
+            Spins up a dedicated <code>duplix.keychain-db</code>, isolates <code>HOME</code> & <code>GEMINI_DIR</code> (while bridging <code>.ssh</code> & <code>.gitconfig</code>), and suffixes URL schemes — keeping Antigravity IDE & Electron/Go accounts 100% independent.
           </p>
         </div>
 
@@ -838,6 +838,19 @@
           <h3 class="bento-title">Voice Memo Companion</h3>
           <p class="bento-copy">
             Instant floating AI audio recorder with global ⌥ ⌘ hotkey and live waveform HUD. Automatically attaches crystal-clear AAC voice memos into Antigravity IDE, Cursor, Slack, or any focused chat.
+          </p>
+        </div>
+
+        <!-- Card 9: 1-Click Isolation Repair -->
+        <div class="bento-card reveal-on-scroll reveal-delay-5">
+          <div class="bento-icon-box">
+            <svg class="bento-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+            </svg>
+          </div>
+          <h3 class="bento-title">1-Click Isolation Repair</h3>
+          <p class="bento-copy">
+            Upgrade existing clones anytime without wiping extensions or workspaces. Use <strong>Repair Isolation</strong> in the UI or run <code>duplix repair --all</code> to inject dedicated Keychain and URL scheme isolation.
           </p>
         </div>
       </div>
@@ -957,6 +970,18 @@
 
         <div class="faq-card">
           <button class="faq-trigger">
+            <span>How does v1.2.0 keep Google &amp; AI IDE accounts (like Antigravity) from syncing across clones?</span>
+            <svg class="faq-chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="faq-body">
+            Modern AI IDEs and Go-based helpers (<code>go-keyring</code>) store OAuth credentials in the shared macOS login Keychain and <code>~/.gemini</code>. Duplix v1.2.0 provisions an isolated <code>duplix.keychain-db</code> per clone, redirects <code>HOME</code>, <code>CFFIXED_USER_HOME</code>, and <code>GEMINI_DIR</code> while symlinking developer configs (<code>.ssh</code>, <code>.gitconfig</code>), and isolates <code>CFBundleURLSchemes</code> so logging out or switching emails in one clone never affects others.
+          </div>
+        </div>
+
+        <div class="faq-card">
+          <button class="faq-trigger">
             <span>What happens when the original application gets updated?</span>
             <svg class="faq-chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <polyline points="6 9 12 15 18 9"></polyline>
@@ -1031,7 +1056,7 @@
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
           </svg>
-          Download Duplix.dmg (1.5 MB)
+          Download Duplix.dmg (2.8 MB)
         </a>
         <a href="https://github.com/businessmanshah-a11y/Duplix/releases" target="_blank" class="btn btn-ghost btn-lg">
           Releases
