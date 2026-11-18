@@ -54,7 +54,7 @@ public final class AppScannerViewModel: ObservableObject {
         defer { isLoading = false }
 
         let fileManager = FileManager.default
-        let home = fileManager.homeDirectoryForCurrentUser
+        let home = DuplixPaths.realHomeDirectoryURL
         let searchDirectories = [
             URL(fileURLWithPath: "/Applications"),
             URL(fileURLWithPath: "/System/Applications"),

@@ -16,7 +16,7 @@ enum ConsoleColor {
 
 func printBanner() {
     print("""
-    \(ConsoleColor.cyan)\(ConsoleColor.bold)Duplix\(ConsoleColor.reset) \(ConsoleColor.dim)— Native macOS App Cloner (v1.2.0)\(ConsoleColor.reset)
+    \(ConsoleColor.cyan)\(ConsoleColor.bold)Duplix\(ConsoleColor.reset) \(ConsoleColor.dim)— Native macOS App Cloner (v1.3.0)\(ConsoleColor.reset)
     """)
 }
 

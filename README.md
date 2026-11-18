@@ -7,7 +7,7 @@
   Run multiple fully isolated instances of any macOS app simultaneously with independent accounts, data, and Dock icons.
   <br><br>
   <a href="https://businessmanshah-a11y.github.io/Duplix/"><img src="https://img.shields.io/badge/Website-Live%20Demo-6366f1?style=for-the-badge&logo=safari&logoColor=white" alt="Live Website"></a>
-  <a href="https://github.com/businessmanshah-a11y/Duplix/releases"><img src="https://img.shields.io/badge/Download-.DMG%20(2.8MB)-10b981?style=for-the-badge&logo=apple&logoColor=white" alt="Download DMG"></a>
+  <a href="https://github.com/businessmanshah-a11y/Duplix/releases"><img src="https://img.shields.io/badge/Download-.DMG%20(1.8MB)-10b981?style=for-the-badge&logo=apple&logoColor=white" alt="Download DMG"></a>
   <a href="https://github.com/businessmanshah-a11y/Duplix/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="MIT License"></a>
 </p>
 
@@ -22,6 +22,7 @@
 ## ✨ Features
 
 - **🚀 Simultaneous Instances:** Run 2, 3, 5, or more copies of any app at the same time without conflicts.
+- **🎙️ Native Integrated Voice Memo (v1.3.0):** Built directly into Duplix (no nested helper app!) with a global `⌥⌘` shortcut, fullscreen-ready floating waveform HUD, automatic `⌘V` chat attachment, live Microphone & Accessibility health checks, and background Launch at Login.
 - **🔒 Deep Multi-Layer Isolation (v1.2.0):** Each clone gets its own dedicated macOS Keychain (`duplix.keychain-db`), isolated `HOME` / `CFFIXED_USER_HOME` / `GEMINI_DIR`, unique `CFBundleURLSchemes`, data directory, cookies, and cache — keeping Electron and Go-keyring accounts (like Antigravity IDE & Antigravity 2.0) 100% independent while bridging `.ssh` and `.gitconfig`.
 - **⚡️ Zero Extra Disk Space:** Leverages **APFS Copy-on-Write (CoW)** to duplicate apps instantly without consuming extra storage.
 - **🎨 Distinct Dock Icons:** Color-coded badges and custom labels so you instantly recognize which project or account you are working in.
@@ -39,9 +40,9 @@
 
 ---
 
-## 🎙️ Companion Tools
+## 🎙️ Built-in Voice Memo (v1.3.0)
 
-- **[Duplix Voice Memo](./scripts/voice_memo/README.md):** A lightweight native macOS floating voice recorder for AI chats (Antigravity IDE, Cursor, etc.) with a global hotkey (`⌥⌘` Option + Command) and instant auto-attachment to your active prompt.
+- **Native Integrated Voice Memo:** Built directly into `Duplix.app` with a unified macOS permission identity (no nested helper app!). Features a persistent menu bar icon (`🎙️` / live recording timer `🔴 00:05`), global `⌥⌘` shortcut, fullscreen-ready floating 5-bar waveform HUD, automatic `⌘V` chat attachment, live Microphone & Accessibility health checks, and silent background **Start at macOS Login**.
 
 ---
 
@@ -61,17 +62,17 @@ All 5 core development phases are **100% Completed & Verified**:
 - **Phase 2 (Icon Badging & Dock Distinction):** ✅ Completed & Verified (CoreGraphics + iconutil)
 - **Phase 3 (SwiftUI Native App & Dashboard):** ✅ Completed & Verified (`swift run DuplixApp`)
 - **Phase 4 (Multi-App QA & Hardening):** ✅ Completed & Verified (Chromium, Electron, Gecko, Native)
-- **Phase 5 (Packaging & DMG Release):** ✅ Completed & Verified (`dist/Duplix-1.2.0.dmg`)
+- **Phase 5 (Packaging & DMG Release):** ✅ Completed & Verified (`dist/Duplix-1.3.0.dmg`)
 
 ---
 
 ## 📦 Installation & Releases
 
 ### Option 1: Apple Disk Image (DMG)
-Download the latest `Duplix-1.2.0.dmg` from the Releases section or build it locally:
+Download the latest `Duplix-1.3.0.dmg` from the Releases section or build it locally:
 ```bash
 ./scripts/build_dmg.sh
-open dist/Duplix-1.2.0.dmg
+open dist/Duplix-1.3.0.dmg
 ```
 Drag **Duplix.app** into your **Applications** folder.
 

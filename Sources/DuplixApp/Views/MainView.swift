@@ -4,6 +4,7 @@ import DuplixCore
 public struct MainView: View {
     @StateObject private var dashboardViewModel = ClonesDashboardViewModel()
     @StateObject private var scannerViewModel = AppScannerViewModel()
+    @ObservedObject private var voiceMemoEngine = VoiceMemoEngine.shared
 
     public init() {}
 
@@ -44,7 +45,23 @@ public struct MainView: View {
                 }
 
                 NavigationLink(value: NavigationSection.voiceMemo) {
-                    Label(NavigationSection.voiceMemo.rawValue, systemImage: NavigationSection.voiceMemo.icon)
+                    Label {
+                        HStack {
+                            Text(NavigationSection.voiceMemo.rawValue)
+                            Spacer()
+                            if voiceMemoEngine.isRecording {
+                                Circle()
+                                    .fill(Color.red)
+                                    .frame(width: 8, height: 8)
+                            } else if voiceMemoEngine.isEnabled {
+                                Circle()
+                                    .fill(Color.green)
+                                    .frame(width: 8, height: 8)
+                            }
+                        }
+                    } icon: {
+                        Image(systemName: NavigationSection.voiceMemo.icon)
+                    }
                 }
             }
 

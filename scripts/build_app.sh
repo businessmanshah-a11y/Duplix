@@ -7,6 +7,7 @@ APP_DIR="$DIST_DIR/Duplix.app"
 CONTENTS_DIR="$APP_DIR/Contents"
 MACOS_DIR="$CONTENTS_DIR/MacOS"
 RESOURCES_DIR="$CONTENTS_DIR/Resources"
+ENTITLEMENTS="$DIR/scripts/duplix_entitlements.plist"
 
 echo "==> Building Duplix release binaries with Swift..."
 cd "$DIR"
@@ -25,12 +26,6 @@ chmod +x "$MACOS_DIR/duplix"
 
 echo "==> Generating AppIcon.icns..."
 swift "$DIR/scripts/generate_app_icon.swift" "$RESOURCES_DIR/AppIcon.icns"
-
-echo "==> Bundling VoiceMemo.app..."
-if [ -f "$DIR/scripts/voice_memo/build.sh" ]; then
-    "$DIR/scripts/voice_memo/build.sh"
-    cp -R "$DIR/scripts/voice_memo/VoiceMemo.app" "$RESOURCES_DIR/VoiceMemo.app"
-fi
 
 echo "==> Writing Info.plist..."
 cat << 'EOF' > "$CONTENTS_DIR/Info.plist"
@@ -51,21 +46,23 @@ cat << 'EOF' > "$CONTENTS_DIR/Info.plist"
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
-    <string>1.2.0</string>
+    <string>1.3.0</string>
     <key>CFBundleVersion</key>
-    <string>3</string>
+    <string>4</string>
     <key>LSMinimumSystemVersion</key>
     <string>13.0</string>
     <key>NSHighResolutionCapable</key>
     <true/>
     <key>NSPrincipalClass</key>
     <string>NSApplication</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Duplix Voice Memo requires microphone access to record voice messages for AI chats.</string>
 </dict>
 </plist>
 EOF
 
-echo "==> Codesigning Duplix.app..."
+echo "==> Codesigning Duplix.app with microphone entitlements..."
 xattr -cr "$APP_DIR"
-codesign --force --deep -s - "$APP_DIR"
+codesign --force --deep -s - --entitlements "$ENTITLEMENTS" "$APP_DIR"
 
 echo "==> Duplix.app successfully assembled at: $APP_DIR"

@@ -24,7 +24,7 @@
       <a href="#" class="brand-link">
         <img src="assets/icon.png" alt="Duplix Icon" class="brand-icon">
         <span class="brand-name">Duplix</span>
-        <span class="badge-version">v1.2.0</span>
+        <span class="badge-version">v1.3.0</span>
       </a>
 
       <nav>
@@ -72,7 +72,7 @@
           <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
           </svg>
-          Download Duplix.dmg (2.8 MB)
+          Download Duplix.dmg (1.8 MB)
         </a>
       </div>
     </div>
@@ -95,7 +95,7 @@
       </h1>
 
       <p class="hero-description">
-        Clone apps in under 1 second with native APFS Copy-on-Write. Run independent accounts side-by-side with isolated macOS Keychains, sandboxed <code>$HOME</code> environments, and distinct color-coded Dock icons.
+        Clone apps in under 1 second with native APFS Copy-on-Write. Run independent accounts side-by-side with isolated macOS Keychains, sandboxed <code>$HOME</code> environments, distinct color-coded Dock icons, and a built-in global <code>⌥⌘</code> Voice Memo recorder.
       </p>
 
       <div class="hero-buttons">
@@ -103,7 +103,7 @@
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
           </svg>
-          Download Duplix.dmg (2.8 MB)
+          Download Duplix.dmg (1.8 MB)
         </a>
 
         <div class="cli-box" id="cli-copy-box" title="Click to copy one-line Terminal installer">
@@ -445,7 +445,7 @@
                       <img src="assets/icon.png" class="scanner-card-icon" alt="Duplix">
                       <div class="scanner-card-details">
                         <div class="scanner-card-name">Duplix</div>
-                        <div class="scanner-card-meta"><span class="engine-badge native">Native</span> v1.2.0</div>
+                        <div class="scanner-card-meta"><span class="engine-badge native">Native</span> v1.3.0</div>
                       </div>
                       <button class="scanner-clone-btn" aria-label="Clone Duplix">Clone</button>
                     </div>
@@ -494,7 +494,7 @@
                     <img src="assets/icon.png" class="about-brand-logo" alt="Duplix">
                     <h3 class="about-hero-title">Duplix</h3>
                     <p class="about-hero-tagline">The Free, Native, Open-Source macOS App Cloner</p>
-                    <span class="about-version-badge">Version 1.2.0 (Deep Keychain & Session Isolation)</span>
+                    <span class="about-version-badge">Version 1.3.0 (Native Integrated Voice Memo & Deep Isolation)</span>
                   </div>
 
                   <div class="about-features-list">
@@ -828,16 +828,16 @@
           </p>
         </div>
 
-        <!-- Card 8: Voice Memo Companion -->
+        <!-- Card 8: Native Integrated Voice Memo (v1.3.0) -->
         <div class="bento-card reveal-on-scroll reveal-delay-4">
           <div class="bento-icon-box">
             <svg class="bento-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
             </svg>
           </div>
-          <h3 class="bento-title">Voice Memo Companion</h3>
+          <h3 class="bento-title">Native Integrated Voice Memo</h3>
           <p class="bento-copy">
-            Instant floating AI audio recorder with global ⌥ ⌘ hotkey and live waveform HUD. Automatically attaches crystal-clear AAC voice memos into Antigravity IDE, Cursor, Slack, or any focused chat.
+            Built directly into Duplix with a menu bar icon (<code>🎙️</code>), global <code>⌥⌘</code> hotkey, fullscreen-ready floating waveform HUD, automatic <code>⌘V</code> chat attachment, live Microphone &amp; Accessibility health checks, and silent background Launch at Login.
           </p>
         </div>
 
@@ -1030,13 +1030,25 @@
 
         <div class="faq-card">
           <button class="faq-trigger">
-            <span>Can I install Duplix via Terminal or Homebrew?</span>
+            <span>How does the built-in Voice Memo work in v1.3.0?</span>
             <svg class="faq-chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <polyline points="6 9 12 15 18 9"></polyline>
             </svg>
           </button>
           <div class="faq-body">
-            Yes. Run <code>curl -fsSL https://businessmanshah-a11y.github.io/Duplix/install.sh | bash</code> in your macOS Terminal to download and install Duplix into /Applications automatically. For Homebrew, install via <code>brew install --cask https://raw.githubusercontent.com/businessmanshah-a11y/Duplix/main/Casks/duplix.rb</code>.
+            In Duplix v1.3.0, Voice Memo is natively integrated directly inside Duplix with a single unified macOS permission identity. Press <code>⌥⌘</code> anywhere (including over fullscreen apps) to open the floating waveform HUD, speak, and press <code>⌥⌘</code> again to automatically attach a crisp compressed <code>.m4a</code> recording into your active AI chat via <code>⌘V</code>. Enable <strong>Start Voice Memo automatically at macOS Login</strong> so it launches silently in the menu bar after every restart.
+          </div>
+        </div>
+
+        <div class="faq-card">
+          <button class="faq-trigger">
+            <span>How do I install or update Duplix without losing my clones?</span>
+            <svg class="faq-chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="faq-body">
+            Run <code>curl -fsSL https://businessmanshah-a11y.github.io/Duplix/install.sh | bash</code> in Terminal or drag <code>Duplix.app</code> from <code>Duplix.dmg</code> into <code>/Applications</code> to update in place. Duplix automatically preserves 100% of your registered clones, isolated data, and settings while replacing the app cleanly without creating duplicate copies. For Homebrew, install via <code>brew install --cask https://raw.githubusercontent.com/businessmanshah-a11y/Duplix/main/Casks/duplix.rb</code>.
           </div>
         </div>
       </div>
@@ -1056,7 +1068,7 @@
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
           </svg>
-          Download Duplix.dmg (2.8 MB)
+          Download Duplix.dmg (1.8 MB)
         </a>
         <a href="https://github.com/businessmanshah-a11y/Duplix/releases" target="_blank" class="btn btn-ghost btn-lg">
           Releases

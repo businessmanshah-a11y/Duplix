@@ -21,7 +21,7 @@ public actor DuplixManager {
         dataDirectoryURL: URL? = nil,
         registryFileURL: URL? = nil
     ) {
-        let home = FileManager.default.homeDirectoryForCurrentUser
+        let home = DuplixPaths.realHomeDirectoryURL
         let appSupportDuplix = home
             .appendingPathComponent("Library", isDirectory: true)
             .appendingPathComponent("Application Support", isDirectory: true)
@@ -258,7 +258,7 @@ public actor DuplixManager {
 
         let candidates = [
             URL(fileURLWithPath: "/Applications/\(record.sourceAppName).app"),
-            fileManager.homeDirectoryForCurrentUser.appendingPathComponent("Applications/\(record.sourceAppName).app", isDirectory: true),
+            DuplixPaths.realHomeDirectoryURL.appendingPathComponent("Applications/\(record.sourceAppName).app", isDirectory: true),
             URL(fileURLWithPath: "/System/Applications/\(record.sourceAppName).app")
         ]
 
