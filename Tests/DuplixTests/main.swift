@@ -574,8 +574,10 @@ final class TestSuite {
         // MARK: - Voicofski (v1.4.0) Automated Tests
         // ============================================================
 
-        runTest("Voicofski models lock gemini-3.8-flash-tts, Lora/Bodi voices & 6 languages") {
+        runTest("Voicofski models lock gemini-3.8-flash-tts, gemini-3.8-flash translate, Lora/Bodi & 6 languages") {
             try assert(VoicofskiModelConfig.ttsModel == "gemini-3.8-flash-tts", "TTS model must be gemini-3.8-flash-tts")
+            try assert(VoicofskiModelConfig.translationModel == "gemini-3.8-flash", "Translation model must be gemini-3.8-flash")
+            try assert(!VoicofskiModelConfig.translationModels.contains(VoicofskiModelConfig.ttsModel), "Translation chain must never use TTS model")
             try assert(VoicofskiVoice.female.aiStudioVoiceName == "Lora", "Female voice must be Lora")
             try assert(VoicofskiVoice.male.aiStudioVoiceName == "Bodi", "Male voice must be Bodi")
             try assert(VoicofskiTargetLanguage.allCases.count == 6, "Expected 6 translation target languages")
@@ -645,26 +647,44 @@ final class TestSuite {
             let key1 = try pool.addKey(label: "Gmail 1", secret: "SECRET_KEY_1")
             let key2 = try pool.addKey(label: "Gmail 2", secret: "SECRET_KEY_2")
 
-            let usedSecret: String = try await pool.executeWithFailover { secret in
+            let usedSecret: String = try await pool.executeWithFailover(forModel: VoicofskiModelConfig.ttsModel) { secret in
                 if secret == "SECRET_KEY_1" {
                     throw VoicofskiError.quotaExceeded
                 }
                 return secret
             }
 
-            try assert(usedSecret == "SECRET_KEY_2", "Should fail over sequentially to Key 2")
+            try assert(usedSecret == "SECRET_KEY_2", "Should fail over sequentially to Key 2 for TTS")
 
             let afterFailover = pool.listKeys()
             let meta1 = afterFailover.first { $0.id == key1.id }
             let meta2 = afterFailover.first { $0.id == key2.id }
-            try assert(meta1?.status == .exhausted, "Key 1 should be marked exhausted")
-            try assert(meta1?.nextResetAt == expectedReset, "Key 1 nextResetAt should be 09:00 UTC same day")
+            try assert(meta1?.exhaustedModels[VoicofskiModelConfig.ttsModel] == expectedReset, "Key 1 TTS nextResetAt should be 09:00 UTC same day")
             try assert(meta2?.status == .active, "Key 2 should be marked active")
 
-            // Exhaust Key 2 as well -> must throw allKeysExhausted
+            // Key 1's TTS is exhausted, but Key 1 must STILL serve Translation (per-model quota isolation!)
+            let transResult: (String, String) = try await pool.executeWithModelFallback(models: VoicofskiModelConfig.translationModels) { secret, model in
+                return (secret, model)
+            }
+            try assert(transResult.0 == "SECRET_KEY_1", "Key 1 should still handle Translation even when its TTS quota is full")
+            try assert(transResult.1 == "gemini-3.8-flash", "Translation should use primary gemini-3.8-flash first")
+
+            // If primary translation model hits 429 on Key 1, fall back to next model on Key 1 (and skip 404 gracefully)
+            let fallbackResult: (String, String) = try await pool.executeWithModelFallback(models: ["gemini-3.8-flash", "missing-model", "gemini-3.8-flash-lite"]) { secret, model in
+                if secret == "SECRET_KEY_1" && model == "gemini-3.8-flash" {
+                    throw VoicofskiError.quotaExceeded
+                }
+                if model == "missing-model" {
+                    throw VoicofskiError.modelNotAvailable("404 not found")
+                }
+                return (secret, model)
+            }
+            try assert(fallbackResult.0 == "SECRET_KEY_1" && fallbackResult.1 == "gemini-3.8-flash-lite", "Should fall back across translation models on Key 1 while skipping 404")
+
+            // Exhaust Key 2 TTS as well -> must throw allKeysExhausted
             var threwAllExhausted = false
             do {
-                let _: String = try await pool.executeWithFailover { _ in
+                let _: String = try await pool.executeWithFailover(forModel: VoicofskiModelConfig.ttsModel) { _ in
                     throw VoicofskiError.quotaExceeded
                 }
             } catch VoicofskiError.allKeysExhausted {
@@ -672,11 +692,11 @@ final class TestSuite {
             }
             try assert(threwAllExhausted, "Expected VoicofskiError.allKeysExhausted when all keys hit 429")
 
-            // Advance clock past 09:00 UTC -> keys must automatically recover
+            // Advance clock past 09:00 UTC -> keys & models must automatically recover
             clock.current = expectedReset.addingTimeInterval(60)
             let recovered = pool.refreshCooldowns()
             try assert(recovered, "Keys should recover automatically after 09:00 UTC")
-            try assert(pool.listKeys().allSatisfy { $0.status == .active }, "All recovered keys should be active")
+            try assert(pool.listKeys().allSatisfy { $0.exhaustedModels.isEmpty }, "All recovered keys should have cleared model cooldowns")
         }
 
         await runAsyncTest("APIKeyPoolManager skips invalid keys and preserves keys on VPN/region errors") {

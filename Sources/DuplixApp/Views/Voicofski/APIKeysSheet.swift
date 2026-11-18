@@ -187,16 +187,27 @@ public struct APIKeysSheet: View {
     }
 
     private func statusSubtitle(for key: APIKeyMetadata) -> String {
+        let fmt = DateFormatter()
+        fmt.timeStyle = .short
+        fmt.dateStyle = .none
+
         switch key.status {
         case .active:
+            if !key.exhaustedModels.isEmpty {
+                let ttsFull = key.exhaustedModels[VoicofskiModelConfig.ttsModel]
+                let transFull = key.exhaustedModels[VoicofskiModelConfig.translationModel]
+                if let reset = ttsFull {
+                    return "Active (Translate) · TTS resets ~\(fmt.string(from: reset))"
+                }
+                if let reset = transFull {
+                    return "Active (TTS) · Translate resets ~\(fmt.string(from: reset))"
+                }
+            }
             return "Active"
         case .untested:
             return "Ready (untested)"
         case .exhausted:
             if let resetAt = key.nextResetAt {
-                let fmt = DateFormatter()
-                fmt.timeStyle = .short
-                fmt.dateStyle = .none
                 return "Quota reached · Resets ~\(fmt.string(from: resetAt))"
             }
             return "Quota reached"

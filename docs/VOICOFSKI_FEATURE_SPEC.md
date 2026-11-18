@@ -214,7 +214,7 @@
   - `403 (FAILED_PRECONDITION / Location not supported)` ← خطای منطقه جغرافیایی / نیاز به VPN
 
 #### ب) مرحله ترجمه (`Translate`)
-- **Method & URL:** `POST https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent`
+- **Method & URL:** `POST https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent` *(با Fallback خودکار به مدل‌های متنی بعدی مثل `gemini-3.8-flash-lite` روی همان کلید در صورت `429` و تفکیک سهمیه هر مدل از مدل TTS)*
 - **Headers:** `x-goog-api-key: <API_KEY>`, `Content-Type: application/json`
 - **Request Body:**
 ```json

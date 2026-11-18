@@ -341,7 +341,7 @@ public final class VoicofskiEngine: ObservableObject {
         let apiClient = self.client
 
         let task = Task<SynthesizedAudioResult, Error> {
-            try await pool.executeWithFailover { apiKey in
+            try await pool.executeWithFailover(forModel: VoicofskiModelConfig.ttsModel) { apiKey in
                 try await apiClient.synthesizeSpeech(text: trimmed, voice: chosenVoice, apiKey: apiKey)
             }
         }
@@ -459,8 +459,8 @@ public final class VoicofskiEngine: ObservableObject {
         let apiClient = self.client
 
         do {
-            let translated = try await pool.executeWithFailover { apiKey in
-                try await apiClient.translate(text: trimmed, targetLanguage: lang, apiKey: apiKey)
+            let translated = try await pool.executeWithModelFallback(models: VoicofskiModelConfig.translationModels) { apiKey, model in
+                try await apiClient.translate(text: trimmed, targetLanguage: lang, model: model, apiKey: apiKey)
             }
 
             self.keys = self.keyPool.listKeys()

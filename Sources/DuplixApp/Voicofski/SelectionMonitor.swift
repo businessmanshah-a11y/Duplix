@@ -29,8 +29,8 @@ public final class SelectionMonitor {
     private var localKeyDownMonitor: Any?
 
     private var mouseDownLocation: CGPoint?
-    private var mouseDownTime: Date = .distantPast
     private var debounceTask: Task<Void, Never>?
+    private var isPerformingClipboardProbe = false
 
     public private(set) var isRunning: Bool = false
 
@@ -123,7 +123,6 @@ public final class SelectionMonitor {
         }
 
         mouseDownLocation = location
-        mouseDownTime = Date()
     }
 
     private func handleMouseUp(at location: CGPoint, clickCount: Int) {
@@ -133,9 +132,9 @@ public final class SelectionMonitor {
 
         guard AXIsProcessTrusted() else { return }
 
-        // Ignore selections made inside Duplix itself (user already has the in-app Composer)
-        if let frontApp = NSWorkspace.shared.frontmostApplication,
-           frontApp.bundleIdentifier == Bundle.main.bundleIdentifier {
+        // Ignore selections inside Duplix itself (user already has the built-in Composer)
+        guard let frontApp = NSWorkspace.shared.frontmostApplication,
+              frontApp.bundleIdentifier != Bundle.main.bundleIdentifier else {
             mouseDownLocation = nil
             return
         }
@@ -150,25 +149,35 @@ public final class SelectionMonitor {
             dragDistance = 0
         }
 
-        let isDragSelection = dragDistance >= 6.0
+        let isDragSelection = dragDistance >= 8.0
         let isMultiClickSelection = clickCount >= 2
 
         guard isDragSelection || isMultiClickSelection else {
-            // Simple single click — likely deselected text
             onDismissRequested?()
             return
         }
 
         let anchor = location
+        let pid = frontApp.processIdentifier
+
         debounceTask?.cancel()
         debounceTask = Task { @MainActor [weak self] in
-            try? await Task.sleep(nanoseconds: 160_000_000) // 160ms settle delay
+            try? await Task.sleep(nanoseconds: 140_000_000) // 140ms settle delay
             guard !Task.isCancelled, let self else { return }
-            self.inspectCurrentSelection(fallbackMousePoint: anchor, wasDragOrMultiClick: true)
+            await self.inspectCurrentSelection(
+                frontAppPID: pid,
+                fallbackMousePoint: anchor,
+                allowClipboardProbe: dragDistance >= 10.0 || isMultiClickSelection
+            )
         }
     }
 
     private func handleKeyDown(keyCode: UInt16, flags: NSEvent.ModifierFlags) {
+        // Ignore our own synthetic Cmd+C clipboard probe
+        if isPerformingClipboardProbe {
+            return
+        }
+
         // Esc dismisses immediately
         if keyCode == 53 {
             debounceTask?.cancel()
@@ -176,10 +185,9 @@ public final class SelectionMonitor {
             return
         }
 
-        // Typing or arrow navigation without shift clears selection
-        let isCommandCopy = (keyCode == 8 && flags.contains(.command)) // Cmd+C
+        // Do not immediately dismiss on Cmd+C itself; dismissal occurs on subsequent click/deselect or 10s timeout
+        let isCommandCopy = (keyCode == 8 && flags.contains(.command))
         if isCommandCopy {
-            // Give a brief moment; if user subsequently clicks/deselects it dismisses cleanly
             return
         }
 
@@ -189,34 +197,49 @@ public final class SelectionMonitor {
         }
     }
 
-    // MARK: - Accessibility Inspection
+    // MARK: - Hybrid Accessibility + Non-Destructive Clipboard Probe
 
-    private func inspectCurrentSelection(fallbackMousePoint: CGPoint, wasDragOrMultiClick: Bool) {
-        let axResult = readAccessibilitySelection()
+    private func inspectCurrentSelection(
+        frontAppPID: pid_t,
+        fallbackMousePoint: CGPoint,
+        allowClipboardProbe: Bool
+    ) async {
+        // 1. Try native Accessibility API first (also enabling Chromium/Electron manual accessibility)
+        let axResult = readAccessibilitySelection(frontAppPID: frontAppPID)
 
         if let axText = axResult.text {
-            // Accessibility gave us the exact selected string — enforce >= 3 characters rule strictly
-            guard VoicofskiTextMetrics.meetsMinimumSelectionLength(axText) else {
-                onDismissRequested?()
+            let trimmed = VoicofskiTextMetrics.trimmed(axText)
+            if !trimmed.isEmpty {
+                // Accessibility returned real selected text — strictly enforce >= 3 characters rule
+                guard VoicofskiTextMetrics.meetsMinimumSelectionLength(trimmed) else {
+                    onDismissRequested?()
+                    return
+                }
+
+                let detected = DetectedSelection(
+                    text: trimmed,
+                    anchorPoint: fallbackMousePoint,
+                    selectionRect: axResult.appKitRect
+                )
+                onSelectionDetected?(detected)
                 return
             }
+        }
 
-            let detected = DetectedSelection(
-                text: VoicofskiTextMetrics.trimmed(axText),
-                anchorPoint: fallbackMousePoint,
-                selectionRect: axResult.appKitRect
-            )
-            onSelectionDetected?(detected)
+        // 2. If the focused element is clearly a non-text UI control (slider/scrollbar/button), stop here
+        guard axResult.mayHaveUnexposedText, allowClipboardProbe else {
             return
         }
 
-        // Some Electron / WebView / PDF apps do not expose kAXSelectedTextAttribute directly.
-        // Only show the subtle corner trigger if the focused element looks text-capable or user performed a clear text drag/multi-click.
-        if wasDragOrMultiClick && axResult.mayHaveUnexposedText {
+        // 3. Electron / Chrome / Antigravity IDE / PDF fallback:
+        // Perform a silent, non-destructive Cmd+C probe that immediately restores the user's clipboard.
+        // If no text is selected (e.g. dragging empty space or a window), pasteboard changeCount stays unchanged -> zero false positives!
+        if let probedText = await captureSelectedTextViaClipboardFallback() {
+            guard !Task.isCancelled else { return }
             let detected = DetectedSelection(
-                text: nil, // Will be resolved cleanly via non-destructive Cmd+C fallback only if user clicks the trigger
+                text: probedText,
                 anchorPoint: fallbackMousePoint,
-                selectionRect: nil
+                selectionRect: axResult.appKitRect
             )
             onSelectionDetected?(detected)
         }
@@ -228,22 +251,33 @@ public final class SelectionMonitor {
         let mayHaveUnexposedText: Bool
     }
 
-    private func readAccessibilitySelection() -> AXSelectionResult {
-        let systemWide = AXUIElementCreateSystemWide()
+    private func readAccessibilitySelection(frontAppPID: pid_t) -> AXSelectionResult {
+        let appElement = AXUIElementCreateApplication(frontAppPID)
+
+        // Hint Chromium / Electron apps (Chrome, Antigravity IDE, VS Code, Slack) to expose their accessibility tree
+        AXUIElementSetAttributeValue(appElement, "AXManualAccessibility" as CFString, kCFBooleanTrue)
+        AXUIElementSetAttributeValue(appElement, "AXEnhancedUserInterface" as CFString, kCFBooleanTrue)
+
+        // Resolve focused element from frontmost app first, falling back to system-wide focused element
         var focusedObj: CFTypeRef?
-        let focusedErr = AXUIElementCopyAttributeValue(systemWide, kAXFocusedUIElementAttribute as CFString, &focusedObj)
-        guard focusedErr == .success, let focusedElement = focusedObj else {
+        var err = AXUIElementCopyAttributeValue(appElement, kAXFocusedUIElementAttribute as CFString, &focusedObj)
+        if err != .success || focusedObj == nil {
+            let systemWide = AXUIElementCreateSystemWide()
+            err = AXUIElementCopyAttributeValue(systemWide, kAXFocusedUIElementAttribute as CFString, &focusedObj)
+        }
+
+        guard err == .success, let focusedElement = focusedObj else {
             return AXSelectionResult(text: nil, appKitRect: nil, mayHaveUnexposedText: true)
         }
 
         let axElement = focusedElement as! AXUIElement
 
-        // Check role to avoid popping up when dragging window chrome / sliders / splitters
+        // Skip non-text chrome widgets so dragging sliders/scrollbars never triggers a probe
         var roleObj: CFTypeRef?
         AXUIElementCopyAttributeValue(axElement, kAXRoleAttribute as CFString, &roleObj)
         let role = (roleObj as? String) ?? ""
         let nonTextRoles: Set<String> = [
-            "AXSlider", "AXScrollBar", "AXSplitter", "AXButton", "AXCheckBox",
+            "AXSlider", "AXScrollBar", "AXSplitter", "AXCheckBox",
             "AXRadioButton", "AXPopUpButton", "AXMenuItem", "AXToolbar", "AXTabGroup"
         ]
         if nonTextRoles.contains(role) {
@@ -253,11 +287,16 @@ public final class SelectionMonitor {
         var selectedTextObj: CFTypeRef?
         let textErr = AXUIElementCopyAttributeValue(axElement, kAXSelectedTextAttribute as CFString, &selectedTextObj)
         if textErr == .success, let selectedText = selectedTextObj as? String {
-            let bounds = readSelectionAppKitRect(for: axElement)
-            return AXSelectionResult(text: selectedText, appKitRect: bounds, mayHaveUnexposedText: false)
+            let trimmed = VoicofskiTextMetrics.trimmed(selectedText)
+            if !trimmed.isEmpty {
+                let bounds = readSelectionAppKitRect(for: axElement)
+                return AXSelectionResult(text: trimmed, appKitRect: bounds, mayHaveUnexposedText: false)
+            }
+            // IMPORTANT: Chrome/Electron/WebViews often return `.success` with an empty string `""`
+            // even when text IS selected inside the canvas/DOM. Allow clipboard probe!
+            return AXSelectionResult(text: nil, appKitRect: nil, mayHaveUnexposedText: true)
         }
 
-        // Accessibility did not expose selected text directly (common in Chrome/Electron/PDF)
         return AXSelectionResult(text: nil, appKitRect: nil, mayHaveUnexposedText: true)
     }
 
@@ -285,7 +324,6 @@ public final class SelectionMonitor {
             return nil
         }
 
-        // Convert Quartz top-left global coordinates to AppKit bottom-left coordinates
         guard let primaryScreen = NSScreen.screens.first else {
             return nil
         }
@@ -294,18 +332,22 @@ public final class SelectionMonitor {
         return CGRect(x: quartzRect.origin.x, y: appKitY, width: quartzRect.width, height: quartzRect.height)
     }
 
-    // MARK: - Non-Destructive Clipboard Fallback (Only on Explicit Trigger Click)
+    // MARK: - Non-Destructive Clipboard Fallback
 
-    /// Captures selected text from the frontmost app by simulating `Cmd+C`, then restores the previous clipboard contents.
+    /// Captures selected text from the frontmost app by simulating `Cmd+C`, then immediately restores the previous clipboard contents.
     public func captureSelectedTextViaClipboardFallback() async -> String? {
+        guard !isPerformingClipboardProbe else { return nil }
+        isPerformingClipboardProbe = true
+        defer { isPerformingClipboardProbe = false }
+
         let pasteboard = NSPasteboard.general
         let savedItems = snapshotPasteboard(pasteboard)
         let originalChangeCount = pasteboard.changeCount
 
         simulateCommandC()
 
-        // Wait briefly for target application to populate the clipboard
-        try? await Task.sleep(nanoseconds: 110_000_000)
+        // Wait briefly for target app (Chrome / Electron / PDF) to write selection to pasteboard
+        try? await Task.sleep(nanoseconds: 95_000_000)
 
         var captured: String? = nil
         if pasteboard.changeCount != originalChangeCount {

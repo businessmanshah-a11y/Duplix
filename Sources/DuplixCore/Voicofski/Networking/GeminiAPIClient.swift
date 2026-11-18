@@ -14,7 +14,7 @@ public struct SynthesizedAudioResult: Sendable {
 
 public protocol GeminiAPIClientProtocol: Sendable {
     func testKey(apiKey: String) async throws
-    func translate(text: String, targetLanguage: VoicofskiTargetLanguage, apiKey: String) async throws -> String
+    func translate(text: String, targetLanguage: VoicofskiTargetLanguage, model: String, apiKey: String) async throws -> String
     func synthesizeSpeech(text: String, voice: VoicofskiVoice, apiKey: String) async throws -> SynthesizedAudioResult
 }
 
@@ -48,14 +48,15 @@ public final class GeminiAPIClient: GeminiAPIClientProtocol {
         try validateHTTPResponse(response, data: data)
     }
 
-    // MARK: - Translate (Gemini 2.5 Flash)
+    // MARK: - Translate (Gemini 3.8 Flash / Fallback Text Models)
 
     public func translate(
         text: String,
         targetLanguage: VoicofskiTargetLanguage,
+        model: String = VoicofskiModelConfig.translationModel,
         apiKey: String
     ) async throws -> String {
-        guard let url = URL(string: "\(VoicofskiModelConfig.baseURL)/models/\(VoicofskiModelConfig.translationModel):generateContent") else {
+        guard let url = URL(string: "\(VoicofskiModelConfig.baseURL)/models/\(model):generateContent") else {
             throw VoicofskiError.networkFailure("Invalid translation URL")
         }
 
@@ -221,6 +222,14 @@ public final class GeminiAPIClient: GeminiAPIClientProtocol {
             lowerMsg.contains("not available in your country") ||
             lowerMsg.contains("region") && http.statusCode == 400 {
             throw VoicofskiError.regionBlocked
+        }
+
+        // Model not found / deprecated for new users (HTTP 404)
+        if http.statusCode == 404 ||
+            statusStr == "NOT_FOUND" ||
+            lowerMsg.contains("no longer available") ||
+            lowerMsg.contains("is not found") {
+            throw VoicofskiError.modelNotAvailable(message)
         }
 
         // Invalid API key

@@ -33,7 +33,7 @@ final class SelectionTriggerPanel: NSPanel {
             defer: false
         )
 
-        self.level = .floating
+        self.level = .popUpMenu
         self.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .transient]
         self.isOpaque = false
         self.backgroundColor = .clear

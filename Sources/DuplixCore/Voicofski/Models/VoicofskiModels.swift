@@ -104,6 +104,7 @@ public struct APIKeyMetadata: Codable, Identifiable, Equatable, Sendable {
     public var orderIndex: Int
     public var status: APIKeyHealthStatus
     public var nextResetAt: Date?
+    public var exhaustedModels: [String: Date]
     public var lastError: String?
     public var lastUsedAt: Date?
     public var createdAt: Date
@@ -114,6 +115,7 @@ public struct APIKeyMetadata: Codable, Identifiable, Equatable, Sendable {
         orderIndex: Int,
         status: APIKeyHealthStatus = .untested,
         nextResetAt: Date? = nil,
+        exhaustedModels: [String: Date] = [:],
         lastError: String? = nil,
         lastUsedAt: Date? = nil,
         createdAt: Date = Date()
@@ -123,9 +125,27 @@ public struct APIKeyMetadata: Codable, Identifiable, Equatable, Sendable {
         self.orderIndex = orderIndex
         self.status = status
         self.nextResetAt = nextResetAt
+        self.exhaustedModels = exhaustedModels
         self.lastError = lastError
         self.lastUsedAt = lastUsedAt
         self.createdAt = createdAt
+    }
+
+    private enum CodingKeys: String, CodingKey {
+        case id, label, orderIndex, status, nextResetAt, exhaustedModels, lastError, lastUsedAt, createdAt
+    }
+
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try c.decode(UUID.self, forKey: .id)
+        label = try c.decode(String.self, forKey: .label)
+        orderIndex = try c.decode(Int.self, forKey: .orderIndex)
+        status = try c.decode(APIKeyHealthStatus.self, forKey: .status)
+        nextResetAt = try c.decodeIfPresent(Date.self, forKey: .nextResetAt)
+        exhaustedModels = try c.decodeIfPresent([String: Date].self, forKey: .exhaustedModels) ?? [:]
+        lastError = try c.decodeIfPresent(String.self, forKey: .lastError)
+        lastUsedAt = try c.decodeIfPresent(Date.self, forKey: .lastUsedAt)
+        createdAt = try c.decodeIfPresent(Date.self, forKey: .createdAt) ?? Date()
     }
 }
 
@@ -208,6 +228,7 @@ public enum VoicofskiError: Error, LocalizedError, Equatable, Sendable {
     case allKeysExhausted
     case quotaExceeded
     case invalidAPIKey(String)
+    case modelNotAvailable(String)
     case regionBlocked
     case networkFailure(String)
     case emptyAudioResponse
@@ -220,11 +241,13 @@ public enum VoicofskiError: Error, LocalizedError, Equatable, Sendable {
         case .noAPIKeys:
             return "No Google AI Studio API keys configured. Add a key in Voicofski settings."
         case .allKeysExhausted:
-            return "All API keys have reached their daily quota. Your request was saved to the Pending Queue."
+            return "All API keys have reached their daily quota for this model. Your request was saved to the Pending Queue."
         case .quotaExceeded:
-            return "API key daily quota exceeded."
+            return "API key daily quota exceeded for this model."
         case .invalidAPIKey(let detail):
             return detail.isEmpty ? "Invalid Google AI Studio API key." : "Invalid API key: \(detail)"
+        case .modelNotAvailable(let detail):
+            return "Model unavailable: \(detail)"
         case .regionBlocked:
             return "Google AI Studio is unavailable in this region. Please check your VPN connection."
         case .networkFailure(let detail):
@@ -270,6 +293,13 @@ public enum VoicofskiTextMetrics {
 public enum VoicofskiModelConfig {
     public static let baseURL = "https://generativelanguage.googleapis.com/v1beta"
     public static let ttsModel = "gemini-3.8-flash-tts"
-    public static let translationModel = "gemini-2.5-flash"
+    /// Primary translation model (separate per-model quota from TTS).
+    public static let translationModel = "gemini-3.8-flash"
+    /// Ordered translation model fallback chain (per-key quota maximizes free daily capacity before switching keys).
+    public static let translationModels = [
+        "gemini-3.8-flash",
+        "gemini-3.8-flash-lite",
+        "gemini-2.5-flash-lite"
+    ]
     public static let apiKeyStudioURL = "https://aistudio.google.com/apikey"
 }
