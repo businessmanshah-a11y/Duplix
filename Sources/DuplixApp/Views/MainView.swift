@@ -5,6 +5,7 @@ public struct MainView: View {
     @StateObject private var dashboardViewModel = ClonesDashboardViewModel()
     @StateObject private var scannerViewModel = AppScannerViewModel()
     @ObservedObject private var voiceMemoEngine = VoiceMemoEngine.shared
+    @ObservedObject private var voicofskiEngine = VoicofskiEngine.shared
 
     public init() {}
 
@@ -15,6 +16,11 @@ public struct MainView: View {
             detailContent
         }
         .frame(minWidth: 860, minHeight: 580)
+        .onAppear {
+            voicofskiEngine.onFocusVoicofskiTabRequested = {
+                dashboardViewModel.selectedSection = .voicofski
+            }
+        }
     }
 
     private var sidebarContent: some View {
@@ -63,6 +69,30 @@ public struct MainView: View {
                         Image(systemName: NavigationSection.voiceMemo.icon)
                     }
                 }
+
+                NavigationLink(value: NavigationSection.voicofski) {
+                    Label {
+                        HStack {
+                            Text(NavigationSection.voicofski.rawValue)
+                            Spacer()
+                            if !voicofskiEngine.pendingQueue.isEmpty {
+                                Text("\(voicofskiEngine.pendingQueue.count)")
+                                    .font(.caption2)
+                                    .fontWeight(.bold)
+                                    .padding(.horizontal, 6)
+                                    .padding(.vertical, 2)
+                                    .background(Color.orange.opacity(0.22))
+                                    .clipShape(Capsule())
+                            } else if voicofskiEngine.isEnabled {
+                                Circle()
+                                    .fill(Color.green)
+                                    .frame(width: 8, height: 8)
+                            }
+                        }
+                    } icon: {
+                        Image(systemName: NavigationSection.voicofski.icon)
+                    }
+                }
             }
 
             Section("System") {
@@ -97,6 +127,8 @@ public struct MainView: View {
             )
         case .voiceMemo:
             VoiceMemoView()
+        case .voicofski:
+            VoicofskiView()
         case .about:
             AboutView()
         }

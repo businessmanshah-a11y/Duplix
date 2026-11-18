@@ -22,6 +22,14 @@ public final class DuplixAppDelegate: NSObject, NSApplicationDelegate {
             self?.openMainWindow()
         }
 
+        let voicofski = VoicofskiEngine.shared
+        voicofski.onOpenMainWindowRequested = { [weak self] in
+            self?.openMainWindow()
+        }
+
+        DuplixMenuBarController.shared.start()
+        voicofski.start()
+
         if launchedInBackground {
             engine.start()
             // Close any initial SwiftUI window opened automatically at launch so startup stays silent in menu bar
@@ -38,11 +46,13 @@ public final class DuplixAppDelegate: NSObject, NSApplicationDelegate {
 
     public func applicationDidBecomeActive(_ notification: Notification) {
         VoiceMemoEngine.shared.refreshPermissions()
+        VoicofskiEngine.shared.refreshPermissions()
+        VoicofskiEngine.shared.refreshKeysAndCooldowns()
     }
 
     public func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
-        // Keep Duplix running in the background when Voice Memo is active in the menu bar
-        return !VoiceMemoEngine.shared.isEnabled
+        // Keep Duplix running in the background when Voice Memo or Voicofski is active in the menu bar
+        return !(VoiceMemoEngine.shared.isEnabled || VoicofskiEngine.shared.isEnabled)
     }
 
     public func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {

@@ -88,13 +88,14 @@ public final class VoiceMemoEngine: NSObject, ObservableObject {
         }
 
         terminateLegacyStandaloneVoiceMemo()
-        setupStatusItem()
+        DuplixMenuBarController.shared.start()
         setupPillPanel()
         setupHotkeys()
         isEnabled = true
         errorMessage = nil
-        statusMessage = "Voice Memo is active in the menu bar (🎙️)."
+        statusMessage = "Voice Memo is active in the Duplix menu bar."
         refreshPermissions()
+        DuplixMenuBarController.shared.updateStatusButton()
     }
 
     public func stop() {
@@ -102,14 +103,11 @@ public final class VoiceMemoEngine: NSObject, ObservableObject {
             stopRecording(attach: false)
         }
         teardownHotkeys()
-        if let item = statusItem {
-            NSStatusBar.system.removeStatusItem(item)
-            statusItem = nil
-        }
         pillPanel?.orderOut(nil)
         pillPanel = nil
         isEnabled = false
         statusMessage = nil
+        DuplixMenuBarController.shared.updateStatusButton()
     }
 
     public func toggleEnabled() {
@@ -559,7 +557,7 @@ public final class VoiceMemoEngine: NSObject, ObservableObject {
                 setupPillPanel()
             }
 
-            statusItem?.button?.title = "🔴 00:00"
+            DuplixMenuBarController.shared.updateStatusButton()
             pillPanel?.show()
             pillPanel?.updateTimer("00:00")
             pillPanel?.updateAudioLevel(0)
@@ -571,7 +569,7 @@ public final class VoiceMemoEngine: NSObject, ObservableObject {
                     self.elapsedSeconds += 1
                     let timeStr = String(format: "%02d:%02d", self.elapsedSeconds / 60, self.elapsedSeconds % 60)
                     self.pillPanel?.updateTimer(timeStr)
-                    self.statusItem?.button?.title = "🔴 \(timeStr)"
+                    DuplixMenuBarController.shared.updateStatusButton()
                 }
             }
 
@@ -604,7 +602,7 @@ public final class VoiceMemoEngine: NSObject, ObservableObject {
         audioRecorder?.stop()
         audioRecorder = nil
 
-        statusItem?.button?.title = "🎙️"
+        DuplixMenuBarController.shared.updateStatusButton()
         pillPanel?.hide()
 
         guard let outputURL = currentOutputURL else { return }

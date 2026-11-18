@@ -570,6 +570,189 @@ final class TestSuite {
             try await customManager.deleteClone(identifierOrName: record.name, deleteData: true)
         }
 
+        // ============================================================
+        // MARK: - Voicofski (v1.4.0) Automated Tests
+        // ============================================================
+
+        runTest("Voicofski models lock gemini-3.8-flash-tts, Lora/Bodi voices & 6 languages") {
+            try assert(VoicofskiModelConfig.ttsModel == "gemini-3.8-flash-tts", "TTS model must be gemini-3.8-flash-tts")
+            try assert(VoicofskiVoice.female.aiStudioVoiceName == "Lora", "Female voice must be Lora")
+            try assert(VoicofskiVoice.male.aiStudioVoiceName == "Bodi", "Male voice must be Bodi")
+            try assert(VoicofskiTargetLanguage.allCases.count == 6, "Expected 6 translation target languages")
+            let codes = Set(VoicofskiTargetLanguage.allCases.map(\.rawValue))
+            try assert(codes == Set(["fa", "en", "de", "fr", "nl", "ar"]), "Target language codes mismatch")
+        }
+
+        runTest("VoicofskiTextMetrics enforces >= 3 chars minimum and > 500 words warning") {
+            try assert(!VoicofskiTextMetrics.meetsMinimumSelectionLength(""), "Empty string should fail")
+            try assert(!VoicofskiTextMetrics.meetsMinimumSelectionLength("  ab  "), "2 trimmed chars should fail")
+            try assert(VoicofskiTextMetrics.meetsMinimumSelectionLength("  abc  "), "3 trimmed chars should pass")
+            try assert(VoicofskiTextMetrics.meetsMinimumSelectionLength("سلام"), "Persian 4-char word should pass")
+
+            let words500 = Array(repeating: "word", count: 500).joined(separator: " ")
+            let words501 = Array(repeating: "word", count: 501).joined(separator: " ")
+            try assert(VoicofskiTextMetrics.wordCount(words500) == 500, "Expected 500 words")
+            try assert(!VoicofskiTextMetrics.exceedsLongTextWarning(words500), "Exactly 500 words should not warn")
+            try assert(VoicofskiTextMetrics.exceedsLongTextWarning(words501), "501 words must trigger warning")
+        }
+
+        runTest("PCMWavEncoder parses AI Studio mimeType and writes valid 44-byte RIFF/WAVE header") {
+            let params1 = PCMWavEncoder.parseAudioMimeType("audio/L16;rate=24000")
+            try assert(params1.bitsPerSample == 16 && params1.sampleRate == 24000, "Failed parsing standard mimeType")
+
+            let params2 = PCMWavEncoder.parseAudioMimeType("audio/L24;codec=pcm;rate=48000")
+            try assert(params2.bitsPerSample == 24 && params2.sampleRate == 48000, "Failed parsing custom mimeType")
+
+            // 1 second of 24kHz 16-bit mono PCM = 48,000 bytes
+            let pcm = Data(repeating: 0x1A, count: 48_000)
+            let result = PCMWavEncoder.convertToWAV(audioData: pcm, mimeType: "audio/L16;rate=24000")
+            try assert(result.wavData.count == 48_044, "WAV size must be PCM + 44-byte header")
+            try assert(PCMWavEncoder.isAlreadyWAV(result.wavData), "Output must have valid RIFF/WAVE header")
+            try assert(abs(result.durationSeconds - 1.0) < 0.001, "Expected 1.0s duration, got \(result.durationSeconds)")
+
+            // Passthrough check: already-WAV buffer should not be double-wrapped
+            let passthrough = PCMWavEncoder.convertToWAV(audioData: result.wavData, mimeType: "audio/L16;rate=24000")
+            try assert(passthrough.wavData.count == 48_044, "Already-WAV input must not be double-wrapped")
+        }
+
+        await runAsyncTest("APIKeyPoolManager performs sequential 429 failover with 09:00 UTC reset") {
+            let tempRoot = FileManager.default.temporaryDirectory
+                .appendingPathComponent("VoicofskiPoolTest_\(UUID().uuidString)", isDirectory: true)
+            defer { try? FileManager.default.removeItem(at: tempRoot) }
+
+            let keychain = InMemoryKeychainStore()
+            let storage = VoicofskiStorage(baseDirectoryURL: tempRoot)
+
+            // Fixed clock: 2026-11-18 07:30:00 UTC (before 09:00 UTC same day)
+            var utc = Calendar(identifier: .gregorian)
+            utc.timeZone = TimeZone(secondsFromGMT: 0)!
+            let fixedBeforeReset = utc.date(from: DateComponents(year: 2026, month: 11, day: 18, hour: 7, minute: 30))!
+            let expectedReset = utc.date(from: DateComponents(year: 2026, month: 11, day: 18, hour: 9, minute: 0))!
+
+            final class MockClock: @unchecked Sendable {
+                var current: Date
+                init(_ date: Date) { self.current = date }
+            }
+            let clock = MockClock(fixedBeforeReset)
+
+            let pool = APIKeyPoolManager(
+                keychain: keychain,
+                storage: storage,
+                client: GeminiAPIClient(),
+                nowProvider: { clock.current }
+            )
+
+            let key1 = try pool.addKey(label: "Gmail 1", secret: "SECRET_KEY_1")
+            let key2 = try pool.addKey(label: "Gmail 2", secret: "SECRET_KEY_2")
+
+            let usedSecret: String = try await pool.executeWithFailover { secret in
+                if secret == "SECRET_KEY_1" {
+                    throw VoicofskiError.quotaExceeded
+                }
+                return secret
+            }
+
+            try assert(usedSecret == "SECRET_KEY_2", "Should fail over sequentially to Key 2")
+
+            let afterFailover = pool.listKeys()
+            let meta1 = afterFailover.first { $0.id == key1.id }
+            let meta2 = afterFailover.first { $0.id == key2.id }
+            try assert(meta1?.status == .exhausted, "Key 1 should be marked exhausted")
+            try assert(meta1?.nextResetAt == expectedReset, "Key 1 nextResetAt should be 09:00 UTC same day")
+            try assert(meta2?.status == .active, "Key 2 should be marked active")
+
+            // Exhaust Key 2 as well -> must throw allKeysExhausted
+            var threwAllExhausted = false
+            do {
+                let _: String = try await pool.executeWithFailover { _ in
+                    throw VoicofskiError.quotaExceeded
+                }
+            } catch VoicofskiError.allKeysExhausted {
+                threwAllExhausted = true
+            }
+            try assert(threwAllExhausted, "Expected VoicofskiError.allKeysExhausted when all keys hit 429")
+
+            // Advance clock past 09:00 UTC -> keys must automatically recover
+            clock.current = expectedReset.addingTimeInterval(60)
+            let recovered = pool.refreshCooldowns()
+            try assert(recovered, "Keys should recover automatically after 09:00 UTC")
+            try assert(pool.listKeys().allSatisfy { $0.status == .active }, "All recovered keys should be active")
+        }
+
+        await runAsyncTest("APIKeyPoolManager skips invalid keys and preserves keys on VPN/region errors") {
+            let tempRoot = FileManager.default.temporaryDirectory
+                .appendingPathComponent("VoicofskiInvalidTest_\(UUID().uuidString)", isDirectory: true)
+            defer { try? FileManager.default.removeItem(at: tempRoot) }
+
+            let keychain = InMemoryKeychainStore()
+            let storage = VoicofskiStorage(baseDirectoryURL: tempRoot)
+            let pool = APIKeyPoolManager(keychain: keychain, storage: storage, client: GeminiAPIClient())
+
+            let k1 = try pool.addKey(label: "Bad Key", secret: "BAD_SECRET")
+            let k2 = try pool.addKey(label: "Good Key", secret: "GOOD_SECRET")
+
+            let ok: String = try await pool.executeWithFailover { secret in
+                if secret == "BAD_SECRET" {
+                    throw VoicofskiError.invalidAPIKey("API_KEY_INVALID")
+                }
+                return secret
+            }
+            try assert(ok == "GOOD_SECRET", "Expected fallback from invalid Key 1 to Key 2")
+            try assert(pool.listKeys().first { $0.id == k1.id }?.status == .invalid, "Key 1 must be marked invalid")
+            try assert(pool.listKeys().first { $0.id == k2.id }?.status == .active, "Key 2 must be active")
+
+            // Region / VPN error should surface immediately without marking Key 2 invalid or exhausted
+            var threwRegion = false
+            do {
+                let _: String = try await pool.executeWithFailover { _ in
+                    throw VoicofskiError.regionBlocked
+                }
+            } catch VoicofskiError.regionBlocked {
+                threwRegion = true
+            }
+            try assert(threwRegion, "Expected regionBlocked error to propagate")
+            try assert(pool.listKeys().first { $0.id == k2.id }?.status == .active, "Key 2 must stay active on VPN/region errors")
+        }
+
+        runTest("VoicofskiStorage persists audio WAV, history.json, and pending_queue.json cleanly") {
+            let tempRoot = FileManager.default.temporaryDirectory
+                .appendingPathComponent("VoicofskiStorageTest_\(UUID().uuidString)", isDirectory: true)
+            defer { try? FileManager.default.removeItem(at: tempRoot) }
+
+            let storage = VoicofskiStorage(baseDirectoryURL: tempRoot)
+            let itemID = UUID()
+            let wav = PCMWavEncoder.wrapPCMInWAVHeader(pcmData: Data(repeating: 0x05, count: 2400))
+            let saved = try storage.saveAudioData(wav, id: itemID)
+            try assert(FileManager.default.fileExists(atPath: saved.fileURL.path), "Saved WAV file must exist")
+
+            let historyItem = VoicofskiHistoryItem(
+                id: itemID,
+                mode: .translate,
+                originalText: "Guten Morgen",
+                translatedText: "صبح بخیر",
+                targetLanguage: .persian,
+                voice: .female,
+                audioFileName: saved.fileName,
+                durationSeconds: 0.5
+            )
+            _ = try storage.appendHistoryItem(historyItem)
+
+            let reloadedHistory = storage.loadHistory()
+            try assert(reloadedHistory.count == 1, "Expected 1 history item")
+            try assert(reloadedHistory[0].spokenText == "صبح بخیر", "History spokenText mismatch")
+
+            let pending = PendingQuotaRequest(text: "Queued text", mode: .direct, voice: .male)
+            _ = try storage.enqueuePendingRequest(pending)
+            try assert(storage.loadPendingQueue().count == 1, "Expected 1 pending queue item")
+
+            _ = try storage.removePendingRequest(id: pending.id)
+            try assert(storage.loadPendingQueue().isEmpty, "Pending queue should be empty after removal")
+
+            _ = try storage.deleteHistoryItem(id: itemID)
+            try assert(storage.loadHistory().isEmpty, "History should be empty after deletion")
+            try assert(!FileManager.default.fileExists(atPath: saved.fileURL.path), "Audio file must be cleaned up on delete")
+        }
+
         print("\n-------------------------------------------")
         print("Test Results: \(passedCount) Passed, \(failedCount) Failed")
         print("-------------------------------------------\n")

@@ -24,13 +24,13 @@
       <a href="#" class="brand-link">
         <img src="assets/icon.png" alt="Duplix Icon" class="brand-icon">
         <span class="brand-name">Duplix</span>
-        <span class="badge-version">v1.3.0</span>
+        <span class="badge-version">v1.4.0</span>
       </a>
 
       <nav>
         <ul class="nav-menu">
           <li><a href="#features" class="nav-item-link">Features</a></li>
-          <li><a href="#simulator" class="nav-item-link">Dock Simulator</a></li>
+          <li><a href="#simulator" class="nav-item-link">Live Playground</a></li>
           <li><a href="#compare" class="nav-item-link">Comparison</a></li>
           <li><a href="#faq" class="nav-item-link">FAQ</a></li>
           <li><a href="https://github.com/businessmanshah-a11y/Duplix" target="_blank" class="nav-item-link">Source</a></li>
@@ -62,7 +62,7 @@
     <div class="mobile-nav-drawer" id="mobile-nav-drawer" aria-hidden="true">
       <ul class="mobile-nav-menu">
         <li><a href="#features" class="mobile-nav-link">Features</a></li>
-        <li><a href="#simulator" class="mobile-nav-link">Dock Simulator</a></li>
+        <li><a href="#simulator" class="mobile-nav-link">Live Playground</a></li>
         <li><a href="#compare" class="mobile-nav-link">Comparison</a></li>
         <li><a href="#faq" class="mobile-nav-link">FAQ</a></li>
         <li><a href="https://github.com/businessmanshah-a11y/Duplix" target="_blank" class="mobile-nav-link">GitHub Source</a></li>
@@ -72,7 +72,7 @@
           <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
           </svg>
-          Download Duplix.dmg (1.8 MB)
+          Download Duplix.dmg (2.4 MB)
         </a>
       </div>
     </div>
@@ -86,7 +86,7 @@
           <circle cx="12" cy="12" r="10" fill="#f59e0b" fill-opacity="0.2"/>
           <path d="M12 6.5H9v11h2v-4h1a3.5 3.5 0 000-7zm0 5h-1v-3h1a1.5 1.5 0 010 3z" fill="#f59e0b"/>
         </svg>
-        Featured on Product Hunt
+        New in v1.4.0 — Voicofski AI Voice &amp; Translate
       </a>
 
       <h1 class="hero-heading">
@@ -95,7 +95,7 @@
       </h1>
 
       <p class="hero-description">
-        Clone Mac apps in milliseconds with APFS Copy-on-Write, isolated Keychains, distinct Dock badges, and built-in Voice Memo.
+        Clone Mac apps in milliseconds with APFS Copy-on-Write, isolated Keychains, distinct Dock badges, built-in Voice Memo, and Voicofski AI Text-to-Speech &amp; Translate.
       </p>
 
       <div class="hero-buttons">
@@ -103,7 +103,7 @@
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
           </svg>
-          Download Duplix.dmg (1.8 MB)
+          Download Duplix.dmg (2.4 MB)
         </a>
 
         <div class="cli-box" id="cli-copy-box" title="Click to copy one-line Terminal installer">
@@ -180,7 +180,15 @@
                 </svg>
                 <span>Voice Memo</span>
               </button>
-              <button class="win-tab-btn" data-slide="3" aria-label="About Duplix View">
+              <button class="win-tab-btn" data-slide="3" aria-label="Voicofski View">
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                  <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                  <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                </svg>
+                <span>Voicofski</span>
+              </button>
+              <button class="win-tab-btn" data-slide="4" aria-label="About Duplix View">
                 <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <circle cx="12" cy="12" r="10"></circle>
                   <line x1="12" y1="16" x2="12" y2="12"></line>
@@ -222,9 +230,17 @@
                     <span class="sidebar-label">Voice Memo</span>
                     <span class="sidebar-live-dot"></span>
                   </div>
+                  <div class="sidebar-nav-item" data-switch="3">
+                    <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                      <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                    </svg>
+                    <span class="sidebar-label">Voicofski</span>
+                    <span class="sidebar-live-dot"></span>
+                  </div>
 
                   <div class="sidebar-section-title" style="margin-top:20px;">System</div>
-                  <div class="sidebar-nav-item" data-switch="3">
+                  <div class="sidebar-nav-item" data-switch="4">
                     <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <circle cx="12" cy="12" r="10"></circle>
                       <line x1="12" y1="16" x2="12" y2="12"></line>
@@ -354,9 +370,17 @@
                     <span class="sidebar-label">Voice Memo</span>
                     <span class="sidebar-live-dot"></span>
                   </div>
+                  <div class="sidebar-nav-item" data-switch="3">
+                    <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                      <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                    </svg>
+                    <span class="sidebar-label">Voicofski</span>
+                    <span class="sidebar-live-dot"></span>
+                  </div>
 
                   <div class="sidebar-section-title" style="margin-top:20px;">System</div>
-                  <div class="sidebar-nav-item" data-switch="3">
+                  <div class="sidebar-nav-item" data-switch="4">
                     <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <circle cx="12" cy="12" r="10"></circle>
                       <line x1="12" y1="16" x2="12" y2="12"></line>
@@ -469,7 +493,7 @@
                       <img src="assets/icon.png" class="scanner-card-icon" alt="Duplix">
                       <div class="scanner-card-details">
                         <div class="scanner-card-name">Duplix</div>
-                        <div class="scanner-card-meta"><span class="engine-badge native">Native</span> v1.3.0</div>
+                        <div class="scanner-card-meta"><span class="engine-badge native">Native</span> v1.4.0</div>
                       </div>
                       <button class="scanner-clone-btn" aria-label="Clone Duplix">Clone</button>
                     </div>
@@ -508,9 +532,17 @@
                     <span class="sidebar-label">Voice Memo</span>
                     <span class="sidebar-live-dot"></span>
                   </div>
+                  <div class="sidebar-nav-item" data-switch="3">
+                    <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                      <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                    </svg>
+                    <span class="sidebar-label">Voicofski</span>
+                    <span class="sidebar-live-dot"></span>
+                  </div>
 
                   <div class="sidebar-section-title" style="margin-top:20px;">System</div>
-                  <div class="sidebar-nav-item" data-switch="3">
+                  <div class="sidebar-nav-item" data-switch="4">
                     <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <circle cx="12" cy="12" r="10"></circle>
                       <line x1="12" y1="16" x2="12" y2="12"></line>
@@ -615,8 +647,8 @@
               </div>
             </div>
 
-            <!-- Screen 4: About Duplix -->
-            <div class="showcase-slide" data-title="Duplix Control Center — Architecture & About" data-index="3">
+            <!-- Screen 4: Voicofski AI Voice & Translate -->
+            <div class="showcase-slide" data-title="Duplix Control Center — Voicofski AI Voice & Translate" data-index="3">
               <div class="app-window-frame">
                 <!-- Sidebar -->
                 <aside class="app-sidebar">
@@ -645,9 +677,135 @@
                     <span class="sidebar-label">Voice Memo</span>
                     <span class="sidebar-live-dot"></span>
                   </div>
+                  <div class="sidebar-nav-item active" data-switch="3">
+                    <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                      <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                    </svg>
+                    <span class="sidebar-label">Voicofski</span>
+                    <span class="sidebar-live-dot"></span>
+                  </div>
 
                   <div class="sidebar-section-title" style="margin-top:20px;">System</div>
-                  <div class="sidebar-nav-item active" data-switch="3">
+                  <div class="sidebar-nav-item" data-switch="4">
+                    <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <line x1="12" y1="16" x2="12" y2="12"></line>
+                      <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                    </svg>
+                    <span class="sidebar-label">About Duplix</span>
+                  </div>
+                </aside>
+
+                <!-- Detail Area: Voicofski View -->
+                <main class="app-detail-view app-detail-voicofski">
+                  <div class="vf-mock-topbar">
+                    <div class="vf-mock-brand">
+                      <div class="vf-mock-avatar">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                          <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                        </svg>
+                      </div>
+                      <div>
+                        <div class="vm-mock-title-row">
+                          <span class="vm-mock-title">Voicofski</span>
+                          <span class="vf-mock-pill">gemini-3.8-flash-tts</span>
+                        </div>
+                        <div class="vm-mock-sub">Select text anywhere on macOS or compose below.</div>
+                      </div>
+                    </div>
+                    <div class="vf-mock-controls">
+                      <span class="vf-voice-chip active">Lora</span>
+                      <span class="vf-voice-chip">Bodi</span>
+                      <span class="vf-keys-chip"><span class="vm-dot-green"></span> 3/3 Keys</span>
+                    </div>
+                  </div>
+
+                  <div class="vf-composer-mock">
+                    <div class="vf-composer-row">
+                      <div class="vf-mode-pills">
+                        <span class="vf-mode-pill">Speak</span>
+                        <span class="vf-mode-pill active">Translate</span>
+                      </div>
+                      <span class="vf-lang-pill">Target: Persian</span>
+                      <span class="vf-word-count">14 words</span>
+                    </div>
+                    <div class="vf-text-box">
+                      “Duplix converts selected text into natural studio speech with automatic multi-key failover.”
+                    </div>
+                    <div class="vf-review-box">
+                      <div class="vf-review-label">Translated Review (Persian) · Ready to speak</div>
+                      <div class="vf-review-rtl" dir="rtl">«دوپلیکس متن انتخاب‌شده را با جابه‌جایی خودکار کلیدهای API به صدای طبیعی تبدیل می‌کند.»</div>
+                    </div>
+                  </div>
+
+                  <!-- Live Notch HUD Player Preview -->
+                  <div class="vf-notch-preview" aria-label="Voicofski Notch HUD Player Preview">
+                    <span class="vf-notch-play">
+                      <svg width="9" height="9" fill="currentColor" viewBox="0 0 16 16">
+                        <rect x="3" y="2" width="3.5" height="12" rx="1"></rect>
+                        <rect x="9.5" y="2" width="3.5" height="12" rx="1"></rect>
+                      </svg>
+                    </span>
+                    <div class="vf-notch-bars" aria-hidden="true">
+                      <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+                    </div>
+                    <div class="vf-notch-seek"><div class="vf-notch-seek-fill"></div></div>
+                    <span class="vf-notch-time">00:06</span>
+                    <span class="vf-notch-rate">1x</span>
+                    <span class="vf-notch-icon-btn">
+                      <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <polyline points="1 4 1 10 7 10"></polyline>
+                        <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                      </svg>
+                    </span>
+                  </div>
+                </main>
+              </div>
+            </div>
+
+            <!-- Screen 5: About Duplix -->
+            <div class="showcase-slide" data-title="Duplix Control Center — Architecture & About" data-index="4">
+              <div class="app-window-frame">
+                <!-- Sidebar -->
+                <aside class="app-sidebar">
+                  <div class="sidebar-section-title">Workspace</div>
+                  <div class="sidebar-nav-item" data-switch="0">
+                    <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                    <span class="sidebar-label">My Clones</span>
+                    <span class="sidebar-badge">1</span>
+                  </div>
+                  <div class="sidebar-nav-item" data-switch="1">
+                    <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="3" width="7" height="7"></rect>
+                      <rect x="14" y="3" width="7" height="7"></rect>
+                      <rect x="14" y="14" width="7" height="7"></rect>
+                      <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    <span class="sidebar-label">Installed Apps</span>
+                  </div>
+                  <div class="sidebar-nav-item" data-switch="2">
+                    <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                      <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                    </svg>
+                    <span class="sidebar-label">Voice Memo</span>
+                    <span class="sidebar-live-dot"></span>
+                  </div>
+                  <div class="sidebar-nav-item" data-switch="3">
+                    <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                      <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                    </svg>
+                    <span class="sidebar-label">Voicofski</span>
+                    <span class="sidebar-live-dot"></span>
+                  </div>
+
+                  <div class="sidebar-section-title" style="margin-top:20px;">System</div>
+                  <div class="sidebar-nav-item active" data-switch="4">
                     <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <circle cx="12" cy="12" r="10"></circle>
                       <line x1="12" y1="16" x2="12" y2="12"></line>
@@ -663,7 +821,7 @@
                     <img src="assets/icon.png" class="about-brand-logo" alt="Duplix">
                     <h3 class="about-hero-title">Duplix</h3>
                     <p class="about-hero-tagline">The Free, Native, Open-Source macOS App Cloner</p>
-                    <span class="about-version-badge">Version 1.3.0 (Native Integrated Voice Memo & Deep Isolation)</span>
+                    <span class="about-version-badge">Version 1.4.0 (Voicofski AI Voice & Translate, Voice Memo & Deep Isolation)</span>
                   </div>
 
                   <div class="about-features-list">
@@ -733,13 +891,14 @@
             <div class="slide-indicator" data-slide="1"><div class="indicator-fill"></div></div>
             <div class="slide-indicator" data-slide="2"><div class="indicator-fill"></div></div>
             <div class="slide-indicator" data-slide="3"><div class="indicator-fill"></div></div>
+            <div class="slide-indicator" data-slide="4"><div class="indicator-fill"></div></div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Interactive Dock Simulator -->
+  <!-- Interactive Live Playground (Dock Badging + Voicofski) -->
   <section class="sim-section" id="simulator">
     <div class="container">
       <div class="section-head reveal-on-scroll">
@@ -748,15 +907,209 @@
             <circle cx="12" cy="12" r="10"></circle>
             <path d="M12 8v8M8 12h8"></path>
           </svg>
-          Live Simulator
+          Interactive Live Playground
         </span>
-        <h2 class="section-headline">Instant Dock Badging Engine</h2>
+        <h2 class="section-headline">Test Duplix Engines Live</h2>
         <p class="section-subtext">
-          Select an application, choose a distinctive badge color, and preview how it renders in the macOS Dock.
+          Preview custom macOS Dock badges or experience Voicofski’s selection trigger, 6-language translation review, and Notch HUD player right in your browser.
         </p>
+
+        <div class="playground-switcher" role="tablist" aria-label="Interactive Simulator Mode">
+          <button class="pg-switch-btn active" id="pg-tab-voicofski" data-pg="voicofski" role="tab" aria-selected="true">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            </svg>
+            <span>Voicofski AI Voice &amp; Translate</span>
+            <span class="pg-new-pill">v1.4</span>
+          </button>
+          <button class="pg-switch-btn" id="pg-tab-dock" data-pg="dock" role="tab" aria-selected="false">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+              <line x1="8" y1="21" x2="16" y2="21"></line>
+              <line x1="12" y1="17" x2="12" y2="21"></line>
+            </svg>
+            <span>Dock Badging Simulator</span>
+          </button>
+        </div>
       </div>
 
-      <div class="simulator-panel reveal-on-scroll">
+      <!-- Playground Panel 1: Voicofski Interactive Simulator -->
+      <div class="simulator-panel vf-playground-panel reveal-on-scroll" id="pg-panel-voicofski">
+        <div class="sim-settings">
+          <div>
+            <div class="field-label">
+              <svg class="label-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M4 7V4h16v3M9 20h6M12 4v16"></path>
+              </svg>
+              Sample Highlighted Text
+            </div>
+            <div class="vf-sample-grid">
+              <button class="vf-sample-btn active" data-sample="en" type="button">English</button>
+              <button class="vf-sample-btn" data-sample="de" type="button">German</button>
+              <button class="vf-sample-btn" data-sample="fr" type="button">French</button>
+            </div>
+          </div>
+
+          <div>
+            <div class="field-label">
+              <svg class="label-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+              </svg>
+              AI Studio Voice (gemini-3.8-flash-tts)
+            </div>
+            <div class="vf-voice-grid">
+              <button class="vf-voice-btn active" data-voice="Lora" type="button">
+                <strong>Lora</strong>
+                <span>Female · Clear &amp; friendly</span>
+              </button>
+              <button class="vf-voice-btn" data-voice="Bodi" type="button">
+                <strong>Bodi</strong>
+                <span>Male · Quiet &amp; intimate</span>
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <div class="field-label">
+              <svg class="label-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+              </svg>
+              Translation Target (6 Languages)
+            </div>
+            <div class="vf-lang-grid">
+              <button class="vf-lang-btn active" data-lang="persian" type="button">Persian</button>
+              <button class="vf-lang-btn" data-lang="english" type="button">English</button>
+              <button class="vf-lang-btn" data-lang="german" type="button">German</button>
+              <button class="vf-lang-btn" data-lang="french" type="button">French</button>
+              <button class="vf-lang-btn" data-lang="dutch" type="button">Dutch</button>
+              <button class="vf-lang-btn" data-lang="arabic" type="button">Arabic</button>
+            </div>
+          </div>
+
+          <div class="vf-keypool-card">
+            <div class="vf-keypool-head">
+              <span>Multi-Key Failover Pool</span>
+              <button class="vf-failover-btn" id="vf-sim-failover" type="button">Simulate 429 Switch</button>
+            </div>
+            <div class="vf-key-pills" id="vf-key-pills">
+              <span class="vf-key-pill active" data-key="0"><span class="vf-kdot"></span>Gmail #1 · Active</span>
+              <span class="vf-key-pill standby" data-key="1"><span class="vf-kdot"></span>Gmail #2 · Standby</span>
+              <span class="vf-key-pill standby" data-key="2"><span class="vf-kdot"></span>Gmail #3 · Standby</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Simulated macOS Notch Desktop Stage -->
+        <div class="vf-mac-stage">
+          <div class="vf-mac-menubar">
+            <span class="vf-menubar-left">macOS Desktop Preview</span>
+            <div class="vf-mac-notch" aria-hidden="true"></div>
+            <span class="vf-menubar-right" id="vf-menubar-status">Voicofski Ready</span>
+          </div>
+
+          <!-- Interactive Notch HUD Floating Player -->
+          <div class="vf-live-notch-hud idle" id="vf-live-hud">
+            <div class="vf-hud-idle-msg" id="vf-hud-idle">
+              Click the red corner icon on the selected text below to test Speak or Translate
+            </div>
+
+            <div class="vf-hud-loading" id="vf-hud-loading" style="display:none;">
+              <div class="vf-loading-orb">
+                <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24">
+                  <path d="M12 3v18M8 7v10M16 7v10M4 11v2M20 11v2" stroke-linecap="round"></path>
+                </svg>
+              </div>
+              <div class="vf-loading-meta">
+                <div class="vf-loading-title" id="vf-loading-title">Generating voice (Lora)...</div>
+                <div class="vf-loading-track"><div class="vf-loading-fill" id="vf-loading-fill"></div></div>
+              </div>
+              <button class="vf-hud-circle-btn" id="vf-hud-cancel" aria-label="Cancel" type="button">
+                <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 16 16">
+                  <path d="M4 4l8 8M12 4l-8 8" stroke-linecap="round"></path>
+                </svg>
+              </button>
+            </div>
+
+            <div class="vf-hud-playing" id="vf-hud-playing" style="display:none;">
+              <button class="vf-hud-play-btn" id="vf-hud-playpause" aria-label="Play or Pause" type="button">
+                <svg width="10" height="10" fill="currentColor" viewBox="0 0 16 16" id="vf-playpause-icon">
+                  <rect x="3" y="2" width="3.5" height="12" rx="1"></rect>
+                  <rect x="9.5" y="2" width="3.5" height="12" rx="1"></rect>
+                </svg>
+              </button>
+              <div class="vf-notch-bars playing" id="vf-live-bars" aria-hidden="true">
+                <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+              </div>
+              <div class="vf-live-seek-wrap" id="vf-live-seek">
+                <div class="vf-live-seek-fill" id="vf-live-seek-fill"></div>
+              </div>
+              <span class="vf-notch-time" id="vf-live-time">00:00</span>
+              <button class="vf-hud-rate-btn" id="vf-hud-rate" type="button">1x</button>
+              <button class="vf-hud-circle-btn" id="vf-hud-replay" aria-label="Replay" type="button">
+                <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <polyline points="1 4 1 10 7 10"></polyline>
+                  <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                </svg>
+              </button>
+              <button class="vf-hud-circle-btn" id="vf-hud-close" aria-label="Close" type="button">
+                <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 16 16">
+                  <path d="M4 4l8 8M12 4l-8 8" stroke-linecap="round"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Simulated Mac App Document with Selected Text + 2-Stage Corner Trigger -->
+          <div class="vf-desktop-doc">
+            <div class="vf-doc-caption">Any macOS App (Safari, Notes, PDF, VS Code...)</div>
+            <div class="vf-selection-wrap">
+              <span class="vf-highlighted-text" id="vf-sim-text">
+                Select any passage across macOS and Duplix turns it into studio speech with zero clutter.
+              </span>
+
+              <!-- 2-Stage Icon-Only Floating Corner Trigger -->
+              <div class="vf-corner-trigger" id="vf-corner-trigger">
+                <button class="vf-trigger-dot" id="vf-trigger-dot" aria-label="Open Voicofski actions" title="Click to expand icon actions" type="button">
+                  <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24">
+                    <path d="M12 4v16M8 8v8M16 8v8M4 11v2M20 11v2" stroke-linecap="round"></path>
+                  </svg>
+                </button>
+                <div class="vf-trigger-actions" id="vf-trigger-actions">
+                  <button class="vf-act-btn vf-act-speak" id="vf-act-speak" aria-label="Speak Selection" title="Speak Selection" type="button">
+                    <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                      <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                    </svg>
+                  </button>
+                  <button class="vf-act-btn vf-act-translate" id="vf-act-translate" aria-label="Translate and Speak" title="Translate & Speak" type="button">
+                    <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <line x1="2" y1="12" x2="22" y2="12"></line>
+                      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- In-App Translation Review Preview (appears when Translate icon is clicked) -->
+            <div class="vf-sim-review-card" id="vf-sim-review-card" style="display:none;">
+              <div class="vf-sim-review-head">
+                <span id="vf-sim-review-lang">Duplix Review · Persian</span>
+                <button class="vf-sim-confirm-btn" id="vf-sim-confirm-speak" type="button">Confirm &amp; Generate Voice</button>
+              </div>
+              <div class="vf-sim-review-body" id="vf-sim-review-body"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Playground Panel 2: Dock Badging Simulator -->
+      <div class="simulator-panel reveal-on-scroll" id="pg-panel-dock" style="display:none;">
         <!-- Settings -->
         <div class="sim-settings">
           <div>
@@ -998,8 +1351,23 @@
           </p>
         </div>
 
-        <!-- Card 8: Native Integrated Voice Memo (v1.3.0) -->
+        <!-- Card 8: Voicofski AI Voice & Translate (v1.4.0) -->
         <div class="bento-card reveal-on-scroll reveal-delay-4">
+          <div class="bento-icon-box">
+            <svg class="bento-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+            </svg>
+          </div>
+          <h3 class="bento-title">Voicofski AI Voice &amp; Translate</h3>
+          <p class="bento-copy">
+            Select text anywhere on macOS for a subtle 2-stage icon trigger to speak directly or translate across 6 languages with in-app review. Powered by <code>gemini-3.8-flash-tts</code> (<code>Lora</code> &amp; <code>Bodi</code>), Keychain multi-key failover, and a Notch HUD player.
+          </p>
+        </div>
+
+        <!-- Card 9: Native Integrated Voice Memo -->
+        <div class="bento-card reveal-on-scroll reveal-delay-5">
           <div class="bento-icon-box">
             <svg class="bento-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
@@ -1007,12 +1375,12 @@
           </div>
           <h3 class="bento-title">Native Integrated Voice Memo</h3>
           <p class="bento-copy">
-            Built directly into Duplix with a menu bar icon (<code>🎙️</code>), global <code>⌥⌘</code> hotkey, fullscreen-ready floating waveform HUD, automatic <code>⌘V</code> chat attachment, live Microphone &amp; Accessibility health checks, and silent background Launch at Login.
+            Built directly into Duplix’s unified menu bar with a global <code>⌥⌘</code> hotkey, fullscreen-ready floating waveform HUD, automatic <code>⌘V</code> chat attachment, live permission checks, and silent Launch at Login.
           </p>
         </div>
 
-        <!-- Card 9: 1-Click Isolation Repair -->
-        <div class="bento-card reveal-on-scroll reveal-delay-5">
+        <!-- Card 10: 1-Click Isolation Repair -->
+        <div class="bento-card reveal-on-scroll reveal-delay-6">
           <div class="bento-icon-box">
             <svg class="bento-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
@@ -1088,6 +1456,13 @@
             <tr>
               <td><strong>Built-in Voice Memo (⌥⌘)</strong></td>
               <td class="duplix-highlight-col"><span class="status-icon-good">Native HUD &amp; Auto-Paste</span></td>
+              <td><span class="status-icon-bad">None</span></td>
+              <td><span class="status-icon-bad">None</span></td>
+              <td><span class="status-icon-bad">None</span></td>
+            </tr>
+            <tr>
+              <td><strong>Voicofski AI Voice &amp; Translate</strong></td>
+              <td class="duplix-highlight-col"><span class="status-icon-good">Selection Trigger + Notch HUD</span></td>
               <td><span class="status-icon-bad">None</span></td>
               <td><span class="status-icon-bad">None</span></td>
               <td><span class="status-icon-bad">None</span></td>
@@ -1207,7 +1582,19 @@
 
         <div class="faq-card">
           <button class="faq-trigger">
-            <span>How does the built-in Voice Memo work in v1.3.0?</span>
+            <span>How does Voicofski AI Voice &amp; Translate work in v1.4.0?</span>
+            <svg class="faq-chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="faq-body">
+            Select at least 3 characters in any macOS app to pop up a subtle corner icon that expands into pure-icon <strong>Speak</strong> and <strong>Translate</strong> actions (or use the built-in Voicofski composer). Powered by Google AI Studio (<code>gemini-3.8-flash-tts</code> with <code>Lora</code> &amp; <code>Bodi</code> voices), Voicofski lets you add multiple personal API keys stored safely in <strong>macOS Keychain</strong> with automatic sequential failover on quota limits (resetting at <code>09:00 UTC</code>), saves overflow requests to a Pending Queue, and plays audio through a sleek <strong>Notch HUD</strong> with live waveform, seekbar, Replay, and local History.
+          </div>
+        </div>
+
+        <div class="faq-card">
+          <button class="faq-trigger">
+            <span>How does the built-in Voice Memo work in v1.3.0+?</span>
             <svg class="faq-chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <polyline points="6 9 12 15 18 9"></polyline>
             </svg>
@@ -1245,7 +1632,7 @@
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
           </svg>
-          Download Duplix.dmg (1.8 MB)
+          Download Duplix.dmg (2.4 MB)
         </a>
         <a href="https://github.com/businessmanshah-a11y/Duplix/releases" target="_blank" class="btn btn-ghost btn-lg">
           Releases

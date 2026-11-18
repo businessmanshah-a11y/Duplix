@@ -26,7 +26,7 @@ public struct AboutView: View {
                         .font(.subheadline)
                         .foregroundColor(.secondary)
 
-                    Text("Version 1.3.0 (Native Integrated Voice Memo & Deep Isolation)")
+                    Text("Version 1.4.0 (Voicofski AI Voice & Translate, Voice Memo & Deep Isolation)")
                         .font(.caption)
                         .padding(.horizontal, 10)
                         .padding(.vertical, 4)
@@ -37,6 +37,12 @@ public struct AboutView: View {
 
                 // Feature Highlights
                 VStack(spacing: 12) {
+                    featureRow(
+                        icon: "speaker.wave.2.circle.fill",
+                        color: .blue,
+                        title: "Voicofski AI Voice & Translate",
+                        desc: "Select text anywhere on macOS to speak or translate across 6 languages via Google AI Studio multi-key failover and a Notch HUD player."
+                    )
                     featureRow(
                         icon: "arrow.triangle.2.circlepath.circle.fill",
                         color: .orange,

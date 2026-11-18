@@ -7,7 +7,7 @@
   Run multiple fully isolated instances of any macOS app simultaneously with independent accounts, data, and Dock icons.
   <br><br>
   <a href="https://businessmanshah-a11y.github.io/Duplix/"><img src="https://img.shields.io/badge/Website-Live%20Demo-6366f1?style=for-the-badge&logo=safari&logoColor=white" alt="Live Website"></a>
-  <a href="https://github.com/businessmanshah-a11y/Duplix/releases"><img src="https://img.shields.io/badge/Download-.DMG%20(1.8MB)-10b981?style=for-the-badge&logo=apple&logoColor=white" alt="Download DMG"></a>
+  <a href="https://github.com/businessmanshah-a11y/Duplix/releases"><img src="https://img.shields.io/badge/Download-.DMG%20(2.4MB)-10b981?style=for-the-badge&logo=apple&logoColor=white" alt="Download DMG"></a>
   <a href="https://github.com/businessmanshah-a11y/Duplix/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="MIT License"></a>
 </p>
 
@@ -21,6 +21,7 @@
 
 ## ✨ Features
 
+- **🔊 Voicofski AI Voice & Translate (v1.4.0):** Select text anywhere on macOS (`>= 3` chars) to pop up a subtle two-stage icon-only trigger (Direct Voice or 6-language Translate with in-app review), powered by Google AI Studio (`gemini-3.8-flash-tts` with `Lora` & `Bodi` voices), macOS Keychain multi-key auto-failover (`09:00 UTC` daily reset), a floating **Notch HUD Player** with waveform & seekbar, persistent audio History, and automatic Playback & Pending Quota Queues.
 - **🚀 Simultaneous Instances:** Run 2, 3, 5, or more copies of any app at the same time without conflicts.
 - **🎙️ Native Integrated Voice Memo (v1.3.0):** Built directly into Duplix (no nested helper app!) with a global `⌥⌘` shortcut, fullscreen-ready floating waveform HUD, automatic `⌘V` chat attachment, live Microphone & Accessibility health checks, and background Launch at Login.
 - **🔒 Deep Multi-Layer Isolation (v1.2.0):** Each clone gets its own dedicated macOS Keychain (`duplix.keychain-db`), isolated `HOME` / `CFFIXED_USER_HOME` / `GEMINI_DIR`, unique `CFBundleURLSchemes`, data directory, cookies, and cache — keeping Electron and Go-keyring accounts (like Antigravity IDE & Antigravity 2.0) 100% independent while bridging `.ssh` and `.gitconfig`.
@@ -40,9 +41,18 @@
 
 ---
 
+## 🔊 Voicofski AI Text-to-Speech & Translate (v1.4.0)
+
+- **System-Wide Selection Trigger & In-App Composer:** Highlight any text across macOS to reveal a subtle corner icon that expands into icon-only **Speak** and **Translate** actions, or type directly inside the dedicated `Voicofski` tab.
+- **6-Language Translation with Review:** Translates automatically into Persian, English, German, French, Dutch, or Arabic and opens in Duplix so you can review before generating speech.
+- **Google AI Studio Multi-Key Failover:** Store multiple personal AI Studio keys securely in **macOS Keychain**. When one key hits its daily quota (`429`), Voicofski switches sequentially to the next key automatically and resets exhausted keys at `09:00 UTC`. If all keys are exhausted, requests are safely stored in the **Pending Queue**.
+- **Notch HUD Floating Player:** Anchored cleanly below the MacBook notch (or top-center of your active screen), featuring a non-linear loading curve, live audio waveform, scrubbable seekbar, Replay, and automatic Playback Queue.
+
+---
+
 ## 🎙️ Built-in Voice Memo (v1.3.0)
 
-- **Native Integrated Voice Memo:** Built directly into `Duplix.app` with a unified macOS permission identity (no nested helper app!). Features a persistent menu bar icon (`🎙️` / live recording timer `🔴 00:05`), global `⌥⌘` shortcut, fullscreen-ready floating 5-bar waveform HUD, automatic `⌘V` chat attachment, live Microphone & Accessibility health checks, and silent background **Start at macOS Login**.
+- **Native Integrated Voice Memo:** Built directly into `Duplix.app` with a unified macOS permission identity and unified Duplix menu bar controller. Features a global `⌥⌘` shortcut, fullscreen-ready floating 5-bar waveform HUD, automatic `⌘V` chat attachment, live Microphone & Accessibility health checks, and silent background **Start at macOS Login**.
 
 ---
 
@@ -50,6 +60,7 @@
 
 Detailed documentation and technical architecture reports are available in the [`docs/`](./docs) directory:
 
+- [Voicofski Feature Specification (v1.4.0)](./docs/VOICOFSKI_FEATURE_SPEC.md)
 - [Technical Architecture & Feasibility Report](./docs/FEASIBILITY_AND_ARCHITECTURE.md)
 - [Roadmap & 5-Phase Plan](./docs/ROADMAP_AND_PHASES.md)
 
@@ -57,22 +68,22 @@ Detailed documentation and technical architecture reports are available in the [
 
 ## 🏗 Development Status
 
-All 5 core development phases are **100% Completed & Verified**:
+All core development phases are **100% Completed & Verified**:
 - **Phase 1 (Core Engine & CLI):** ✅ Completed & Verified (100% automated test coverage)
 - **Phase 2 (Icon Badging & Dock Distinction):** ✅ Completed & Verified (CoreGraphics + iconutil)
 - **Phase 3 (SwiftUI Native App & Dashboard):** ✅ Completed & Verified (`swift run DuplixApp`)
 - **Phase 4 (Multi-App QA & Hardening):** ✅ Completed & Verified (Chromium, Electron, Gecko, Native)
-- **Phase 5 (Packaging & DMG Release):** ✅ Completed & Verified (`dist/Duplix-1.3.0.dmg`)
+- **Phase 5 (Packaging, Voice Memo & Voicofski v1.4.0):** ✅ Completed & Verified (`dist/Duplix-1.4.0.dmg`, 22 automated tests)
 
 ---
 
 ## 📦 Installation & Releases
 
 ### Option 1: Apple Disk Image (DMG)
-Download the latest `Duplix-1.3.0.dmg` from the Releases section or build it locally:
+Download the latest `Duplix-1.4.0.dmg` from the Releases section or build it locally:
 ```bash
 ./scripts/build_dmg.sh
-open dist/Duplix-1.3.0.dmg
+open dist/Duplix-1.4.0.dmg
 ```
 Drag **Duplix.app** into your **Applications** folder.
 
@@ -136,7 +147,7 @@ duplix repair --all
 # Delete a clone cleanly
 swift run duplix delete "Antigravity Work"
 
-# Run automated test suite (16 automated unit & integration tests)
+# Run automated test suite (22 automated unit & integration tests)
 swift run DuplixTests
 ```
 

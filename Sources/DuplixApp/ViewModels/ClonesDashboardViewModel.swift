@@ -5,6 +5,7 @@ public enum NavigationSection: String, Hashable, CaseIterable {
     case clones = "My Clones"
     case scanner = "Installed Apps"
     case voiceMemo = "Voice Memo"
+    case voicofski = "Voicofski"
     case about = "About Duplix"
 
     public var icon: String {
@@ -12,6 +13,7 @@ public enum NavigationSection: String, Hashable, CaseIterable {
         case .clones: return "square.2.layers.3d"
         case .scanner: return "apps.ipad"
         case .voiceMemo: return "waveform"
+        case .voicofski: return "speaker.wave.2"
         case .about: return "info.circle"
         }
     }
