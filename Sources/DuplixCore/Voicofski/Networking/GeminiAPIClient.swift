@@ -224,6 +224,15 @@ public final class GeminiAPIClient: GeminiAPIClientProtocol {
             throw VoicofskiError.regionBlocked
         }
 
+        // Transient server overload / high demand (HTTP 503 / 500)
+        if http.statusCode == 503 ||
+            statusStr == "UNAVAILABLE" ||
+            lowerMsg.contains("high demand") ||
+            lowerMsg.contains("overloaded") ||
+            lowerMsg.contains("try again later") {
+            throw VoicofskiError.modelOverloaded(message)
+        }
+
         // Model not found / deprecated for new users (HTTP 404)
         if http.statusCode == 404 ||
             statusStr == "NOT_FOUND" ||

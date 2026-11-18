@@ -140,8 +140,13 @@ public struct VoicofskiView: View {
         HStack(spacing: 10) {
             Image(systemName: "hand.raised.fill")
                 .foregroundColor(.orange)
-            Text("Enable Accessibility to show the floating icon on text selection.")
-                .font(.caption)
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Enable Accessibility to show the floating icon on text selection.")
+                    .font(.caption.weight(.medium))
+                Text("After updating Duplix, remove (−) and re-add (+) it in Privacy Settings.")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
+            }
             Spacer()
             Button("Grant") {
                 engine.requestAccessibilityPermission()
@@ -448,7 +453,7 @@ public struct VoicofskiView: View {
                         Text(lang.displayName)
                     }
                     Text("·")
-                    Text(item.createdAt, style: .relative)
+                    Text(relativeTimeString(for: item.createdAt))
                 }
                 .font(.caption2)
                 .foregroundColor(.secondary)
@@ -554,5 +559,11 @@ public struct VoicofskiView: View {
             RoundedRectangle(cornerRadius: 10, style: .continuous)
                 .fill(Color(NSColor.controlBackgroundColor).opacity(0.6))
         )
+    }
+
+    private func relativeTimeString(for date: Date) -> String {
+        let formatter = RelativeDateTimeFormatter()
+        formatter.unitsStyle = .abbreviated
+        return formatter.localizedString(for: date, relativeTo: Date())
     }
 }

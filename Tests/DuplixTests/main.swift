@@ -574,9 +574,10 @@ final class TestSuite {
         // MARK: - Voicofski (v1.4.0) Automated Tests
         // ============================================================
 
-        runTest("Voicofski models lock gemini-3.8-flash-tts, gemini-3.8-flash translate, Lora/Bodi & 6 languages") {
+        runTest("Voicofski models lock gemini-3.8-flash-tts, translate fallback chain, Lora/Bodi & 6 languages") {
             try assert(VoicofskiModelConfig.ttsModel == "gemini-3.8-flash-tts", "TTS model must be gemini-3.8-flash-tts")
-            try assert(VoicofskiModelConfig.translationModel == "gemini-3.8-flash", "Translation model must be gemini-3.8-flash")
+            try assert(VoicofskiModelConfig.translationModels.contains("gemini-3.5-flash-lite"), "Translation chain should include gemini-3.5-flash-lite")
+            try assert(VoicofskiModelConfig.translationModels.contains("gemini-3.8-flash"), "Translation chain should include gemini-3.8-flash")
             try assert(!VoicofskiModelConfig.translationModels.contains(VoicofskiModelConfig.ttsModel), "Translation chain must never use TTS model")
             try assert(VoicofskiVoice.female.aiStudioVoiceName == "Lora", "Female voice must be Lora")
             try assert(VoicofskiVoice.male.aiStudioVoiceName == "Bodi", "Male voice must be Bodi")
@@ -667,19 +668,22 @@ final class TestSuite {
                 return (secret, model)
             }
             try assert(transResult.0 == "SECRET_KEY_1", "Key 1 should still handle Translation even when its TTS quota is full")
-            try assert(transResult.1 == "gemini-3.8-flash", "Translation should use primary gemini-3.8-flash first")
+            try assert(transResult.1 == VoicofskiModelConfig.translationModel, "Translation should use primary model first")
 
-            // If primary translation model hits 429 on Key 1, fall back to next model on Key 1 (and skip 404 gracefully)
-            let fallbackResult: (String, String) = try await pool.executeWithModelFallback(models: ["gemini-3.8-flash", "missing-model", "gemini-3.8-flash-lite"]) { secret, model in
-                if secret == "SECRET_KEY_1" && model == "gemini-3.8-flash" {
-                    throw VoicofskiError.quotaExceeded
+            // If primary translation model hits 503 overload and second hits 404, seamlessly fall back to third on Key 1!
+            let fallbackResult: (String, String) = try await pool.executeWithModelFallback(
+                models: ["gemini-3.5-flash-lite", "missing-model", "gemini-3.8-flash"],
+                maxOverloadRetries: 0
+            ) { secret, model in
+                if model == "gemini-3.5-flash-lite" {
+                    throw VoicofskiError.modelOverloaded("503 high demand")
                 }
                 if model == "missing-model" {
                     throw VoicofskiError.modelNotAvailable("404 not found")
                 }
                 return (secret, model)
             }
-            try assert(fallbackResult.0 == "SECRET_KEY_1" && fallbackResult.1 == "gemini-3.8-flash-lite", "Should fall back across translation models on Key 1 while skipping 404")
+            try assert(fallbackResult.0 == "SECRET_KEY_1" && fallbackResult.1 == "gemini-3.8-flash", "Should fall back seamlessly across 503 overload and 404 models on Key 1")
 
             // Exhaust Key 2 TTS as well -> must throw allKeysExhausted
             var threwAllExhausted = false

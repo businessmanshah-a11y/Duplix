@@ -229,6 +229,7 @@ public enum VoicofskiError: Error, LocalizedError, Equatable, Sendable {
     case quotaExceeded
     case invalidAPIKey(String)
     case modelNotAvailable(String)
+    case modelOverloaded(String)
     case regionBlocked
     case networkFailure(String)
     case emptyAudioResponse
@@ -248,6 +249,8 @@ public enum VoicofskiError: Error, LocalizedError, Equatable, Sendable {
             return detail.isEmpty ? "Invalid Google AI Studio API key." : "Invalid API key: \(detail)"
         case .modelNotAvailable(let detail):
             return "Model unavailable: \(detail)"
+        case .modelOverloaded(let detail):
+            return detail.isEmpty ? "Google AI Studio is temporarily experiencing high demand. Please try again in a moment." : "Temporarily overloaded: \(detail)"
         case .regionBlocked:
             return "Google AI Studio is unavailable in this region. Please check your VPN connection."
         case .networkFailure(let detail):
@@ -294,11 +297,12 @@ public enum VoicofskiModelConfig {
     public static let baseURL = "https://generativelanguage.googleapis.com/v1beta"
     public static let ttsModel = "gemini-3.8-flash-tts"
     /// Primary translation model (separate per-model quota from TTS).
-    public static let translationModel = "gemini-3.8-flash"
-    /// Ordered translation model fallback chain (per-key quota maximizes free daily capacity before switching keys).
+    public static let translationModel = "gemini-3.5-flash-lite"
+    /// Ordered translation model fallback chain (handles 503 high-demand spikes, 404 deprecations, and 429 per-model quotas automatically).
     public static let translationModels = [
+        "gemini-3.5-flash-lite",
         "gemini-3.8-flash",
-        "gemini-3.8-flash-lite",
+        "gemini-3-flash-preview",
         "gemini-2.5-flash-lite"
     ]
     public static let apiKeyStudioURL = "https://aistudio.google.com/apikey"

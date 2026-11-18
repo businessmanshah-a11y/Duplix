@@ -1,6 +1,6 @@
 cask "duplix" do
   version "1.4.0"
-  sha256 "b6fe7b15e51307ffc4e539f958273b087f8f1175d58cc58771cd84941b4eaeae"
+  sha256 "9b1a18a23378c90b0dec2c17bac81f5dec2c29ea314bdd9736ed961fb23d546e"
 
   url "https://businessmanshah-a11y.github.io/Duplix/downloads/Duplix.dmg"
   name "Duplix"

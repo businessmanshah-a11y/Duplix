@@ -231,10 +231,11 @@ public final class APIKeyPoolManager: @unchecked Sendable {
         }
     }
 
-    /// Executes an operation across a prioritized list of models per key (e.g. `["gemini-3.8-flash", "gemini-3.8-flash-lite"]`),
-    /// maximizing each key's per-model daily quota before moving sequentially to the next API key.
+    /// Executes an operation across a prioritized list of models per key (e.g. `["gemini-3.5-flash-lite", "gemini-3.8-flash", ...]`),
+    /// maximizing each key's per-model daily quota, skipping 404 unavailable models, and automatically falling back/retrying on 503 high-demand spikes.
     public func executeWithModelFallback<T>(
         models: [String],
+        maxOverloadRetries: Int = 1,
         _ operation: @Sendable (String, String) async throws -> T
     ) async throws -> T {
         _ = refreshCooldowns()
@@ -248,59 +249,82 @@ public final class APIKeyPoolManager: @unchecked Sendable {
         var sawExhausted = false
         var lastError: Error?
 
-        for meta in orderedKeys {
-            if meta.status == .invalid {
-                continue
+        for attempt in 0...max(0, maxOverloadRetries) {
+            if attempt > 0 {
+                // Brief backoff before retrying after transient 503 overload spikes
+                try? await Task.sleep(nanoseconds: UInt64(700_000_000 * attempt))
             }
 
-            guard let secret = try? keychain.loadSecret(forKeyID: meta.id), !secret.isEmpty else {
-                updateKeyState(id: meta.id, status: .invalid, nextResetAt: nil, lastError: "Key missing from Keychain.")
-                continue
-            }
+            var sawOverloadedThisPass = false
+            let currentKeys = listKeys()
 
-            for model in models {
-                // Skip this model on this key if it is still in daily cooldown
-                if let modelReset = meta.exhaustedModels[model], now < modelReset {
-                    sawExhausted = true
+            for meta in currentKeys {
+                if meta.status == .invalid {
                     continue
                 }
 
-                do {
-                    let result = try await operation(secret, model)
-                    markKeyModelUsedSuccessfully(id: meta.id, model: model)
-                    return result
-                } catch let error as VoicofskiError {
-                    switch error {
-                    case .quotaExceeded:
+                guard let secret = try? keychain.loadSecret(forKeyID: meta.id), !secret.isEmpty else {
+                    updateKeyState(id: meta.id, status: .invalid, nextResetAt: nil, lastError: "Key missing from Keychain.")
+                    continue
+                }
+
+                for model in models {
+                    // Skip this model on this key if it is still in daily cooldown
+                    if let modelReset = meta.exhaustedModels[model], now < modelReset {
                         sawExhausted = true
-                        markKeyModelExhausted(id: meta.id, model: model)
                         continue
-                    case .modelNotAvailable:
-                        // Try next fallback model without penalizing the key
-                        lastError = error
-                        continue
-                    case .invalidAPIKey:
-                        updateKeyState(id: meta.id, status: .invalid, nextResetAt: nil, lastError: error.localizedDescription)
-                        lastError = error
+                    }
+
+                    do {
+                        let result = try await operation(secret, model)
+                        markKeyModelUsedSuccessfully(id: meta.id, model: model)
+                        return result
+                    } catch let error as VoicofskiError {
+                        switch error {
+                        case .quotaExceeded:
+                            sawExhausted = true
+                            markKeyModelExhausted(id: meta.id, model: model)
+                            continue
+                        case .modelNotAvailable:
+                            // Skip deprecated/404 model without penalizing the key
+                            lastError = error
+                            continue
+                        case .modelOverloaded:
+                            // Immediately fall back to next model on 503 high-demand spike without penalizing key
+                            sawOverloadedThisPass = true
+                            lastError = error
+                            continue
+                        case .invalidAPIKey:
+                            updateKeyState(id: meta.id, status: .invalid, nextResetAt: nil, lastError: error.localizedDescription)
+                            lastError = error
+                            break
+                        case .regionBlocked, .networkFailure, .cancelled, .apiError, .emptyAudioResponse, .emptyTranslationResponse:
+                            throw error
+                        case .noAPIKeys, .allKeysExhausted:
+                            throw error
+                        }
+                        // Break inner model loop if key itself became invalid
                         break
-                    case .regionBlocked, .networkFailure, .cancelled, .apiError, .emptyAudioResponse, .emptyTranslationResponse:
-                        throw error
-                    case .noAPIKeys, .allKeysExhausted:
+                    } catch {
                         throw error
                     }
-                    // Break inner model loop if key itself became invalid
-                    break
-                } catch {
-                    throw error
                 }
+            }
+
+            // Only retry a second pass if we hit transient 503 overload spikes
+            if !sawOverloadedThisPass {
+                break
             }
         }
 
-        if sawExhausted {
+        if sawExhausted && lastError == nil {
             throw VoicofskiError.allKeysExhausted
         }
         if let lastError {
             throw lastError
+        }
+        if sawExhausted {
+            throw VoicofskiError.allKeysExhausted
         }
         throw VoicofskiError.noAPIKeys
     }
