@@ -95,7 +95,7 @@
       </h1>
 
       <p class="hero-description">
-        Clone apps in under 1 second with native APFS Copy-on-Write. Run independent accounts side-by-side with isolated macOS Keychains, sandboxed <code>$HOME</code> environments, distinct color-coded Dock icons, and a built-in global <code>⌥⌘</code> Voice Memo recorder.
+        Clone Mac apps in milliseconds with APFS Copy-on-Write, isolated Keychains, distinct Dock badges, and built-in Voice Memo.
       </p>
 
       <div class="hero-buttons">
@@ -172,7 +172,15 @@
                 </svg>
                 <span>Installed Apps</span>
               </button>
-              <button class="win-tab-btn" data-slide="2" aria-label="About Duplix View">
+              <button class="win-tab-btn" data-slide="2" aria-label="Voice Memo View">
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                  <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                  <line x1="12" y1="19" x2="12" y2="23"></line>
+                </svg>
+                <span>Voice Memo</span>
+              </button>
+              <button class="win-tab-btn" data-slide="3" aria-label="About Duplix View">
                 <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                   <circle cx="12" cy="12" r="10"></circle>
                   <line x1="12" y1="16" x2="12" y2="12"></line>
@@ -206,9 +214,17 @@
                     </svg>
                     <span class="sidebar-label">Installed Apps</span>
                   </div>
+                  <div class="sidebar-nav-item" data-switch="2">
+                    <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                      <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                    </svg>
+                    <span class="sidebar-label">Voice Memo</span>
+                    <span class="sidebar-live-dot"></span>
+                  </div>
 
                   <div class="sidebar-section-title" style="margin-top:20px;">System</div>
-                  <div class="sidebar-nav-item" data-switch="2">
+                  <div class="sidebar-nav-item" data-switch="3">
                     <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <circle cx="12" cy="12" r="10"></circle>
                       <line x1="12" y1="16" x2="12" y2="12"></line>
@@ -330,9 +346,17 @@
                     </svg>
                     <span class="sidebar-label">Installed Apps</span>
                   </div>
+                  <div class="sidebar-nav-item" data-switch="2">
+                    <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                      <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                    </svg>
+                    <span class="sidebar-label">Voice Memo</span>
+                    <span class="sidebar-live-dot"></span>
+                  </div>
 
                   <div class="sidebar-section-title" style="margin-top:20px;">System</div>
-                  <div class="sidebar-nav-item" data-switch="2">
+                  <div class="sidebar-nav-item" data-switch="3">
                     <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <circle cx="12" cy="12" r="10"></circle>
                       <line x1="12" y1="16" x2="12" y2="12"></line>
@@ -454,8 +478,8 @@
               </div>
             </div>
 
-            <!-- Screen 3: About Duplix -->
-            <div class="showcase-slide" data-title="Duplix Control Center — Architecture & About" data-index="2">
+            <!-- Screen 3: Native Voice Memo -->
+            <div class="showcase-slide" data-title="Duplix Control Center — Native Voice Memo" data-index="2">
               <div class="app-window-frame">
                 <!-- Sidebar -->
                 <aside class="app-sidebar">
@@ -476,9 +500,154 @@
                     </svg>
                     <span class="sidebar-label">Installed Apps</span>
                   </div>
+                  <div class="sidebar-nav-item active" data-switch="2">
+                    <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                      <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                    </svg>
+                    <span class="sidebar-label">Voice Memo</span>
+                    <span class="sidebar-live-dot"></span>
+                  </div>
 
                   <div class="sidebar-section-title" style="margin-top:20px;">System</div>
-                  <div class="sidebar-nav-item active" data-switch="2">
+                  <div class="sidebar-nav-item" data-switch="3">
+                    <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <line x1="12" y1="16" x2="12" y2="12"></line>
+                      <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                    </svg>
+                    <span class="sidebar-label">About Duplix</span>
+                  </div>
+                </aside>
+
+                <!-- Detail Area: Voice Memo View -->
+                <main class="app-detail-view app-detail-voicememo">
+                  <div class="vm-mock-header">
+                    <div class="vm-mock-avatar">
+                      <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                        <line x1="12" y1="19" x2="12" y2="23"></line>
+                      </svg>
+                    </div>
+                    <div>
+                      <div class="vm-mock-title-row">
+                        <span class="vm-mock-title">Voice Memo</span>
+                        <span class="vm-mock-pill-badge">Native Engine</span>
+                      </div>
+                      <div class="vm-mock-sub">Built directly into Duplix — global ⌥⌘ hotkey &amp; automatic ⌘V chat attach.</div>
+                    </div>
+                  </div>
+
+                  <div class="vm-mock-card vm-mock-status-card">
+                    <div class="vm-status-left">
+                      <span class="vm-dot-green"></span>
+                      <div>
+                        <div class="vm-card-heading">Voice Memo is Active in Menu Bar (🎙️)</div>
+                        <div class="vm-card-caption">Stays active even if you close this window. Press ⌥⌘ anywhere to record.</div>
+                      </div>
+                    </div>
+                    <button class="vm-btn-record" type="button">
+                      <svg width="11" height="11" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                      </svg>
+                      Record Now
+                    </button>
+                  </div>
+
+                  <div class="vm-perm-grid">
+                    <div class="vm-perm-item">
+                      <div class="vm-perm-left">
+                        <svg width="14" height="14" fill="none" stroke="#16a34a" stroke-width="2" viewBox="0 0 24 24">
+                          <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                          <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                        </svg>
+                        <div>
+                          <div class="vm-card-heading">Microphone</div>
+                          <div class="vm-card-caption">AAC 44.1 kHz capture</div>
+                        </div>
+                      </div>
+                      <span class="vm-perm-badge-ok">Granted</span>
+                    </div>
+
+                    <div class="vm-perm-item">
+                      <div class="vm-perm-left">
+                        <svg width="14" height="14" fill="none" stroke="#16a34a" stroke-width="2" viewBox="0 0 24 24">
+                          <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                          <path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 16h8"></path>
+                        </svg>
+                        <div>
+                          <div class="vm-card-heading">Accessibility</div>
+                          <div class="vm-card-caption">Global ⌥⌘ &amp; auto ⌘V</div>
+                        </div>
+                      </div>
+                      <span class="vm-perm-badge-ok">Granted</span>
+                    </div>
+                  </div>
+
+                  <div class="vm-mock-card vm-login-row">
+                    <div>
+                      <div class="vm-card-heading">Start Voice Memo automatically at macOS Login</div>
+                      <div class="vm-card-caption">Silently launches in the menu bar after every restart so ⌥⌘ is always ready.</div>
+                    </div>
+                    <div class="vm-mac-switch" aria-hidden="true"></div>
+                  </div>
+
+                  <!-- Live Floating HUD Pill Preview -->
+                  <div class="vm-hud-pill-preview" aria-label="Floating Voice Memo HUD Preview">
+                    <span class="vm-hud-dot"></span>
+                    <span class="vm-hud-timer">00:14</span>
+                    <div class="vm-hud-bars" aria-hidden="true">
+                      <span></span><span></span><span></span><span></span><span></span>
+                    </div>
+                    <span class="vm-hud-stop-btn" title="Stop & Attach">
+                      <svg width="10" height="10" fill="currentColor" viewBox="0 0 16 16">
+                        <rect x="3" y="3" width="10" height="10" rx="2"></rect>
+                      </svg>
+                    </span>
+                    <span class="vm-hud-cancel-btn" title="Cancel">
+                      <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 16 16">
+                        <path d="M4 4l8 8M12 4l-8 8" stroke-linecap="round"></path>
+                      </svg>
+                    </span>
+                  </div>
+                </main>
+              </div>
+            </div>
+
+            <!-- Screen 4: About Duplix -->
+            <div class="showcase-slide" data-title="Duplix Control Center — Architecture & About" data-index="3">
+              <div class="app-window-frame">
+                <!-- Sidebar -->
+                <aside class="app-sidebar">
+                  <div class="sidebar-section-title">Workspace</div>
+                  <div class="sidebar-nav-item" data-switch="0">
+                    <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                    <span class="sidebar-label">My Clones</span>
+                    <span class="sidebar-badge">1</span>
+                  </div>
+                  <div class="sidebar-nav-item" data-switch="1">
+                    <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="3" y="3" width="7" height="7"></rect>
+                      <rect x="14" y="3" width="7" height="7"></rect>
+                      <rect x="14" y="14" width="7" height="7"></rect>
+                      <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    <span class="sidebar-label">Installed Apps</span>
+                  </div>
+                  <div class="sidebar-nav-item" data-switch="2">
+                    <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                      <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                    </svg>
+                    <span class="sidebar-label">Voice Memo</span>
+                    <span class="sidebar-live-dot"></span>
+                  </div>
+
+                  <div class="sidebar-section-title" style="margin-top:20px;">System</div>
+                  <div class="sidebar-nav-item active" data-switch="3">
                     <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <circle cx="12" cy="12" r="10"></circle>
                       <line x1="12" y1="16" x2="12" y2="12"></line>
@@ -563,6 +732,7 @@
             <div class="slide-indicator active" data-slide="0"><div class="indicator-fill"></div></div>
             <div class="slide-indicator" data-slide="1"><div class="indicator-fill"></div></div>
             <div class="slide-indicator" data-slide="2"><div class="indicator-fill"></div></div>
+            <div class="slide-indicator" data-slide="3"><div class="indicator-fill"></div></div>
           </div>
         </div>
       </div>
@@ -914,6 +1084,13 @@
               <td>Moderate</td>
               <td><span class="status-icon-bad">Heavy (4GB+ RAM)</span></td>
               <td>Low</td>
+            </tr>
+            <tr>
+              <td><strong>Built-in Voice Memo (⌥⌘)</strong></td>
+              <td class="duplix-highlight-col"><span class="status-icon-good">Native HUD &amp; Auto-Paste</span></td>
+              <td><span class="status-icon-bad">None</span></td>
+              <td><span class="status-icon-bad">None</span></td>
+              <td><span class="status-icon-bad">None</span></td>
             </tr>
             <tr>
               <td><strong>Price & Licensing</strong></td>

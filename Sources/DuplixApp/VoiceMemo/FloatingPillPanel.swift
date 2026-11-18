@@ -35,7 +35,7 @@ final class AudioMeterView: NSView {
             let minHeight: CGFloat = 3.0
             bar.frame = CGRect(x: x, y: (bounds.height - minHeight) / 2.0, width: barWidth, height: minHeight)
             bar.cornerRadius = 1.5
-            bar.backgroundColor = NSColor(calibratedRed: 0.95, green: 0.35, blue: 0.25, alpha: 0.85).cgColor
+            bar.backgroundColor = NSColor(calibratedRed: 0.98, green: 0.36, blue: 0.28, alpha: 0.9).cgColor
             layer?.addSublayer(bar)
             bars.append(bar)
         }
@@ -56,9 +56,9 @@ final class AudioMeterView: NSView {
             bar.frame = CGRect(x: bar.frame.origin.x, y: y, width: bar.frame.width, height: targetHeight)
 
             if level > 0.15 {
-                bar.backgroundColor = NSColor(calibratedRed: 1.0, green: 0.28, blue: 0.22, alpha: 1.0).cgColor
+                bar.backgroundColor = NSColor(calibratedRed: 1.0, green: 0.32, blue: 0.25, alpha: 1.0).cgColor
             } else {
-                bar.backgroundColor = NSColor(calibratedRed: 0.65, green: 0.65, blue: 0.65, alpha: 0.45).cgColor
+                bar.backgroundColor = NSColor(calibratedWhite: 1.0, alpha: 0.35).cgColor
             }
         }
         CATransaction.commit()
@@ -76,7 +76,7 @@ final class FloatingPillPanel: NSPanel {
     var onStop: (() -> Void)?
     var onCancel: (() -> Void)?
 
-    private static let pillWidth: CGFloat = 248
+    private static let pillWidth: CGFloat = 212
     private static let pillHeight: CGFloat = 44
 
     init() {
@@ -95,6 +95,7 @@ final class FloatingPillPanel: NSPanel {
         self.hasShadow = true
         self.isMovableByWindowBackground = true
         self.hidesOnDeactivate = false
+        self.appearance = NSAppearance(named: .darkAqua)
 
         setupUI(width: Self.pillWidth, height: Self.pillHeight)
     }
@@ -111,20 +112,22 @@ final class FloatingPillPanel: NSPanel {
 
     private func setupUI(width: CGFloat, height: CGFloat) {
         let visualEffect = NSVisualEffectView(frame: NSRect(x: 0, y: 0, width: width, height: height))
+        visualEffect.appearance = NSAppearance(named: .darkAqua)
         visualEffect.material = .hudWindow
         visualEffect.blendingMode = .behindWindow
         visualEffect.state = .active
         visualEffect.wantsLayer = true
+        visualEffect.layer?.backgroundColor = NSColor(calibratedWhite: 0.08, alpha: 0.72).cgColor
         visualEffect.layer?.cornerRadius = height / 2
         visualEffect.layer?.masksToBounds = true
-        visualEffect.layer?.borderColor = NSColor.white.withAlphaComponent(0.2).cgColor
+        visualEffect.layer?.borderColor = NSColor.white.withAlphaComponent(0.18).cgColor
         visualEffect.layer?.borderWidth = 1.0
 
-        // Red pulsing dot
-        pulseDot = NSView(frame: NSRect(x: 14, y: (height - 10) / 2, width: 10, height: 10))
+        // Red pulsing recording indicator dot
+        pulseDot = NSView(frame: NSRect(x: 15, y: (height - 9) / 2, width: 9, height: 9))
         pulseDot.wantsLayer = true
         pulseDot.layer?.backgroundColor = NSColor.systemRed.cgColor
-        pulseDot.layer?.cornerRadius = 5
+        pulseDot.layer?.cornerRadius = 4.5
         visualEffect.addSubview(pulseDot)
 
         let pulseAnimation = CABasicAnimation(keyPath: "opacity")
@@ -136,14 +139,14 @@ final class FloatingPillPanel: NSPanel {
         pulseAnimation.repeatCount = .infinity
         pulseDot.layer?.add(pulseAnimation, forKey: "pulse")
 
-        // Timer Label
-        timerLabel = NSTextField(frame: NSRect(x: 30, y: (height - 20) / 2 - 1, width: 50, height: 20))
+        // Timer Label (high-contrast white monospaced digits)
+        timerLabel = NSTextField(frame: NSRect(x: 31, y: (height - 19) / 2 - 1, width: 48, height: 19))
         timerLabel.isEditable = false
         timerLabel.isSelectable = false
         timerLabel.isBezeled = false
         timerLabel.drawsBackground = false
         timerLabel.textColor = .white
-        timerLabel.font = NSFont.monospacedDigitSystemFont(ofSize: 13, weight: .bold)
+        timerLabel.font = NSFont.monospacedDigitSystemFont(ofSize: 13, weight: .semibold)
         timerLabel.stringValue = "00:00"
         visualEffect.addSubview(timerLabel)
 
@@ -151,31 +154,37 @@ final class FloatingPillPanel: NSPanel {
         meterView = AudioMeterView(frame: NSRect(x: 84, y: (height - 22) / 2, width: 42, height: 22))
         visualEffect.addSubview(meterView)
 
-        // Stop Button (Save & Attach)
-        let stopButton = NSButton(frame: NSRect(x: 138, y: (height - 28) / 2, width: 60, height: 28))
-        stopButton.bezelStyle = .rounded
+        // Stop & Attach Button (Universal Icon-Only, no language text)
+        let stopButton = NSButton(frame: NSRect(x: 136, y: (height - 30) / 2, width: 30, height: 30))
         stopButton.isBordered = false
         stopButton.wantsLayer = true
         stopButton.layer?.backgroundColor = NSColor.systemRed.cgColor
-        stopButton.layer?.cornerRadius = 14
-        stopButton.title = "ثبت ■"
-        stopButton.font = NSFont.systemFont(ofSize: 11, weight: .bold)
+        stopButton.layer?.cornerRadius = 15
+        stopButton.title = ""
+        stopButton.imagePosition = .imageOnly
+        if let stopImg = NSImage(systemSymbolName: "stop.fill", accessibilityDescription: "Stop and Attach") {
+            let config = NSImage.SymbolConfiguration(pointSize: 11, weight: .bold)
+            stopButton.image = stopImg.withSymbolConfiguration(config)
+        }
         stopButton.contentTintColor = .white
         stopButton.target = self
         stopButton.action = #selector(stopClicked)
-        stopButton.toolTip = "Stop & Attach to Chat (⌥⌘)"
+        stopButton.toolTip = "Stop & Attach (⌥⌘)"
         visualEffect.addSubview(stopButton)
 
-        // Cancel Button (Esc)
-        let cancelButton = NSButton(frame: NSRect(x: 206, y: (height - 28) / 2, width: 28, height: 28))
-        cancelButton.bezelStyle = .circular
+        // Cancel Button (Universal Icon-Only)
+        let cancelButton = NSButton(frame: NSRect(x: 174, y: (height - 28) / 2, width: 28, height: 28))
         cancelButton.isBordered = false
         cancelButton.wantsLayer = true
-        cancelButton.layer?.backgroundColor = NSColor.white.withAlphaComponent(0.15).cgColor
+        cancelButton.layer?.backgroundColor = NSColor.white.withAlphaComponent(0.14).cgColor
         cancelButton.layer?.cornerRadius = 14
-        cancelButton.title = "✕"
-        cancelButton.font = NSFont.systemFont(ofSize: 12, weight: .semibold)
-        cancelButton.contentTintColor = .lightGray
+        cancelButton.title = ""
+        cancelButton.imagePosition = .imageOnly
+        if let cancelImg = NSImage(systemSymbolName: "xmark", accessibilityDescription: "Cancel") {
+            let config = NSImage.SymbolConfiguration(pointSize: 11, weight: .semibold)
+            cancelButton.image = cancelImg.withSymbolConfiguration(config)
+        }
+        cancelButton.contentTintColor = NSColor.white.withAlphaComponent(0.85)
         cancelButton.target = self
         cancelButton.action = #selector(cancelClicked)
         cancelButton.toolTip = "Cancel (Esc)"

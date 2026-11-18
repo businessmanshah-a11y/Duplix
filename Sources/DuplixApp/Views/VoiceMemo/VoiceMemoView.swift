@@ -336,10 +336,7 @@ public struct VoiceMemoView: View {
                 .font(.headline)
 
             VStack(spacing: 12) {
-                Toggle(isOn: Binding(
-                    get: { engine.launchAtLogin },
-                    set: { engine.setLaunchAtLogin($0) }
-                )) {
+                HStack(spacing: 12) {
                     VStack(alignment: .leading, spacing: 2) {
                         Text("Start Voice Memo automatically at macOS Login")
                             .font(.subheadline)
@@ -348,12 +345,18 @@ public struct VoiceMemoView: View {
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
+                    Spacer()
+                    Toggle("", isOn: Binding(
+                        get: { engine.launchAtLogin },
+                        set: { engine.setLaunchAtLogin($0) }
+                    ))
+                    .labelsHidden()
+                    .toggleStyle(.switch)
                 }
-                .toggleStyle(.switch)
 
                 Divider()
 
-                Toggle(isOn: $engine.autoStartWithDuplix) {
+                HStack(spacing: 12) {
                     VStack(alignment: .leading, spacing: 2) {
                         Text("Activate Voice Memo when Duplix opens")
                             .font(.subheadline)
@@ -362,8 +365,11 @@ public struct VoiceMemoView: View {
                             .font(.caption)
                             .foregroundColor(.secondary)
                     }
+                    Spacer()
+                    Toggle("", isOn: $engine.autoStartWithDuplix)
+                        .labelsHidden()
+                        .toggleStyle(.switch)
                 }
-                .toggleStyle(.switch)
             }
             .padding(16)
             .background(
