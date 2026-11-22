@@ -7,7 +7,7 @@
   Run multiple fully isolated instances of any macOS app simultaneously with independent accounts, data, and Dock icons.
   <br><br>
   <a href="https://businessmanshah-a11y.github.io/Duplix/"><img src="https://img.shields.io/badge/Website-Live%20Demo-6366f1?style=for-the-badge&logo=safari&logoColor=white" alt="Live Website"></a>
-  <a href="https://github.com/businessmanshah-a11y/Duplix/releases"><img src="https://img.shields.io/badge/Download-.DMG%20(2.5MB)-10b981?style=for-the-badge&logo=apple&logoColor=white" alt="Download DMG"></a>
+  <a href="https://github.com/businessmanshah-a11y/Duplix/releases"><img src="https://img.shields.io/badge/Download-.DMG%20Universal%20(3.9MB)-10b981?style=for-the-badge&logo=apple&logoColor=white" alt="Download DMG"></a>
   <a href="https://github.com/businessmanshah-a11y/Duplix/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" alt="MIT License"></a>
 </p>
 
@@ -27,7 +27,7 @@
 - **🔒 Deep Multi-Layer Isolation (v1.2.0):** Each clone gets its own dedicated macOS Keychain (`duplix.keychain-db`), isolated `HOME` / `CFFIXED_USER_HOME` / `GEMINI_DIR`, unique `CFBundleURLSchemes`, data directory, cookies, and cache — keeping Electron and Go-keyring accounts (like Antigravity IDE & Antigravity 2.0) 100% independent while bridging `.ssh` and `.gitconfig`.
 - **⚡️ Zero Extra Disk Space:** Leverages **APFS Copy-on-Write (CoW)** to duplicate apps instantly without consuming extra storage.
 - **🎨 Distinct Dock Icons:** Color-coded badges and custom labels so you instantly recognize which project or account you are working in.
-- **🛡 Apple Silicon Native:** Full ad-hoc code signing and Gatekeeper compliance for M1/M2/M3/M4 and Intel Macs.
+- **🛡 Universal 2 Native (Apple Silicon & Intel):** Full ad-hoc code signing and Gatekeeper compliance for Apple Silicon (M1/M2/M3/M4) and Intel Macs.
 - **💸 100% Free & Open-Source:** No subscriptions, no license keys, no trial periods.
 
 ---

@@ -89,7 +89,7 @@ final class TestSuite {
         case .gecko:
             let omniJa = resourcesURL.appendingPathComponent("omni.ja")
             try "mock omni".write(to: omniJa, atomically: true, encoding: .utf8)
-        case .nativeCocoa, .unknown:
+        case .nativeCocoa, .native, .unknown:
             break
         }
 
@@ -775,6 +775,151 @@ final class TestSuite {
             _ = try storage.deleteHistoryItem(id: itemID)
             try assert(storage.loadHistory().isEmpty, "History should be empty after deletion")
             try assert(!FileManager.default.fileExists(atPath: saved.fileURL.path), "Audio file must be cleaned up on delete")
+        }
+
+        // ==========================================
+        // Phase 2: Cross-Platform (Windows & Linux) Tests
+        // ==========================================
+
+        runTest("PlatformPaths correctly resolves idiomatic directory structures for macOS, Linux, and Windows") {
+            let mockHome = URL(fileURLWithPath: "/mock/home/developer")
+            
+            let macPaths = PlatformPaths(platform: .macOS, homeDirectoryURL: mockHome)
+            try assert(macPaths.registryFileURL.path.contains("Library/Application Support/Duplix/clones.json"), "macOS registry path mismatch")
+            try assert(macPaths.dataRootDirectoryURL.path.contains("Library/Application Support/Duplix/data"), "macOS data path mismatch")
+            try assert(macPaths.launcherDirectoryURL.path.contains("Applications/Duplix Clones"), "macOS launcher path mismatch")
+
+            let linuxPaths = PlatformPaths(platform: .linux, homeDirectoryURL: mockHome)
+            try assert(linuxPaths.registryFileURL.path == "/mock/home/developer/.config/duplix/clones.json", "Linux registry path mismatch")
+            try assert(linuxPaths.dataRootDirectoryURL.path == "/mock/home/developer/.local/share/duplix/data", "Linux data path mismatch")
+            try assert(linuxPaths.launcherDirectoryURL.path == "/mock/home/developer/.local/share/applications", "Linux launcher path mismatch")
+            try assert(linuxPaths.dataDirectoryForClone(id: "test-uuid-123").path == "/mock/home/developer/.local/share/duplix/data/test-uuid-123", "Linux clone data path mismatch")
+
+            let winPaths = PlatformPaths(platform: .windows, homeDirectoryURL: mockHome)
+            try assert(winPaths.registryFileURL.path.contains("Duplix/clones.json"), "Windows registry path mismatch")
+            try assert(winPaths.dataRootDirectoryURL.path.contains("Duplix/data"), "Windows data path mismatch")
+            try assert(winPaths.launcherDirectoryURL.path.contains("Duplix Clones"), "Windows launcher path mismatch")
+        }
+
+        runTest("WindowsLauncherGenerator creates valid cmd batch script and powershell shortcut arguments") {
+            let generator = WindowsLauncherGenerator()
+            let exePath = "C:\\Program Files\\VSCode\\Code.exe"
+            let dataPath = "C:\\Users\\User\\AppData\\Local\\Duplix\\data\\clone-1"
+
+            let cmdScript = generator.generateCmdScript(
+                executablePath: exePath,
+                dataDirectoryPath: dataPath,
+                engineType: .electron
+            )
+            try assert(cmdScript.contains("@echo off"), "CMD script must contain @echo off")
+            try assert(cmdScript.contains("--user-data-dir=\"C:\\Users\\User\\AppData\\Local\\Duplix\\data\\clone-1\""), "CMD script must isolate user-data-dir")
+            try assert(cmdScript.contains(".gitconfig"), "CMD script should bridge gitconfig")
+            try assert(cmdScript.contains(".ssh"), "CMD script should bridge ssh")
+
+            let ps1Script = generator.generatePowerShellShortcutScript(
+                shortcutPath: "C:\\Users\\User\\Desktop\\VSCode Clone.lnk",
+                targetExePath: exePath,
+                dataDirectoryPath: dataPath,
+                engineType: .electron,
+                iconPath: "C:\\Icons\\custom.ico",
+                description: "Duplix Isolated VSCode"
+            )
+            try assert(ps1Script.contains("WScript.Shell"), "PowerShell script must use WScript.Shell")
+            try assert(ps1Script.contains("--user-data-dir="), "PowerShell shortcut must pass user-data-dir argument")
+            try assert(ps1Script.contains("custom.ico"), "PowerShell shortcut must assign icon")
+            try assert(ps1Script.contains("$Shortcut.Save()"), "PowerShell shortcut must call Save()")
+        }
+
+        runTest("LinuxLauncherGenerator creates valid bwrap isolation script and FreeDesktop desktop entry") {
+            let generator = LinuxLauncherGenerator()
+            let exePath = "/usr/bin/code"
+            let dataPath = "/home/developer/.local/share/duplix/data/clone-2"
+
+            let bwrapScript = generator.generateBwrapScript(
+                executablePath: exePath,
+                appName: "VS Code",
+                dataDirectoryPath: dataPath,
+                engineType: .electron
+            )
+            try assert(bwrapScript.contains("bwrap"), "Linux launcher must configure bwrap")
+            try assert(bwrapScript.contains("XDG_CONFIG_HOME"), "Linux launcher must set XDG_CONFIG_HOME")
+            try assert(bwrapScript.contains("XDG_DATA_HOME"), "Linux launcher must set XDG_DATA_HOME")
+            try assert(bwrapScript.contains("--bind \"$CONFIG_DIR\" \"$HOME/.config\""), "Linux launcher must isolate config directory")
+
+            let desktopEntry = generator.generateDesktopEntry(
+                cloneName: "VS Code (Work Clone)",
+                launcherScriptPath: "/home/developer/.local/share/duplix/launchers/launch-2.sh",
+                iconPath: "/home/developer/.local/share/icons/duplix-work.png"
+            )
+            try assert(desktopEntry.contains("[Desktop Entry]"), "Desktop entry must have header")
+            try assert(desktopEntry.contains("Type=Application"), "Desktop entry type must be Application")
+            try assert(desktopEntry.contains("Name=VS Code (Work Clone)"), "Desktop entry name mismatch")
+            try assert(desktopEntry.contains("Categories=Utility;Development;"), "Desktop entry categories mismatch")
+            try assert(desktopEntry.contains("Exec=/home/developer/.local/share/duplix/launchers/launch-2.sh %U"), "Desktop entry Exec mismatch")
+        }
+
+        // ==========================================
+        // Phase 3: Mobile (Android & iOS) Tests
+        // ==========================================
+
+        runTest("MobileCloneRecord encodes, decodes and manages multi-profile freeze toggles") {
+            var clone = MobileCloneRecord(
+                packageName: "com.instagram.android",
+                sourceAppName: "Instagram",
+                customName: "Instagram Shop",
+                profileId: 2,
+                badgeLabel: "SHOP",
+                badgeColorHex: "#7c3aed",
+                isFrozen: false
+            )
+
+            try assert(!clone.isFrozen, "New mobile clone should not be frozen by default")
+            clone.toggleFreeze()
+            try assert(clone.isFrozen, "Mobile clone should be frozen after toggle")
+            clone.toggleFreeze()
+            try assert(!clone.isFrozen, "Mobile clone should be unfrozen after second toggle")
+
+            let encoder = JSONEncoder()
+            let data = try encoder.encode(clone)
+            let decoder = JSONDecoder()
+            let decoded = try decoder.decode(MobileCloneRecord.self, from: data)
+
+            try assert(decoded.packageName == "com.instagram.android", "Decoded package name mismatch")
+            try assert(decoded.customName == "Instagram Shop", "Decoded custom name mismatch")
+            try assert(decoded.profileId == 2, "Decoded profileId mismatch")
+            try assert(decoded.badgeLabel == "SHOP", "Decoded badgeLabel mismatch")
+        }
+
+        runTest("AndroidWorkProfileBridge generates valid pm and dpm system commands") {
+            let bridge = AndroidWorkProfileBridge()
+            let pkg = "com.instagram.android"
+
+            let installCmd = bridge.buildInstallExistingPackageCommand(packageName: pkg, profileId: 1)
+            try assert(installCmd == "pm install-existing --user 1 com.instagram.android", "Android pm install command mismatch")
+
+            let suspendCmd = bridge.buildSuspendPackageCommand(packageName: pkg, profileId: 1, suspend: true)
+            try assert(suspendCmd == "pm suspend --user 1 com.instagram.android", "Android pm suspend command mismatch")
+
+            let unsuspendCmd = bridge.buildSuspendPackageCommand(packageName: pkg, profileId: 1, suspend: false)
+            try assert(unsuspendCmd == "pm unsuspend --user 1 com.instagram.android", "Android pm unsuspend command mismatch")
+
+            try assert(bridge.processTextIntentAction == "android.intent.action.PROCESS_TEXT", "ProcessText intent action mismatch")
+            try assert(bridge.generateProcessTextActivityManifestSnippet().contains("Duplix Voice"), "Manifest snippet mismatch")
+        }
+
+        runTest("IOSCompanionBridge generates valid deep-link URLs for Action Button and Share Sheet") {
+            let bridge = IOSCompanionBridge()
+
+            let memoURL = bridge.buildVoiceMemoLaunchURL(autoRecord: true)
+            try assert(memoURL?.scheme == "duplix-voice", "iOS memo URL scheme mismatch")
+            try assert(memoURL?.host == "memo", "iOS memo URL host mismatch")
+            try assert(memoURL?.absoluteString.contains("action=start_recording") == true, "iOS memo URL query mismatch")
+
+            let speakURL = bridge.buildVoicofskiSpeakURL(text: "سلام دنیا", languageCode: "fa")
+            try assert(speakURL?.scheme == "duplix-voice", "iOS speak URL scheme mismatch")
+            try assert(speakURL?.host == "speak", "iOS speak URL host mismatch")
+            try assert(speakURL?.absoluteString.contains("lang=fa") == true, "iOS speak URL language query mismatch")
+            try assert(bridge.appGroupIdentifier == "group.com.duplix.shared", "iOS App Group identifier mismatch")
         }
 
         print("\n-------------------------------------------")

@@ -9,20 +9,35 @@ MACOS_DIR="$CONTENTS_DIR/MacOS"
 RESOURCES_DIR="$CONTENTS_DIR/Resources"
 ENTITLEMENTS="$DIR/scripts/duplix_entitlements.plist"
 
-echo "==> Building Duplix release binaries with Swift..."
+echo "==> Building Duplix release binaries with Swift for Universal 2 (arm64 + x86_64)..."
 cd "$DIR"
-swift build -c release
+swift build -c release --arch arm64 --arch x86_64
+BIN_DIR="$(swift build -c release --arch arm64 --arch x86_64 --show-bin-path)"
+
+if [ ! -d "$BIN_DIR" ]; then
+    if [ -d "$DIR/.build/apple/Products/Release" ]; then
+        BIN_DIR="$DIR/.build/apple/Products/Release"
+    elif [ -d "$DIR/.build/out/Products/Release" ]; then
+        BIN_DIR="$DIR/.build/out/Products/Release"
+    elif [ -d "$DIR/.build/release" ]; then
+        BIN_DIR="$DIR/.build/release"
+    fi
+fi
 
 echo "==> Creating Duplix.app bundle structure..."
 rm -rf "$APP_DIR"
 mkdir -p "$MACOS_DIR"
 mkdir -p "$RESOURCES_DIR"
 
-echo "==> Copying executables..."
-cp "$DIR/.build/release/DuplixApp" "$MACOS_DIR/DuplixApp"
-cp "$DIR/.build/release/duplix" "$MACOS_DIR/duplix"
+echo "==> Copying executables from $BIN_DIR..."
+cp "$BIN_DIR/DuplixApp" "$MACOS_DIR/DuplixApp"
+cp "$BIN_DIR/duplix" "$MACOS_DIR/duplix"
 chmod +x "$MACOS_DIR/DuplixApp"
 chmod +x "$MACOS_DIR/duplix"
+
+echo "==> Verifying Universal 2 architectures..."
+lipo -info "$MACOS_DIR/DuplixApp"
+lipo -info "$MACOS_DIR/duplix"
 
 echo "==> Generating AppIcon.icns..."
 swift "$DIR/scripts/generate_app_icon.swift" "$RESOURCES_DIR/AppIcon.icns"

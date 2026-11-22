@@ -210,7 +210,7 @@ public struct CloneCardView: View {
             switch engine {
             case .electron: return (.purple, "Electron")
             case .gecko: return (.orange, "Gecko")
-            case .nativeCocoa: return (.blue, "Native")
+            case .nativeCocoa, .native: return (.blue, "Native")
             case .unknown: return (.gray, "Generic")
             }
         }()

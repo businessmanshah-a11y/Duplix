@@ -31,6 +31,7 @@
         <ul class="nav-menu">
           <li><a href="#features" class="nav-item-link">Features</a></li>
           <li><a href="#simulator" class="nav-item-link">Live Playground</a></li>
+          <li><a href="#downloads" class="nav-item-link">Downloads</a></li>
           <li><a href="#compare" class="nav-item-link">Comparison</a></li>
           <li><a href="#faq" class="nav-item-link">FAQ</a></li>
           <li><a href="https://github.com/businessmanshah-a11y/Duplix" target="_blank" class="nav-item-link">Source</a></li>
@@ -44,11 +45,11 @@
           </svg>
           GitHub
         </a>
-        <a href="downloads/Duplix.dmg?v=1.4.0" download="Duplix.dmg" class="btn btn-primary nav-desktop-only">
+        <a href="#downloads" class="btn btn-primary nav-desktop-only">
           <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
           </svg>
-          Download DMG
+          Download Universal
         </a>
         <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Open navigation menu" aria-expanded="false">
           <span class="hamburger-line"></span>
@@ -63,6 +64,7 @@
       <ul class="mobile-nav-menu">
         <li><a href="#features" class="mobile-nav-link">Features</a></li>
         <li><a href="#simulator" class="mobile-nav-link">Live Playground</a></li>
+        <li><a href="#downloads" class="mobile-nav-link">Downloads</a></li>
         <li><a href="#compare" class="mobile-nav-link">Comparison</a></li>
         <li><a href="#faq" class="mobile-nav-link">FAQ</a></li>
         <li><a href="https://github.com/businessmanshah-a11y/Duplix" target="_blank" class="mobile-nav-link">GitHub Source</a></li>
@@ -72,7 +74,7 @@
           <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
           </svg>
-          Download Duplix.dmg (2.5 MB)
+          Download Universal DMG (3.9 MB)
         </a>
       </div>
     </div>
@@ -81,12 +83,12 @@
   <!-- Hero Section -->
   <section class="hero-section">
     <div class="container">
-      <a href="#" id="ph-pill-link" class="ph-pill">
+      <a href="#downloads" id="ph-pill-link" class="ph-pill">
         <svg class="ph-badge-icon" viewBox="0 0 24 24" fill="currentColor">
-          <circle cx="12" cy="12" r="10" fill="#f59e0b" fill-opacity="0.2"/>
-          <path d="M12 6.5H9v11h2v-4h1a3.5 3.5 0 000-7zm0 5h-1v-3h1a1.5 1.5 0 010 3z" fill="#f59e0b"/>
+          <circle cx="12" cy="12" r="10" fill="#10b981" fill-opacity="0.2"/>
+          <path d="M12 6.5H9v11h2v-4h1a3.5 3.5 0 000-7zm0 5h-1v-3h1a1.5 1.5 0 010 3z" fill="#10b981"/>
         </svg>
-        New in v1.4.0 — Voicofski AI Voice &amp; Translate
+        Universal 2 Release — Native Apple Silicon &amp; Intel Support
       </a>
 
       <h1 class="hero-heading">
@@ -103,7 +105,11 @@
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
           </svg>
-          Download Duplix.dmg (2.5 MB)
+          Download Universal DMG (3.9 MB)
+        </a>
+
+        <a href="#downloads" class="btn btn-ghost btn-lg">
+          All Platforms
         </a>
 
         <div class="cli-box" id="cli-copy-box" title="Click to copy one-line Terminal installer">
@@ -931,6 +937,14 @@
             </svg>
             <span>Dock Badging Simulator</span>
           </button>
+          <button class="pg-switch-btn" id="pg-tab-mobile" data-pg="mobile" role="tab" aria-selected="false">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <rect x="5" y="2" width="14" height="20" rx="3" ry="3"></rect>
+              <line x1="12" y1="18" x2="12.01" y2="18"></line>
+            </svg>
+            <span>Duplix Mobile (4x Instagram)</span>
+            <span class="pg-new-pill">Phase 3</span>
+          </button>
         </div>
       </div>
 
@@ -1229,6 +1243,207 @@
             <!-- Telegram -->
             <div class="dock-slot">
               <img src="assets/logos/telegram.svg" class="dock-slot-icon dock-icon-full" alt="Telegram">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Playground Panel 3: Duplix Mobile Interactive Simulator -->
+      <div class="simulator-panel reveal-on-scroll" id="pg-panel-mobile" style="display:none;">
+        <div class="sim-settings">
+          <div>
+            <div class="field-label">
+              <svg class="label-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <rect x="5" y="2" width="14" height="20" rx="3" ry="3"></rect>
+                <line x1="12" y1="18" x2="12.01" y2="18"></line>
+              </svg>
+              Mobile View Mode
+            </div>
+            <div class="vf-sample-grid">
+              <button class="vf-sample-btn active" id="mob-switch-clones" type="button">📱 4x Clones</button>
+              <button class="vf-sample-btn" id="mob-switch-voice" type="button">🔊 Voicofski</button>
+              <button class="vf-sample-btn" id="mob-switch-memo" type="button">🎙️ Voice Memo</button>
+            </div>
+          </div>
+
+          <div>
+            <div class="field-label">
+              <svg class="label-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              </svg>
+              Mobile Architecture Engine
+            </div>
+            <div class="mobile-info-card">
+              <p><strong>Android:</strong> Enterprise Work Profile isolation via <code>DevicePolicyManager</code>. Zero root, 100% Google Play &amp; FCM push notification compliance.</p>
+              <p style="margin-top:8px;"><strong>iOS:</strong> Share Sheet action extension + Action Button / Siri Shortcuts companion.</p>
+            </div>
+          </div>
+
+          <div>
+            <button class="btn btn-primary btn-block" id="mob-add-clone-btn" type="button">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              + Add 5th Clone (Telegram)
+            </button>
+          </div>
+        </div>
+
+        <!-- Phone Frame -->
+        <div class="mobile-phone-stage">
+          <div class="mobile-phone-frame">
+            <div class="mobile-phone-notch">
+              <div class="notch-camera"></div>
+              <div class="notch-speaker"></div>
+            </div>
+
+            <!-- Phone Screen -->
+            <div class="mobile-screen-content">
+              <!-- Status bar -->
+              <div class="mobile-status-header">
+                <span>14:15</span>
+                <div class="mobile-status-icons">
+                  <span>5G</span>
+                  <span>98%</span>
+                </div>
+              </div>
+
+              <!-- Top Bar inside phone -->
+              <div class="phone-app-header">
+                <span class="phone-app-title">Duplix Mobile</span>
+                <span class="phone-profile-pill">Work Sandbox</span>
+              </div>
+
+              <!-- Screen 1: Clones Dashboard (Default) -->
+              <div class="phone-subview active" id="phone-view-clones">
+                <div class="phone-view-heading">
+                  <h4>Active Clones (4)</h4>
+                  <span class="phone-sub-badge">Instagram Fleet</span>
+                </div>
+
+                <div class="mobile-clones-list" id="mobile-clones-container">
+                  <!-- Clone 1: Main -->
+                  <div class="mobile-clone-item" id="mob-clone-1">
+                    <div class="mob-clone-icon-wrap" style="border-color:#4f46e5;">
+                      <img src="assets/logos/instagram.svg" alt="Instagram" class="mob-app-img" onerror="this.src='assets/logos/antigravity.png'">
+                      <span class="mob-clone-badge" style="background:#4f46e5;">MAIN</span>
+                    </div>
+                    <div class="mob-clone-meta">
+                      <span class="mob-clone-title">Instagram (Personal)</span>
+                      <span class="mob-clone-sub">Profile 0 • @alex_dev</span>
+                    </div>
+                    <button class="mob-freeze-toggle active" title="Toggle Freeze" data-clone="1">Active</button>
+                  </div>
+
+                  <!-- Clone 2: Shop -->
+                  <div class="mobile-clone-item" id="mob-clone-2">
+                    <div class="mob-clone-icon-wrap" style="border-color:#10b981;">
+                      <img src="assets/logos/instagram.svg" alt="Instagram" class="mob-app-img" onerror="this.src='assets/logos/antigravity.png'">
+                      <span class="mob-clone-badge" style="background:#10b981;">SHOP</span>
+                    </div>
+                    <div class="mob-clone-meta">
+                      <span class="mob-clone-title">Instagram (Store)</span>
+                      <span class="mob-clone-sub">Profile 1 • @duplix_shop</span>
+                    </div>
+                    <button class="mob-freeze-toggle active" title="Toggle Freeze" data-clone="2">Active</button>
+                  </div>
+
+                  <!-- Clone 3: Agency Work -->
+                  <div class="mobile-clone-item" id="mob-clone-3">
+                    <div class="mob-clone-icon-wrap" style="border-color:#7c3aed;">
+                      <img src="assets/logos/instagram.svg" alt="Instagram" class="mob-app-img" onerror="this.src='assets/logos/antigravity.png'">
+                      <span class="mob-clone-badge" style="background:#7c3aed;">WORK</span>
+                    </div>
+                    <div class="mob-clone-meta">
+                      <span class="mob-clone-title">Instagram (Agency)</span>
+                      <span class="mob-clone-sub">Profile 2 • @creator_hub</span>
+                    </div>
+                    <button class="mob-freeze-toggle active" title="Toggle Freeze" data-clone="3">Active</button>
+                  </div>
+
+                  <!-- Clone 4: Client 1 (Frozen) -->
+                  <div class="mobile-clone-item frozen" id="mob-clone-4">
+                    <div class="mob-clone-icon-wrap" style="border-color:#f59e0b;">
+                      <img src="assets/logos/instagram.svg" alt="Instagram" class="mob-app-img" onerror="this.src='assets/logos/antigravity.png'">
+                      <span class="mob-clone-badge" style="background:#f59e0b;">CL 1</span>
+                    </div>
+                    <div class="mob-clone-meta">
+                      <span class="mob-clone-title">Instagram (Client A)</span>
+                      <span class="mob-clone-sub">Profile 3 • Snoozed / 0% Battery</span>
+                    </div>
+                    <button class="mob-freeze-toggle" title="Toggle Freeze" data-clone="4">Frozen</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Screen 2: Voicofski Phone View -->
+              <div class="phone-subview" id="phone-view-voice" style="display:none;">
+                <div class="phone-view-heading">
+                  <h4>Voicofski Assistant</h4>
+                  <span class="phone-sub-badge">AI TTS v1.4</span>
+                </div>
+                <div class="mobile-voice-composer">
+                  <div class="mobile-bubble-sample">
+                    <span class="mobile-bubble-sender">Highlighted Text:</span>
+                    <p>Duplix enables multiple isolated profiles on mobile devices.</p>
+                  </div>
+                  <div class="mobile-hud-player">
+                    <div class="mobile-hud-row">
+                      <span class="mobile-hud-voice">Voice: Lora</span>
+                      <span class="mobile-hud-lang">FA / EN</span>
+                    </div>
+                    <div class="mobile-wave-bars">
+                      <span class="m-wave"></span><span class="m-wave"></span><span class="m-wave"></span><span class="m-wave"></span><span class="m-wave"></span>
+                    </div>
+                    <button class="btn btn-primary btn-sm btn-block" id="mob-play-voice-btn">▶ Play Audio Stream</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Screen 3: Voice Memo Phone View -->
+              <div class="phone-subview" id="phone-view-memo" style="display:none;">
+                <div class="phone-view-heading">
+                  <h4>Voice Memo</h4>
+                  <span class="phone-sub-badge">Action Button</span>
+                </div>
+                <div class="mobile-memo-center">
+                  <div class="mobile-record-circle" id="mob-record-circle">
+                    <svg width="34" height="34" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                      <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                      <line x1="12" y1="19" x2="12" y2="23"></line>
+                      <line x1="8" y1="23" x2="16" y2="23"></line>
+                    </svg>
+                  </div>
+                  <span class="mobile-record-status" id="mob-record-status">Tap to Record</span>
+                  <span class="mobile-record-timer" id="mob-record-timer">00:00</span>
+                </div>
+              </div>
+
+              <!-- Phone Bottom Nav Bar -->
+              <div class="mobile-bottom-nav">
+                <button class="mob-nav-btn active" id="mob-btn-nav-clones" data-target="clones">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <rect x="5" y="2" width="14" height="20" rx="3" ry="3"></rect>
+                  </svg>
+                  <span>Clones</span>
+                </button>
+                <button class="mob-nav-btn" id="mob-btn-nav-voice" data-target="voice">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                  </svg>
+                  <span>Voice</span>
+                </button>
+                <button class="mob-nav-btn" id="mob-btn-nav-memo" data-target="memo">
+                  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                  </svg>
+                  <span>Memo</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -1631,27 +1846,189 @@
     </div>
   </section>
 
-  <!-- Download Action Banner -->
-  <section class="container" id="download">
-    <div class="download-card reveal-on-scroll">
-      <h2 class="download-title">Get Started with Duplix</h2>
-      <p class="download-subtext">
-        Free, native, and open source. Run your independent Mac workspaces side-by-side today.
+  <!-- Multi-Platform Download Hub -->
+  <section class="container" id="downloads">
+    <div class="download-section-wrap reveal-on-scroll">
+      <div class="section-badge-center">
+        <span class="badge-tag">Cross-Platform Ecosystem</span>
+      </div>
+      <h2 class="download-title text-center">Get Duplix for Your Platform</h2>
+      <p class="download-subtext text-center">
+        Native app cloning, complete session isolation, and AI workflows. Universal macOS package available now, with Windows, Linux, and Mobile in active development.
       </p>
 
-      <div class="hero-buttons">
-        <a href="downloads/Duplix.dmg?v=1.4.0" download="Duplix.dmg" class="btn btn-primary btn-lg">
-          <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-          </svg>
-          Download Duplix.dmg (2.5 MB)
-        </a>
-        <a href="https://github.com/businessmanshah-a11y/Duplix/releases" target="_blank" class="btn btn-ghost btn-lg">
-          Releases
-        </a>
-        <a href="https://github.com/businessmanshah-a11y/Duplix" target="_blank" class="btn btn-ghost btn-lg">
-          View on GitHub
-        </a>
+      <div class="os-download-grid">
+        <!-- macOS Card (Universal 2 - Active) -->
+        <div class="os-card os-card-active">
+          <div class="os-card-glow"></div>
+          <div class="os-card-header">
+            <div class="os-icon-wrap os-mac-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.63-.77 1.06-1.85.94-2.93-.91.04-2.02.61-2.67 1.37-.58.67-1.1 1.76-.96 2.81 1.02.08 2.06-.48 2.69-1.25z"/>
+              </svg>
+            </div>
+            <div class="os-header-text">
+              <div class="os-name-row">
+                <h3 class="os-name">macOS</h3>
+                <span class="os-status-badge status-live">
+                  <span class="status-pulse-dot"></span> Live • v1.4.0
+                </span>
+              </div>
+              <span class="os-arch-label">Universal 2 Binary</span>
+            </div>
+          </div>
+
+          <div class="os-chip-group">
+            <span class="os-chip os-chip-highlight">Apple Silicon (M1/M2/M3/M4)</span>
+            <span class="os-chip os-chip-highlight">Intel Core (x86_64)</span>
+            <span class="os-chip">macOS 13.0+</span>
+          </div>
+
+          <p class="os-desc">
+            Instant APFS zero-overhead cloning, isolated Keychain &amp; URL schemes, distinct Dock badges, Voicofski AI TTS &amp; built-in Voice Memo.
+          </p>
+
+          <div class="os-actions">
+            <a href="downloads/Duplix.dmg?v=1.4.0" download="Duplix.dmg" class="btn btn-primary btn-block">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+              </svg>
+              Download Universal DMG (3.9 MB)
+            </a>
+            <div class="os-sub-actions">
+              <span class="os-cask-code"><code>brew install --cask duplix</code></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Windows Card (Phase 2 Ready) -->
+        <div class="os-card os-card-upcoming">
+          <div class="os-card-header">
+            <div class="os-icon-wrap os-win-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/>
+              </svg>
+            </div>
+            <div class="os-header-text">
+              <div class="os-name-row">
+                <h3 class="os-name">Windows</h3>
+                <span class="os-status-badge status-dev">Phase 2 Engine Ready</span>
+              </div>
+              <span class="os-arch-label">Windows 11 / 10 • x64, ARM64 &amp; 32-bit</span>
+            </div>
+          </div>
+
+          <div class="os-chip-group">
+            <span class="os-chip os-chip-highlight">Zero-Disk Overhead</span>
+            <span class="os-chip">64-bit (x64)</span>
+            <span class="os-chip">32-bit (x86)</span>
+            <span class="os-chip">ARM64</span>
+            <span class="os-chip">User-Data-Dir</span>
+            <span class="os-chip">Start Menu Shortcuts</span>
+          </div>
+
+          <p class="os-desc">
+            Simultaneous isolated instances for VS Code, Discord, Slack, and Chromium apps via custom <code>--user-data-dir</code> profiles and Taskbar badging.
+          </p>
+
+          <div class="os-actions">
+            <a href="https://github.com/businessmanshah-a11y/Duplix/blob/main/docs/CROSS_PLATFORM_SPEC.md" target="_blank" class="btn btn-ghost btn-block">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+              </svg>
+              View Windows Engine Spec
+            </a>
+            <div class="os-sub-actions">
+              <a href="https://github.com/businessmanshah-a11y/Duplix" target="_blank" class="os-roadmap-link">Follow on GitHub &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Linux Card (Phase 2 Ready) -->
+        <div class="os-card os-card-upcoming">
+          <div class="os-card-header">
+            <div class="os-icon-wrap os-linux-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12.002 0c-3.136 0-4.877 2.052-4.877 4.743 0 .736.14 1.488.423 2.222C5.39 8.01 4.004 10.278 4.004 13.045c0 2.247.95 4.148 2.457 5.342-.045.228-.07.46-.07.697 0 2.71 2.502 4.916 5.611 4.916s5.61-2.206 5.61-4.916c0-.237-.024-.469-.07-.697 1.508-1.194 2.457-3.095 2.457-5.342 0-2.767-1.386-5.035-3.544-6.08.283-.734.423-1.486.423-2.222C16.878 2.052 15.138 0 12.002 0z"/>
+              </svg>
+            </div>
+            <div class="os-header-text">
+              <div class="os-name-row">
+                <h3 class="os-name">Linux</h3>
+                <span class="os-status-badge status-dev">Phase 2 Engine Ready</span>
+              </div>
+              <span class="os-arch-label">Ubuntu • Fedora • Arch</span>
+            </div>
+          </div>
+
+          <div class="os-chip-group">
+            <span class="os-chip os-chip-highlight">Bubblewrap Sandboxing</span>
+            <span class="os-chip">.desktop Launchers</span>
+            <span class="os-chip">Btrfs / XFS CoW</span>
+          </div>
+
+          <p class="os-desc">
+            Lightweight containerized sandbox isolation using Bubblewrap, Btrfs/XFS CoW reflink copying, and automated <code>.desktop</code> launcher generator.
+          </p>
+
+          <div class="os-actions">
+            <a href="https://github.com/businessmanshah-a11y/Duplix/blob/main/docs/CROSS_PLATFORM_SPEC.md" target="_blank" class="btn btn-ghost btn-block">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+              </svg>
+              View Linux Engine Spec
+            </a>
+            <div class="os-sub-actions">
+              <a href="https://github.com/businessmanshah-a11y/Duplix" target="_blank" class="os-roadmap-link">View Architecture Docs &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mobile Card (Phase 3 Interactive Prototype) -->
+        <div class="os-card os-card-active">
+          <div class="os-card-glow"></div>
+          <div class="os-card-header">
+            <div class="os-icon-wrap os-mobile-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="5" y="2" width="14" height="20" rx="3" ry="3"></rect>
+                <line x1="12" y1="18" x2="12.01" y2="18"></line>
+              </svg>
+            </div>
+            <div class="os-header-text">
+              <div class="os-name-row">
+                <h3 class="os-name">Mobile</h3>
+                <span class="os-status-badge status-live">
+                  <span class="status-pulse-dot"></span> Phase 3 Live Prototype
+                </span>
+              </div>
+              <span class="os-arch-label">Android (Work Profile) &amp; iOS (Action Button)</span>
+            </div>
+          </div>
+
+          <div class="os-chip-group">
+            <span class="os-chip os-chip-highlight">4x Instagram Clones</span>
+            <span class="os-chip">Zero-Battery Freeze</span>
+            <span class="os-chip">Voicofski Mini-HUD</span>
+            <span class="os-chip">Voice Memo Haptic</span>
+          </div>
+
+          <p class="os-desc">
+            Independent multi-instance sandboxing (up to 4+ Instagram or messaging accounts) without root or APK tampering; seamless Voicofski selection and Action Button Voice Memo.
+          </p>
+
+          <div class="os-actions">
+            <a href="#simulator" class="btn btn-primary btn-block" id="jump-to-mobile-sim">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <rect x="5" y="2" width="14" height="20" rx="3" ry="3"></rect>
+                <line x1="12" y1="18" x2="12.01" y2="18"></line>
+              </svg>
+              Try Interactive Mobile Simulator
+            </a>
+            <div class="os-sub-actions">
+              <a href="https://github.com/businessmanshah-a11y/Duplix/blob/main/docs/MOBILE_UIUX_AND_DESIGN_SPEC.md" target="_blank" class="os-roadmap-link">View Mobile UI/UX Spec &rarr;</a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>

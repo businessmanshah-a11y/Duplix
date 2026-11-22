@@ -364,10 +364,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initial render
   updateDockSim();
 
-  // 8. Interactive Live Playground Switcher (Voicofski + Dock Badging)
+  // 8. Interactive Live Playground Switcher (Voicofski + Dock Badging + Duplix Mobile)
   const pgTabs = document.querySelectorAll('.pg-switch-btn');
   const pgVoicofski = document.getElementById('pg-panel-voicofski');
   const pgDock = document.getElementById('pg-panel-dock');
+  const pgMobile = document.getElementById('pg-panel-mobile');
 
   pgTabs.forEach(tab => {
     tab.addEventListener('click', () => {
@@ -379,6 +380,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       if (pgVoicofski) pgVoicofski.style.display = target === 'voicofski' ? 'grid' : 'none';
       if (pgDock) pgDock.style.display = target === 'dock' ? 'grid' : 'none';
+      if (pgMobile) pgMobile.style.display = target === 'mobile' ? 'grid' : 'none';
     });
   });
 
@@ -666,6 +668,156 @@ document.addEventListener('DOMContentLoaded', () => {
         showToast('09:00 UTC Reset — All API keys automatically recovered!');
       } else {
         showToast(`Key #${vfKeyIndex} hit 429 quota — auto-switched to Gmail #${vfKeyIndex + 1}!`);
+      }
+    });
+  }
+
+  // ==========================================
+  // 10. Duplix Mobile Interactive Simulator
+  // ==========================================
+  const phoneViews = {
+    clones: document.getElementById('phone-view-clones'),
+    voice: document.getElementById('phone-view-voice'),
+    memo: document.getElementById('phone-view-memo')
+  };
+
+  const mobNavBtns = document.querySelectorAll('.mob-nav-btn');
+  const mobSwitchBtns = {
+    clones: document.getElementById('mob-switch-clones'),
+    voice: document.getElementById('mob-switch-voice'),
+    memo: document.getElementById('mob-switch-memo')
+  };
+
+  function setMobileView(mode) {
+    Object.keys(phoneViews).forEach(key => {
+      const view = phoneViews[key];
+      if (view) view.style.display = key === mode ? 'flex' : 'none';
+    });
+
+    mobNavBtns.forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.target === mode);
+    });
+
+    Object.keys(mobSwitchBtns).forEach(key => {
+      const btn = mobSwitchBtns[key];
+      if (btn) btn.classList.toggle('active', key === mode);
+    });
+  }
+
+  mobNavBtns.forEach(btn => {
+    btn.addEventListener('click', () => setMobileView(btn.dataset.target));
+  });
+
+  if (mobSwitchBtns.clones) mobSwitchBtns.clones.addEventListener('click', () => setMobileView('clones'));
+  if (mobSwitchBtns.voice) mobSwitchBtns.voice.addEventListener('click', () => setMobileView('voice'));
+  if (mobSwitchBtns.memo) mobSwitchBtns.memo.addEventListener('click', () => setMobileView('memo'));
+
+  // Mobile Clone Freeze Toggles
+  document.addEventListener('click', e => {
+    const freezeBtn = e.target.closest('.mob-freeze-toggle');
+    if (freezeBtn) {
+      const item = freezeBtn.closest('.mobile-clone-item');
+      const isCurrentlyActive = freezeBtn.classList.contains('active');
+      if (isCurrentlyActive) {
+        freezeBtn.classList.remove('active');
+        freezeBtn.textContent = 'Frozen';
+        if (item) item.classList.add('frozen');
+        showToast('Clone frozen: Background sync paused (0% battery)');
+      } else {
+        freezeBtn.classList.add('active');
+        freezeBtn.textContent = 'Active';
+        if (item) item.classList.remove('frozen');
+        showToast('Clone active: Background sync & push notifications restored');
+      }
+    }
+  });
+
+  // Add 5th clone button
+  const addCloneBtn = document.getElementById('mob-add-clone-btn');
+  const clonesContainer = document.getElementById('mobile-clones-container');
+  let addedTelegram = false;
+
+  if (addCloneBtn && clonesContainer) {
+    addCloneBtn.addEventListener('click', () => {
+      if (addedTelegram) {
+        showToast('Telegram clone is already running in Work Profile!');
+        setMobileView('clones');
+        return;
+      }
+      addedTelegram = true;
+      const tgClone = document.createElement('div');
+      tgClone.className = 'mobile-clone-item';
+      tgClone.id = 'mob-clone-5';
+      tgClone.innerHTML = `
+        <div class="mob-clone-icon-wrap" style="border-color:#06b6d4;">
+          <img src="assets/logos/telegram.svg" alt="Telegram" class="mob-app-img" onerror="this.src='assets/logos/antigravity.png'">
+          <span class="mob-clone-badge" style="background:#06b6d4;">TG 2</span>
+        </div>
+        <div class="mob-clone-meta">
+          <span class="mob-clone-title">Telegram (Work)</span>
+          <span class="mob-clone-sub">Profile 4 • @team_leads</span>
+        </div>
+        <button class="mob-freeze-toggle active" title="Toggle Freeze" data-clone="5">Active</button>
+      `;
+      clonesContainer.appendChild(tgClone);
+      addCloneBtn.innerHTML = `✓ 5th Clone Active (Telegram)`;
+      addCloneBtn.disabled = true;
+      showToast('Telegram successfully provisioned into Work Profile Sandbox!');
+      setMobileView('clones');
+    });
+  }
+
+  // Voice Memo Mobile Simulation
+  const recordCircle = document.getElementById('mob-record-circle');
+  const recordStatus = document.getElementById('mob-record-status');
+  const recordTimer = document.getElementById('mob-record-timer');
+  let isRecording = false;
+  let recordInterval = null;
+  let recordSeconds = 0;
+
+  if (recordCircle) {
+    recordCircle.addEventListener('click', () => {
+      isRecording = !isRecording;
+      recordCircle.classList.toggle('recording', isRecording);
+      if (isRecording) {
+        recordStatus.textContent = 'Recording Audio...';
+        recordStatus.style.color = '#ef4444';
+        recordSeconds = 0;
+        recordInterval = setInterval(() => {
+          recordSeconds++;
+          const mins = String(Math.floor(recordSeconds / 60)).padStart(2, '0');
+          const secs = String(recordSeconds % 60).padStart(2, '0');
+          if (recordTimer) recordTimer.textContent = `${mins}:${secs}`;
+        }, 1000);
+        showToast('Microphone active. Recording voice memo...');
+      } else {
+        clearInterval(recordInterval);
+        recordStatus.textContent = 'Tap to Record';
+        recordStatus.style.color = '#e2e8f0';
+        showToast(`Voice memo recorded (${recordSeconds}s) & saved to clipboard!`);
+        if (recordTimer) recordTimer.textContent = '00:00';
+      }
+    });
+  }
+
+  // Voicofski play button inside phone
+  const mobVoicePlayBtn = document.getElementById('mob-play-voice-btn');
+  if (mobVoicePlayBtn) {
+    mobVoicePlayBtn.addEventListener('click', () => {
+      showToast('Streaming audio with Google AI Studio (gemini-3.8-flash-tts)...');
+    });
+  }
+
+  // Jump to mobile simulator link from download card
+  const jumpToMobBtn = document.getElementById('jump-to-mobile-sim');
+  const mobTabBtn = document.getElementById('pg-tab-mobile');
+  if (jumpToMobBtn && mobTabBtn) {
+    jumpToMobBtn.addEventListener('click', e => {
+      e.preventDefault();
+      mobTabBtn.click();
+      const simSection = document.getElementById('simulator');
+      if (simSection) {
+        simSection.scrollIntoView({ behavior: 'smooth' });
       }
     });
   }

@@ -130,7 +130,7 @@ public struct LauncherGenerator: Sendable {
               "$@"
             """
 
-        case .nativeCocoa, .unknown:
+        case .nativeCocoa, .native, .unknown:
             scriptContent = """
             #!/bin/bash
             set -e
