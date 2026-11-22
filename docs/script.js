@@ -850,34 +850,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
   setupArchSwitcher('mac-arch-selector', 'mac-download-btn', 'mac-btn-text');
   setupArchSwitcher('win-arch-selector', 'win-download-btn', 'win-btn-text');
-
-  // 12. Modals (Android Guide & iOS TestFlight)
-  function setupModal(openBtnId, modalId, closeBtnId) {
-    const openBtn = document.getElementById(openBtnId);
-    const modal = document.getElementById(modalId);
-    const closeBtn = document.getElementById(closeBtnId);
-    if (!openBtn || !modal) return;
-
-    openBtn.addEventListener('click', () => {
-      modal.style.display = 'flex';
-      modal.setAttribute('aria-hidden', 'false');
-    });
-
-    if (closeBtn) {
-      closeBtn.addEventListener('click', () => {
-        modal.style.display = 'none';
-        modal.setAttribute('aria-hidden', 'true');
-      });
-    }
-
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        modal.style.display = 'none';
-        modal.setAttribute('aria-hidden', 'true');
-      }
-    });
-  }
-
-  setupModal('open-android-guide-btn', 'android-guide-modal', 'close-android-modal');
-  setupModal('open-ios-modal-btn', 'ios-beta-modal', 'close-ios-modal');
 });
