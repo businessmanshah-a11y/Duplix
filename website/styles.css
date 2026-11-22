@@ -1986,6 +1986,18 @@ body {
   border-color: rgba(99, 102, 241, 0.25);
 }
 
+.btn-windows {
+  background: linear-gradient(135deg, #0078D4 0%, #005a9e 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(0, 120, 212, 0.4) !important;
+}
+
+.btn-windows:hover {
+  background: linear-gradient(135deg, #1084d8 0%, #0078D4 100%) !important;
+  box-shadow: 0 6px 20px rgba(0, 120, 212, 0.55) !important;
+  transform: translateY(-2px);
+}
+
 .btn-android {
   background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
   color: #ffffff !important;

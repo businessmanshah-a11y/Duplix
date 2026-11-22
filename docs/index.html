@@ -1909,50 +1909,56 @@
           </div>
         </div>
 
-        <!-- Windows Card (Phase 2 Ready) -->
+        <!-- Windows Card (Live v1.4.0) -->
         <div class="os-card os-card-active">
+          <div class="os-card-glow" style="background: radial-gradient(circle, rgba(0, 120, 212, 0.25) 0%, transparent 70%);"></div>
           <div class="os-card-header">
             <div class="os-icon-wrap os-win-icon">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                <rect x="2" y="2" width="9.2" height="9.2" rx="1.5" fill="#0078D4"/>
+                <rect x="12.8" y="2" width="9.2" height="9.2" rx="1.5" fill="#0078D4"/>
+                <rect x="2" y="12.8" width="9.2" height="9.2" rx="1.5" fill="#0078D4"/>
+                <rect x="12.8" y="12.8" width="9.2" height="9.2" rx="1.5" fill="#0078D4"/>
               </svg>
             </div>
             <div class="os-header-text">
               <div class="os-name-row">
                 <h3 class="os-name">Windows</h3>
-                <span class="os-status-badge status-live">Phase 2 Engine Ready</span>
+                <span class="os-status-badge status-live" style="background: rgba(0, 120, 212, 0.16); color: #38bdf8; border-color: rgba(0, 120, 212, 0.3);">
+                  <span class="status-pulse-dot" style="background:#0078D4;"></span> Live • v1.4.0
+                </span>
               </div>
-              <span class="os-arch-label">Windows 11 / 10 • Multi-Architecture</span>
+              <span class="os-arch-label">Windows 11 &amp; 10 • Native PE Executable</span>
             </div>
           </div>
 
           <!-- Windows Architecture Selector -->
           <div class="os-arch-selector" id="win-arch-selector">
-            <button class="arch-btn active" data-arch="x64" data-file="downloads/Duplix-Windows-x64.zip" data-label="Download Windows x64 (.zip)">64-bit (x64)</button>
-            <button class="arch-btn" data-arch="arm64" data-file="downloads/Duplix-Windows-ARM64.zip" data-label="Download Windows ARM64 (.zip)">ARM64 (Snapdragon)</button>
-            <button class="arch-btn" data-arch="x86" data-file="downloads/Duplix-Windows-x86.zip" data-label="Download Windows 32-bit (.zip)">32-bit (x86)</button>
+            <button class="arch-btn active" data-arch="x64" data-file="downloads/Duplix-Setup-x64.exe" data-label="Download Windows x64 (.exe)" data-sub="Recommended for Windows 10 &amp; 11 (64-bit)">64-bit (x64)</button>
+            <button class="arch-btn" data-arch="arm64" data-file="downloads/Duplix-Setup-ARM64.exe" data-label="Download Windows ARM64 (.exe)" data-sub="Optimized for Snapdragon X &amp; Surface Pro">ARM64</button>
+            <button class="arch-btn" data-arch="x86" data-file="downloads/Duplix-Setup-x86.exe" data-label="Download Windows 32-bit (.exe)" data-sub="Legacy Windows 32-bit">32-bit (x86)</button>
           </div>
 
           <div class="os-chip-group">
-            <span class="os-chip os-chip-highlight">Zero-Disk Overhead</span>
-            <span class="os-chip">PowerShell &amp; CMD Launchers</span>
-            <span class="os-chip">User-Data-Dir</span>
-            <span class="os-chip">Start Menu Shortcuts</span>
+            <span class="os-chip os-chip-highlight" style="border-color: #0078D4; color: #7dd3fc;">Self-Installing .exe</span>
+            <span class="os-chip">User-Data-Dir Sandbox</span>
+            <span class="os-chip">Desktop &amp; Start Menu Shortcuts</span>
+            <span class="os-chip">Chrome • VS Code • Discord</span>
           </div>
 
           <p class="os-desc">
-            Simultaneous isolated instances for VS Code, Discord, Slack, and Chromium apps via custom <code>--user-data-dir</code> profiles and Taskbar badging.
+            Native Windows cloner with complete isolated <code>--user-data-dir</code> sandboxes, automatic Start Menu shortcuts, and separate Taskbar grouping.
           </p>
 
           <div class="os-actions">
-            <a href="downloads/Duplix-Windows-x64.zip" download="Duplix-Windows-x64.zip" class="btn btn-primary btn-block" id="win-download-btn">
+            <a href="downloads/Duplix-Setup-x64.exe" download="Duplix-Setup-x64.exe" class="btn btn-primary btn-block btn-windows" id="win-download-btn">
               <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
               </svg>
-              <span id="win-btn-text">Download Windows x64 (.zip)</span>
+              <span id="win-btn-text">Download Windows x64 (.exe)</span>
             </a>
             <div class="os-sub-actions">
-              <a href="https://github.com/businessmanshah-a11y/Duplix/blob/main/docs/CROSS_PLATFORM_SPEC.md" target="_blank" class="os-roadmap-link">View Windows Engine Spec &rarr;</a>
+              <span class="os-cask-code"><code>winget install duplix</code></span>
             </div>
           </div>
         </div>
