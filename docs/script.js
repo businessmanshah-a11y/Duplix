@@ -810,15 +810,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Jump to mobile simulator link from download card
   const jumpToMobBtn = document.getElementById('jump-to-mobile-sim');
+  const jumpToAndroidSim = document.getElementById('jump-to-android-sim');
   const mobTabBtn = document.getElementById('pg-tab-mobile');
-  if (jumpToMobBtn && mobTabBtn) {
-    jumpToMobBtn.addEventListener('click', e => {
-      e.preventDefault();
-      mobTabBtn.click();
-      const simSection = document.getElementById('simulator');
-      if (simSection) {
-        simSection.scrollIntoView({ behavior: 'smooth' });
-      }
-    });
-  }
+  
+  [jumpToMobBtn, jumpToAndroidSim].forEach(btn => {
+    if (btn && mobTabBtn) {
+      btn.addEventListener('click', e => {
+        e.preventDefault();
+        mobTabBtn.click();
+        const simSection = document.getElementById('simulator');
+        if (simSection) {
+          simSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    }
+  });
 });
