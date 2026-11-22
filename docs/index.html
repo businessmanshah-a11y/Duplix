@@ -1874,26 +1874,34 @@
                   <span class="status-pulse-dot"></span> Live • v1.4.0
                 </span>
               </div>
-              <span class="os-arch-label">Universal 2 Binary</span>
+              <span class="os-arch-label">Universal 2 (Apple Silicon &amp; Intel)</span>
             </div>
           </div>
 
+          <!-- Mac Architecture Selector -->
+          <div class="os-arch-selector" id="mac-arch-selector">
+            <button class="arch-btn active" data-arch="universal" data-file="downloads/Duplix.dmg?v=1.4.0" data-label="Download Universal DMG (3.9 MB)" data-sub="Universal 2: Runs natively on Apple Silicon &amp; Intel">Universal (Both)</button>
+            <button class="arch-btn" data-arch="arm64" data-file="downloads/Duplix-AppleSilicon.dmg" data-label="Download Apple Silicon DMG (2.5 MB)" data-sub="Optimized for Apple M1, M2, M3, M4">Apple Silicon</button>
+            <button class="arch-btn" data-arch="x86_64" data-file="downloads/Duplix-Intel.dmg" data-label="Download Intel DMG (2.6 MB)" data-sub="Optimized for Intel Core (x86_64)">Intel Core</button>
+          </div>
+
           <div class="os-chip-group">
-            <span class="os-chip os-chip-highlight">Apple Silicon (M1/M2/M3/M4)</span>
-            <span class="os-chip os-chip-highlight">Intel Core (x86_64)</span>
+            <span class="os-chip os-chip-highlight">APFS Zero-Disk Clones</span>
+            <span class="os-chip">Voice Memo Microphone</span>
+            <span class="os-chip">Voicofski AI TTS</span>
             <span class="os-chip">macOS 13.0+</span>
           </div>
 
-          <p class="os-desc">
+          <p class="os-desc" id="mac-desc-text">
             Instant APFS zero-overhead cloning, isolated Keychain &amp; URL schemes, distinct Dock badges, Voicofski AI TTS &amp; built-in Voice Memo.
           </p>
 
           <div class="os-actions">
-            <a href="downloads/Duplix.dmg?v=1.4.0" download="Duplix.dmg" class="btn btn-primary btn-block">
+            <a href="downloads/Duplix.dmg?v=1.4.0" download="Duplix.dmg" class="btn btn-primary btn-block" id="mac-download-btn">
               <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
               </svg>
-              Download Universal DMG (3.9 MB)
+              <span id="mac-btn-text">Download Universal DMG (3.9 MB)</span>
             </a>
             <div class="os-sub-actions">
               <span class="os-cask-code"><code>brew install --cask duplix</code></span>
@@ -1914,16 +1922,22 @@
                 <h3 class="os-name">Windows</h3>
                 <span class="os-status-badge status-live">Phase 2 Engine Ready</span>
               </div>
-              <span class="os-arch-label">Windows 11 / 10 • x64, ARM64 &amp; 32-bit</span>
+              <span class="os-arch-label">Windows 11 / 10 • Multi-Architecture</span>
             </div>
+          </div>
+
+          <!-- Windows Architecture Selector -->
+          <div class="os-arch-selector" id="win-arch-selector">
+            <button class="arch-btn active" data-arch="x64" data-file="downloads/Duplix-Windows-x64.zip" data-label="Download Windows x64 (.zip)">64-bit (x64)</button>
+            <button class="arch-btn" data-arch="arm64" data-file="downloads/Duplix-Windows-ARM64.zip" data-label="Download Windows ARM64 (.zip)">ARM64 (Snapdragon)</button>
+            <button class="arch-btn" data-arch="x86" data-file="downloads/Duplix-Windows-x86.zip" data-label="Download Windows 32-bit (.zip)">32-bit (x86)</button>
           </div>
 
           <div class="os-chip-group">
             <span class="os-chip os-chip-highlight">Zero-Disk Overhead</span>
-            <span class="os-chip">64-bit (x64)</span>
-            <span class="os-chip">32-bit (x86)</span>
-            <span class="os-chip">ARM64</span>
+            <span class="os-chip">PowerShell &amp; CMD Launchers</span>
             <span class="os-chip">User-Data-Dir</span>
+            <span class="os-chip">Start Menu Shortcuts</span>
           </div>
 
           <p class="os-desc">
@@ -1931,11 +1945,11 @@
           </p>
 
           <div class="os-actions">
-            <a href="downloads/Duplix-Windows-Engine.zip" download="Duplix-Windows-Engine.zip" class="btn btn-primary btn-block">
+            <a href="downloads/Duplix-Windows-x64.zip" download="Duplix-Windows-x64.zip" class="btn btn-primary btn-block" id="win-download-btn">
               <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
               </svg>
-              Download Windows Engine (.zip)
+              <span id="win-btn-text">Download Windows x64 (.zip)</span>
             </a>
             <div class="os-sub-actions">
               <a href="https://github.com/businessmanshah-a11y/Duplix/blob/main/docs/CROSS_PLATFORM_SPEC.md" target="_blank" class="os-roadmap-link">View Windows Engine Spec &rarr;</a>
@@ -1983,7 +1997,7 @@
           </div>
         </div>
 
-        <!-- Android Card (Phase 3 Beta) -->
+        <!-- Android Card (Phase 3 Beta Guide) -->
         <div class="os-card os-card-active">
           <div class="os-card-glow" style="background: radial-gradient(circle, rgba(16, 185, 129, 0.25) 0%, transparent 70%);"></div>
           <div class="os-card-header">
@@ -1996,10 +2010,10 @@
               <div class="os-name-row">
                 <h3 class="os-name">Android</h3>
                 <span class="os-status-badge status-live" style="background: rgba(16, 185, 129, 0.16); color: #34d399; border-color: rgba(16, 185, 129, 0.3);">
-                  <span class="status-pulse-dot" style="background:#10b981;"></span> Beta Preview
+                  <span class="status-pulse-dot" style="background:#10b981;"></span> Work Profile Beta
                 </span>
               </div>
-              <span class="os-arch-label">Android 9.0 to 15 • Work Profile Sandbox</span>
+              <span class="os-arch-label">Android 9.0 to 15 • Multi-Profile Sandbox</span>
             </div>
           </div>
 
@@ -2011,16 +2025,16 @@
           </div>
 
           <p class="os-desc">
-            Independent multi-instance sandboxing (up to 4+ Instagram or messaging accounts) without root or APK tampering via Android DevicePolicyManager Work Profile.
+            Run up to 4+ isolated Instagram accounts without modifying APKs or battery drain via Android DevicePolicyManager Work Profile.
           </p>
 
           <div class="os-actions">
-            <a href="downloads/Duplix-Android-WorkProfile.apk" download="Duplix-Android-WorkProfile.apk" class="btn btn-primary btn-block btn-android">
+            <button class="btn btn-primary btn-block btn-android" id="open-android-guide-btn" type="button">
               <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
               </svg>
-              Download Android APK (Beta)
-            </a>
+              Work Profile Guide &amp; Closed Beta
+            </button>
             <div class="os-sub-actions">
               <a href="#simulator" class="os-roadmap-link" id="jump-to-android-sim">Open Android Interactive Sim &rarr;</a>
             </div>
@@ -2040,7 +2054,7 @@
               <div class="os-name-row">
                 <h3 class="os-name">iOS</h3>
                 <span class="os-status-badge status-live" style="background: rgba(99, 102, 241, 0.16); color: #a5b4fc; border-color: rgba(99, 102, 241, 0.3);">
-                  <span class="status-pulse-dot" style="background:#6366f1;"></span> Companion
+                  <span class="status-pulse-dot" style="background:#6366f1;"></span> TestFlight Beta
                 </span>
               </div>
               <span class="os-arch-label">iOS 17.0 to 18+ • Action Button &amp; Shortcuts</span>
@@ -2055,18 +2069,18 @@
           </div>
 
           <p class="os-desc">
-            iOS Companion bridge with dedicated Siri Shortcut for Action Button voice memos, and Share Sheet integration for instant Voicofski text-to-speech.
+            Companion app with Action Button voice memo recording, Voicofski text-to-speech Share Sheet integration, and URL schemes.
           </p>
 
           <div class="os-actions">
-            <a href="downloads/Duplix-Voice-Companion.shortcut" download="Duplix-Voice-Companion.shortcut" class="btn btn-primary btn-block btn-ios">
+            <button class="btn btn-primary btn-block btn-ios" id="open-ios-modal-btn" type="button">
               <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
               </svg>
-              Install iOS Action Shortcut
-            </a>
+              Join TestFlight Beta &amp; Shortcuts
+            </button>
             <div class="os-sub-actions">
-              <a href="https://github.com/businessmanshah-a11y/Duplix/blob/main/docs/MOBILE_UIUX_AND_DESIGN_SPEC.md" target="_blank" class="os-roadmap-link">Join TestFlight &amp; View Spec &rarr;</a>
+              <a href="https://github.com/businessmanshah-a11y/Duplix/blob/main/docs/MOBILE_UIUX_AND_DESIGN_SPEC.md" target="_blank" class="os-roadmap-link">View iOS Companion Spec &rarr;</a>
             </div>
           </div>
         </div>
@@ -2090,6 +2104,97 @@
       </div>
     </div>
   </footer>
+
+  <!-- Android Guide Modal -->
+  <div class="duplix-modal-backdrop" id="android-guide-modal" style="display:none;" aria-hidden="true">
+    <div class="duplix-modal-card">
+      <div class="duplix-modal-header">
+        <div class="modal-title-wrap">
+          <span class="modal-icon-badge" style="background:rgba(16,185,129,0.15); color:#10b981;">🤖</span>
+          <div>
+            <h3 class="modal-title">Android Multi-Profile &amp; 4x Instagram Guide</h3>
+            <span class="modal-subtitle">Zero-Root • 100% Google Play &amp; FCM Push Safe</span>
+          </div>
+        </div>
+        <button class="modal-close-btn" id="close-android-modal" aria-label="Close">&times;</button>
+      </div>
+      <div class="duplix-modal-body">
+        <div class="modal-notice-box">
+          <p><strong>Note on Android Native APK:</strong> Google Android requires verified device administrator provisioning for isolated Work Profiles. Below are the 3 safe ways to run 4x Instagram today:</p>
+        </div>
+
+        <div class="modal-steps-list">
+          <div class="modal-step-item">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <h4>Samsung Secure Folder / Dual Messenger (Instant)</h4>
+              <p>On Samsung devices, go to <em>Settings &rarr; Advanced Features &rarr; Dual Messenger</em> or activate <em>Secure Folder</em> for an instant isolated 2nd and 3rd Instagram.</p>
+            </div>
+          </div>
+          <div class="modal-step-item">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <h4>Island / Shelter Work Profile (Pixel, Xiaomi, Motorola, etc.)</h4>
+              <p>Install <a href="https://f-droid.org/en/packages/net.typeblog.shelter/" target="_blank" class="modal-link">Shelter (F-Droid)</a> or Island to provision an unmanaged Android Work Profile sandbox. Clone Instagram into it with full background freeze support (0% battery drain).</p>
+            </div>
+          </div>
+          <div class="modal-step-item">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <h4>Duplix Native Android APK (Closed Beta)</h4>
+              <p>Our native Android APK bridge with automated profile provisioning is in active development. Star the repository to be notified when the first signed release APK lands.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="duplix-modal-footer">
+        <a href="https://github.com/businessmanshah-a11y/Duplix/blob/main/docs/MOBILE_UIUX_AND_DESIGN_SPEC.md" target="_blank" class="btn btn-secondary">Read Android Architecture Spec</a>
+        <a href="https://github.com/businessmanshah-a11y/Duplix/releases" target="_blank" class="btn btn-primary" style="background:#10b981;">Star on GitHub for APK Release</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- iOS Beta Modal -->
+  <div class="duplix-modal-backdrop" id="ios-beta-modal" style="display:none;" aria-hidden="true">
+    <div class="duplix-modal-card">
+      <div class="duplix-modal-header">
+        <div class="modal-title-wrap">
+          <span class="modal-icon-badge" style="background:rgba(99,102,241,0.15); color:#6366f1;"></span>
+          <div>
+            <h3 class="modal-title">iOS Action Button Companion &amp; TestFlight</h3>
+            <span class="modal-subtitle">iPhone 15 Pro / 16 / 16 Pro Action Button &amp; Shortcuts</span>
+          </div>
+        </div>
+        <button class="modal-close-btn" id="close-ios-modal" aria-label="Close">&times;</button>
+      </div>
+      <div class="duplix-modal-body">
+        <p style="color:#94a3b8; font-size:0.92rem; margin-bottom:14px;">
+          Duplix on iOS connects directly to your iPhone's <strong>Action Button</strong> for 1-tap voice memo recording and Apple Share Sheet for Voicofski text-to-speech.
+        </p>
+
+        <div class="modal-steps-list">
+          <div class="modal-step-item">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <h4>Install Action Button Shortcut</h4>
+              <p>Download the official Duplix Shortcut file to bind microphone recording directly to your iPhone Action Button.</p>
+            </div>
+          </div>
+          <div class="modal-step-item">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <h4>Request TestFlight Beta Access</h4>
+              <p>The native iOS companion application is built with Swift/SwiftUI. Sign up on GitHub to join the upcoming TestFlight build.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="duplix-modal-footer">
+        <a href="downloads/Duplix-Voice-Companion.shortcut" download="Duplix-Voice-Companion.shortcut" class="btn btn-primary" style="background:#6366f1;">Download Action Shortcut</a>
+        <a href="https://github.com/businessmanshah-a11y/Duplix" target="_blank" class="btn btn-secondary">Request TestFlight Access</a>
+      </div>
+    </div>
+  </div>
 
   <!-- Toast Notification -->
   <div id="toast-notice" class="toast-notice">
